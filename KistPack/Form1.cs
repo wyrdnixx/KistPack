@@ -162,20 +162,36 @@ namespace KistPack
         //private async void testTask(object sender, EventArgs e)
         private async void testTask(Int32 _Fall)
         {
-            
+            PatientVisit pv=null;
+            try
+            {
 
-            // Start a new task with parameters
-            //Task<int> myTask = Task.Run(() => MyMethodWithParameters(_Fall));
-            Task<PatientVisit> myTask = Task.Run(() => GetVisit(_Fall));
 
-            // Wait for the task to complete without blocking the UI
-            await myTask;
+                // Start a new task with parameters
+                //Task<int> myTask = Task.Run(() => MyMethodWithParameters(_Fall));
+                Task<PatientVisit> myTask = Task.Run(() => GetVisit(_Fall));
 
-            // Set the TextBox text with the result
-            //textBox3.Text = myTask.Result;
-            PatientVisit pv = myTask.Result;
+                // Wait for the task to complete without blocking the UI
+                await myTask;
 
-            tbKiste.Text = pv.Surname;
+
+                // Set the TextBox text with the result
+                //textBox3.Text = myTask.Result;
+                pv = myTask.Result;
+
+                
+            } catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "error");
+            }
+            finally
+            {
+                if (pv != null)
+                {
+                    tbKiste.Text = pv.Surname;
+                }
+            }
+
         }
 
 
