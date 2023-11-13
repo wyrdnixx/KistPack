@@ -155,8 +155,8 @@ namespace KistPack
                 //dgvAkten.DataSource= dt;
                 //dgvAkten.Update();
                 
-                testTask(Int32.Parse(tbFallScann.Text));
-                tbFallScann.Text = "";
+                getVisitFromArchivDB(Int32.Parse(tbFallScann.Text));
+                
 
                 
             }
@@ -166,9 +166,15 @@ namespace KistPack
         #region test async Tasks
 
         //private async void testTask(object sender, EventArgs e)
-        private async void testTask(Int32 _Fall)
+        private async void getVisitFromArchivDB(Int32 _Fall)
         {
             PatientVisit pv=null;
+            tbFallScann.Enabled = false;
+            btnNewCharge.Enabled=false;
+            btnNextBox.Enabled=false;
+            btnApplyNewBox.Enabled=false;
+            tbStatus.BackColor = Color.Gray;
+            tbStatus.Text = "Suche Fallnummer: " + _Fall.ToString();
             try
             {
 
@@ -205,6 +211,15 @@ namespace KistPack
                 tbStatus.BackColor = Color.Red;
                 tbStatus.Text = "Fehler: " + ex.Message;
                 playSoundER();
+            }
+            finally
+            {
+                btnNewCharge.Enabled = true;
+                btnNextBox.Enabled = true;
+                btnApplyNewBox.Enabled = true;
+                tbFallScann.Text = "";
+                tbFallScann.Enabled = true;
+                tbFallScann.Focus();
             }
            
 
