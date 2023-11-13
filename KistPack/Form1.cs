@@ -44,6 +44,9 @@ namespace KistPack
             //ds.Tables.Add(dt);
             //dgvAkten.DataSource = ds;
             dgvAkten.DataSource = dt;
+            
+            
+
 
         }
 
@@ -293,8 +296,16 @@ namespace KistPack
                 MessageBox.Show(ex.Message + ": " + ex.StackTrace.ToString(), "Error");
             }
         }
-  
+
 
         #endregion
+
+        private void btnDeleteEntry_Click(object sender, EventArgs e)
+        {
+            if (!dgvAkten.SelectedRows[0].IsNewRow)            
+                dt.Rows.RemoveAt(dgvAkten.SelectedRows[0].Index);
+            dgvAkten.Update();
+
+        }
     }
 }
