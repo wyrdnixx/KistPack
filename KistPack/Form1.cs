@@ -148,97 +148,46 @@ namespace KistPack
                 //dt.AcceptChanges();
                 //dgvAkten.DataSource= dt;
                 //dgvAkten.Update();
-                GetVisitAsync(tbFallScann.Text);
+                
+                testTask(Int32.Parse(tbFallScann.Text));
                 tbFallScann.Text = "";
 
-                //testDBSelect(tbFallScann.Text);
+                
             }
         }
 
-        //private void testDBSelect(string _Fallnr)
-        //{
 
-        //    PatientVisit pv  = archDB.GetVisit(_Fallnr);
-        //    if(pv != null)
-        //    {
-        //        Boolean dupCheck = false;
+        #region test async Tasks
 
-        //        foreach (DataRow row in dt.Rows)
-        //        {
-        //            if ( row["Visit"].ToString() == pv.Pat.ToString())
-        //            {
-        //                dupCheck = true;
-        //                String Errmsg = "Fallnummer " + pv.Pat.ToString() + " schon vorhanden! Bitte Akte prüfen.";
-        //                MessageBox.Show(Errmsg, "error");                    }
-        //        }
-
-        //        if (!dupCheck) {
-        //            dt.Rows.Add(tbCharge.Text, tbKiste.Text, pv.Pat, pv.Per, pv.Givenname, pv.Surname);
-        //            dt.AcceptChanges();
-        //            dgvAkten.Update();
-        //        }
-        //    }
-        //}
-
-
-        #region test Async
-
-        private void testAsnyc()
+        //private async void testTask(object sender, EventArgs e)
+        private async void testTask(Int32 _Fall)
         {
-            //This delegate will be called when the thread is done executing.
-            ArchDB.doWorkCallback callback = new ArchDB.doWorkCallback(displayWorkDone);
-
-            int threadInputData = 5;
-
-            //doWork() runs as a separate thread. We pass it the data and the callback delegate.
-            Thread workThread = new Thread(() => doWork(threadInputData, callback));
-
-            //Run thread.
-            workThread.Start();
-
-        }
-        public static void displayWorkDone(int result, string _error)
-        {
-            Console.WriteLine("Result: " + result);
-            if (_error == null)
-            {
-                MessageBox.Show(result.ToString(), "Result");
-            } else
-            {
-                MessageBox.Show(_error, "Error");
-            }
             
+
+            // Start a new task with parameters
+            //Task<int> myTask = Task.Run(() => MyMethodWithParameters(_Fall));
+            Task<PatientVisit> myTask = Task.Run(() => GetVisit(_Fall));
+
+            // Wait for the task to complete without blocking the UI
+            await myTask;
+
+            // Set the TextBox text with the result
+            //textBox3.Text = myTask.Result;
+            PatientVisit pv = myTask.Result;
+
+            tbKiste.Text = pv.Surname;
         }
 
 
+        #endregion
 
-        private void GetVisitAsync(string _Fallnummer)
-        {
-            ArchDB.GetVisitCallback callback = new GetVisitCallback(processVisit);  
-            Thread worker = new Thread(() => GetVisit(_Fallnummer, callback)); worker.Start();
-        }
 
-        private  void processVisit(PatientVisit pv, Exception ex)
-        {
-            // no exception and no visit found 
-            if (ex == null && pv == null)
-            {
-                MessageBox.Show("Kein Fall gefunden", "no visit found");
-            }
-            // exception
-            else if (ex != null)
-            {
-                MessageBox.Show("Fehler beim Datenabruf: " + ex.Message, "Error");
-            } 
-            // got visit
-            else
-            {
-                MessageBox.Show("Fall gefunden: " + pv.Surname, "Result");
 
-                updateData(pv);
-            }
-        }
 
+
+
+        #region test Async threads
+      
 
         private void updateData(PatientVisit pv)
         {

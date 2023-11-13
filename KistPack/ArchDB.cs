@@ -16,47 +16,36 @@ namespace KistPack
 
 
 
-        #region Test Async
+        //#region Test Async
 
-        //test Async
-        public delegate void doWorkCallback(int result, string error);
+        ////test Async
+        //public delegate void doWorkCallback(int result, string error);
 
-        public static void doWork(int n, doWorkCallback callback)
-        {
-            int result = 0;
+        //public static void doWork(int n, doWorkCallback callback)
+        //{
+        //    int result = 0;
 
-            for (int i = 0; i < n; i++)
-            {
-                //Do some work....
-                Thread.Sleep(1000);
-                result += 10;
-            }
+        //    for (int i = 0; i < n; i++)
+        //    {
+        //        //Do some work....
+        //        Thread.Sleep(1000);
+        //        result += 10;
+        //    }
 
-            //Call the callback delegate which points to the displayWorkDone() method and pass it the result to be returned from the thread.
-            callback(result,null);
-        }
+        //    //Call the callback delegate which points to the displayWorkDone() method and pass it the result to be returned from the thread.
+        //    callback(result,null);
+        //}
 
-        #endregion
+        //#endregion
 
 
 
 
         private static string connString = @"Server = MSSQL; Database = TestDB; Trusted_Connection = True;";
 
-        public delegate void GetVisitCallback(PatientVisit pv, Exception ex);
-        //public PatientVisit GetVisit(string _Fallnummer)
-        public static void GetVisit(string _Fallnummer, GetVisitCallback callback)
+        
+        public static PatientVisit GetVisit(Int32 _Fallnummer)
         {
-
-            //DataTable dt = new DataTable();
-            //dt.Columns.Add("Charge");
-            //dt.Columns.Add("Kiste");
-            //dt.Columns.Add("Fallnr");
-            //string PAT, PER, surname, givenname;
-
-            
-
-
             try
             {
                 //sql connection object
@@ -94,9 +83,9 @@ namespace KistPack
                             PatientVisit pv = new PatientVisit(PAT,PER,surname,givenname);
 
 
-
+                            
                             //return pv;
-                            callback(pv, null);
+                            return pv;
                         }
                     }
                     else
@@ -104,7 +93,7 @@ namespace KistPack
                         Console.WriteLine("No data found.");
                         //global::System.Windows.Forms.MessageBox.Show("test","no data found");
                         //return null;
-                        callback(null, null);
+                        return null;
                     }
 
                     //close data reader
@@ -119,10 +108,10 @@ namespace KistPack
                 //display error message
                 Console.WriteLine("Exception: " + ex.Message);
                 global::System.Windows.Forms.MessageBox.Show(ex.Message,"error");
-                callback(null, ex);
+                return null;
             }
 
-            //return null;
+            return null;
             
         }
     }
