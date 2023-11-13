@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Media;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,7 +21,10 @@ namespace KistPack
         public static DataSet ds;
         public static DataTable dt;
         private static ArchDB archDB;
+        private static SoundPlayer sndplayrOK;
+        private static SoundPlayer sndplayrER;
 
+            
         public Form1()
         {
             InitializeComponent();
@@ -26,6 +32,8 @@ namespace KistPack
             //ds = new DataSet();
             dt = new DataTable();
 
+            sndplayrOK = new SoundPlayer(Properties.Resources.ok);
+            sndplayrER = new SoundPlayer(Properties.Resources.exception);
 
             dt.Columns.Add("Charge");
             dt.Columns.Add("Box");
@@ -59,9 +67,7 @@ namespace KistPack
         private void btnNewCharge_Click(object sender, EventArgs e)
         {
             // TEST
-            //testDBSelect("12345678");
-            //testAsnyc();
-            //GetVisitAsync("12345678");
+            
 
                 // ToDo: Prüfen ob vorhandene Charge / oder ob gespeichert wurde
 
@@ -179,18 +185,28 @@ namespace KistPack
                 //textBox3.Text = myTask.Result;
                 pv = myTask.Result;
 
-                
-            } catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "error");
-            }
-            finally
-            {
                 if (pv != null)
                 {
-                    tbKiste.Text = pv.Surname;
+
+                    updateData(pv);                                        
+
                 }
+                else
+                {
+                    //MessageBox.Show("Fallnummer wurde nicht gefunden: " + _Fall.ToString(), "Fehler");
+                    tbStatus.BackColor = Color.Red;
+                    tbStatus.Text = "Fallnummer wurde nicht gefunden: " + _Fall.ToString();
+                    playSoundER();
+                }
+
+            } catch (Exception ex)
+            {
+                //MessageBox.Show(ex.Message, "error");
+                tbStatus.BackColor = Color.Red;
+                tbStatus.Text = "Fehler: " + ex.Message;
+                playSoundER();
             }
+           
 
         }
 
@@ -215,7 +231,10 @@ namespace KistPack
                 {
                     dupCheck = true;
                     String Errmsg = "Fallnummer " + pv.Pat.ToString() + " schon vorhanden! Bitte Akte prüfen.";
-                    MessageBox.Show(Errmsg, "error");
+                    //MessageBox.Show(Errmsg, "error");
+                    tbStatus.BackColor = Color.Red;
+                    tbStatus.Text = "Fehler: " + Errmsg;
+                    playSoundER();
                 }
             }
 
@@ -224,10 +243,43 @@ namespace KistPack
                 dt.Rows.Add(tbCharge.Text, tbKiste.Text, pv.Pat, pv.Per, pv.Givenname, pv.Surname);
                 dt.AcceptChanges();
                 dgvAkten.Update();
+                tbStatus.BackColor = Color.Green;
+                tbStatus.Text = "Fall " + pv.Pat + " zur Charge hinzugefügt.";
+                playSoundOK();
             }
         }
 
         #endregion
 
+
+
+        #region Audio
+
+        private void playSoundOK()
+        {
+            try
+            {
+                //SoundPlayer sndplayrOK = new SoundPlayer(Properties.Resources.ok);
+                sndplayrOK.Play();
+            }catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + ": " + ex.StackTrace.ToString(), "Error");
+            }
+        }
+        private void playSoundER()
+        {
+            try
+            {
+                //SoundPlayer sndplayrOK = new SoundPlayer(Properties.Resources.ok);
+                sndplayrER.Play();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + ": " + ex.StackTrace.ToString(), "Error");
+            }
+        }
+  
+
+        #endregion
     }
 }
