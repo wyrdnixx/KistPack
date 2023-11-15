@@ -1,4 +1,7 @@
-﻿using System;
+﻿using iText.Kernel.Pdf;
+using iText.Layout;
+using iText.Layout.Element;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -307,5 +310,67 @@ namespace KistPack
             dgvAkten.Update();
 
         }
+
+
+        #region PDF Print
+
+     
+
+        private void ExportToPdf(DataGridView dataGridView, string pdfFilePath)
+        {
+            try
+            {
+                PdfWriter writer = new PdfWriter(pdfFilePath);
+                PdfDocument pdf = new PdfDocument(writer);
+                Document document = new Document(pdf);
+
+                var paragraph = new Paragraph("MCB Akten - Charge: " + tbCharge.Text);
+                document.Add(paragraph);
+
+                // Add a table to the document
+                iText.Layout.Element.Table table = new iText.Layout.Element.Table(dataGridView.Columns.Count);
+
+                // Add header row
+                foreach (DataGridViewColumn column in dataGridView.Columns)
+                {
+                    table.AddHeaderCell(new Cell().Add(new Paragraph(column.HeaderText)));
+                }
+
+                // Add data rows
+                foreach (DataGridViewRow row in dataGridView.Rows)
+                {
+                    foreach (DataGridViewCell cell in row.Cells)
+                    {
+                        table.AddCell(new Cell().Add(new Paragraph(cell.Value?.ToString())));
+                    }
+                }
+
+                // Add table to the document
+                document.Add(table);
+                document.Close();
+                MessageBox.Show("Exported to PDF successfully!", "Export to PDF", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message, "Export to PDF", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnFinishCharge_Click(object sender, EventArgs e)
+        {
+            {
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.Filter = "PDF files (*.pdf)|*.pdf";
+                saveFileDialog.Title = "Export to PDF";
+                saveFileDialog.ShowDialog();
+
+                if (saveFileDialog.FileName != "")
+                {
+                    ExportToPdf(dgvAkten, saveFileDialog.FileName);
+                }
+            }
     }
+    #endregion
+
+}
 }

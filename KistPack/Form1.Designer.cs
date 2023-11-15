@@ -45,6 +45,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.tbKiste = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.btnFinishCharge = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAkten)).BeginInit();
@@ -62,6 +63,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.btnFinishCharge);
             this.tabPage1.Controls.Add(this.btnDeleteEntry);
             this.tabPage1.Controls.Add(this.tbStatus);
             this.tabPage1.Controls.Add(this.tbFallScann);
@@ -87,7 +89,7 @@
             // btnDeleteEntry
             // 
             this.btnDeleteEntry.BackColor = System.Drawing.Color.Red;
-            this.btnDeleteEntry.Location = new System.Drawing.Point(3, 214);
+            this.btnDeleteEntry.Location = new System.Drawing.Point(3, 247);
             this.btnDeleteEntry.Name = "btnDeleteEntry";
             this.btnDeleteEntry.Size = new System.Drawing.Size(27, 23);
             this.btnDeleteEntry.TabIndex = 12;
@@ -182,13 +184,13 @@
             // 
             this.dgvAkten.AllowUserToAddRows = false;
             this.dgvAkten.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvAkten.Location = new System.Drawing.Point(34, 214);
+            this.dgvAkten.Location = new System.Drawing.Point(34, 247);
             this.dgvAkten.MultiSelect = false;
             this.dgvAkten.Name = "dgvAkten";
             this.dgvAkten.ReadOnly = true;
             this.dgvAkten.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvAkten.ShowEditingIcon = false;
-            this.dgvAkten.Size = new System.Drawing.Size(1131, 615);
+            this.dgvAkten.Size = new System.Drawing.Size(1131, 582);
             this.dgvAkten.TabIndex = 5;
             // 
             // btnNewCharge
@@ -257,6 +259,17 @@
             this.tabPage2.Text = "Suche";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // btnFinishCharge
+            // 
+            this.btnFinishCharge.Font = new System.Drawing.Font("Arial", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnFinishCharge.Location = new System.Drawing.Point(34, 193);
+            this.btnFinishCharge.Name = "btnFinishCharge";
+            this.btnFinishCharge.Size = new System.Drawing.Size(361, 48);
+            this.btnFinishCharge.TabIndex = 13;
+            this.btnFinishCharge.Text = "Charge abschließen";
+            this.btnFinishCharge.UseVisualStyleBackColor = true;
+            this.btnFinishCharge.Click += new System.EventHandler(this.btnFinishCharge_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -292,6 +305,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox tbStatus;
         private System.Windows.Forms.Button btnDeleteEntry;
+        private System.Windows.Forms.Button btnFinishCharge;
     }
 }
 
