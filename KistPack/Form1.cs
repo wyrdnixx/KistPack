@@ -1,4 +1,7 @@
-﻿using System;
+﻿using iText.Kernel.Pdf;
+using iText.Layout;
+using iText.Layout.Element;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -306,6 +309,149 @@ namespace KistPack
                 dt.Rows.RemoveAt(dgvAkten.SelectedRows[0].Index);
             dgvAkten.Update();
 
+        }
+
+
+        #region PDF Print
+
+
+        private void InitializeDataGridView()
+        {
+            // Assuming you have already populated your DataGridView with data
+            // This is just an example; replace it with your actual data
+            tbCharge.Text = "testCharge_000001";
+            dt.Rows.Add("TESTCharge", "100001", "10001","1","Hans","Hansen");
+            dt.Rows.Add("TESTCharge", "100001", "10002", "2", "Peter", "Peterson");
+            dt.Rows.Add("TESTCharge", "100001", "10003", "3", "Susi", "Susen");
+            dt.Rows.Add("TESTCharge", "100002", "10004", "4", "Maja", "Majar");
+            dt.Rows.Add("TESTCharge", "100002", "10005", "5", "Ede", "Edwind");
+            dt.Rows.Add("TESTCharge", "100003", "10006", "6", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100003", "10007", "7", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100003", "10008", "8", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100003", "10009", "9", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100004", "10010", "10", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100004", "10011", "11", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100005", "10012", "12", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100006", "10013", "13", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100006", "10014", "14", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100006", "10015", "15", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100006", "10015", "16", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100006", "10015", "17", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100007", "10015", "18", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100008", "10015", "19", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100008", "10015", "20", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100008", "10015", "21", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100008", "10015", "22", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100009", "10015", "23", "Max", "Maxer");
+
+            dt.AcceptChanges();
+
+        }
+
+        private void ExportToPDF(DataGridView dataGridView, string pdfFilePath)
+        {
+
+            try
+            {
+            
+            // Dictionary to store box numbers and their corresponding data
+            Dictionary<string, List<string[]>> boxData = new Dictionary<string, List<string[]>>();
+
+            PdfWriter writer = new PdfWriter(pdfFilePath);
+            PdfDocument pdf = new PdfDocument(writer);
+            Document document = new Document(pdf);
+
+
+            var paragraph = new Paragraph("MCB Akten - Charge: " + tbCharge.Text);
+            document.Add(paragraph);
+
+
+
+            // Iterate through DataGridView rows and group data by box number
+            foreach (DataGridViewRow row in dataGridView.Rows)
+            {
+                    string charge = row.Cells["Charge"].Value.ToString();
+                    string boxNumber = row.Cells["Box"].Value.ToString();
+                    string visit = row.Cells["Visit"].Value.ToString();
+                    string person = row.Cells["Person"].Value.ToString();
+                    string givenname = row.Cells["Givenname"].Value.ToString();
+                    string surname = row.Cells["Surname"].Value.ToString();
+
+
+                    if (!boxData.ContainsKey(boxNumber))
+                {
+                    boxData[boxNumber] = new List<string[]>();
+                }
+
+                boxData[boxNumber].Add(new string[] { visit, person, givenname, surname });
+            }
+
+            // Create a PDF document and add tables for each box
+           
+               
+                    foreach (var kvp in boxData)
+                    {
+                        // Create a table for each box
+                        Table table = new Table(new float[] { 1, 1,1,1})
+                            .UseAllAvailableWidth();
+
+                        // Add header row to the table
+                        table.AddHeaderCell("Visit");
+                        table.AddHeaderCell("Person");
+                        table.AddHeaderCell("Givenname");
+                        table.AddHeaderCell("Surname");
+
+                    // Add data rows to the table
+                    foreach (var rowData in kvp.Value)
+                        {
+                            table.AddCell(rowData[0]); // Visit
+                            table.AddCell(rowData[1]); // Person
+                            table.AddCell(rowData[2]); // givenname
+                            table.AddCell(rowData[3]); // surname
+                    }
+
+                // Add the table to the PDF document
+                document.Add(new Paragraph($"Box: {kvp.Key}"));
+                document.Add(table);
+                    }
+
+
+            document.Close();
+                //MessageBox.Show("PDF generated successfully!");
+                tbStatus.BackColor = Color.Green;
+                tbStatus.Text = "PDF erfolgreich erstellt";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message, "Export to PDF", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        private void btnFinishCharge_Click(object sender, EventArgs e)
+        {
+            {
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.Filter = "PDF files (*.pdf)|*.pdf";
+                saveFileDialog.Title = "Export to PDF";
+                saveFileDialog.ShowDialog();
+
+                if (saveFileDialog.FileName != "")
+                {
+                    //ExportToPdf(dgvAkten, saveFileDialog.FileName);
+                    
+                    ExportToPDF(dgvAkten, saveFileDialog.FileName);
+
+                }
+            }
+    }
+        #endregion
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            InitializeDataGridView();
+            btnFinishCharge_Click(sender, e);
+            
         }
     }
 }
