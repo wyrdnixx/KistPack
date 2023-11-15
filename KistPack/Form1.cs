@@ -335,14 +335,14 @@ namespace KistPack
             dt.Rows.Add("TESTCharge", "100006", "10013", "13", "Max", "Maxer");
             dt.Rows.Add("TESTCharge", "100006", "10014", "14", "Max", "Maxer");
             dt.Rows.Add("TESTCharge", "100006", "10015", "15", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100006", "10015", "16", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100006", "10015", "17", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100007", "10015", "18", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100008", "10015", "19", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100008", "10015", "20", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100008", "10015", "21", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100008", "10015", "22", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100009", "10015", "23", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100006", "10016", "16", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100006", "10017", "17", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100007", "10018", "18", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100008", "10019", "19", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100008", "10020", "20", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100008", "10021", "21", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100008", "10022", "22", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100009", "10023", "23", "Max", "Maxer");
 
             dt.AcceptChanges();
 
@@ -441,6 +441,7 @@ namespace KistPack
                     //ExportToPdf(dgvAkten, saveFileDialog.FileName);
                     
                     ExportToPDF(dgvAkten, saveFileDialog.FileName);
+                    System.Diagnostics.Process.Start(saveFileDialog.FileName);
 
                 }
             }
