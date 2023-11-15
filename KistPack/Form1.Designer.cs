@@ -43,6 +43,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.tbKiste = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.tbStatus = new System.Windows.Forms.TextBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAkten)).BeginInit();
@@ -60,6 +61,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.tbStatus);
             this.tabPage1.Controls.Add(this.tbFallScann);
             this.tabPage1.Controls.Add(this.label3);
             this.tabPage1.Controls.Add(this.btnApplyNewBox);
@@ -224,6 +226,18 @@
             this.tabPage2.Text = "Suche";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // tbStatus
+            // 
+            this.tbStatus.Font = new System.Drawing.Font("Arial", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbStatus.Location = new System.Drawing.Point(705, 127);
+            this.tbStatus.Multiline = true;
+            this.tbStatus.Name = "tbStatus";
+            this.tbStatus.ReadOnly = true;
+            this.tbStatus.Size = new System.Drawing.Size(460, 81);
+            this.tbStatus.TabIndex = 11;
+            this.tbStatus.TabStop = false;
+            this.tbStatus.Text = "Status";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -257,6 +271,7 @@
         private System.Windows.Forms.Button btnCreateCharge;
         private System.Windows.Forms.TextBox tbFallScann;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox tbStatus;
     }
 }
 

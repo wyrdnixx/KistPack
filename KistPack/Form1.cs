@@ -3,10 +3,15 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Media;
+using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static KistPack.ArchDB;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace KistPack
@@ -16,7 +21,10 @@ namespace KistPack
         public static DataSet ds;
         public static DataTable dt;
         private static ArchDB archDB;
+        private static SoundPlayer sndplayrOK;
+        private static SoundPlayer sndplayrER;
 
+            
         public Form1()
         {
             InitializeComponent();
@@ -24,6 +32,8 @@ namespace KistPack
             //ds = new DataSet();
             dt = new DataTable();
 
+            sndplayrOK = new SoundPlayer(Properties.Resources.ok);
+            sndplayrER = new SoundPlayer(Properties.Resources.exception);
 
             dt.Columns.Add("Charge");
             dt.Columns.Add("Box");
@@ -57,8 +67,8 @@ namespace KistPack
         private void btnNewCharge_Click(object sender, EventArgs e)
         {
             // TEST
-            testDBSelect("12345678");
             
+
                 // ToDo: Prüfen ob vorhandene Charge / oder ob gespeichert wurde
 
             cbMandant.Enabled = true;
@@ -136,48 +146,140 @@ namespace KistPack
                 
 
 
-                DataRow r = dt.NewRow();
-                r[0]=tbCharge.Text;
-                r[1] = tbKiste.Text;
-                r[2] = tbFallScann.Text;
+                //DataRow r = dt.NewRow();
+                //r[0]=tbCharge.Text;
+                //r[1] = tbKiste.Text;
+                //r[2] = tbFallScann.Text;
                 //dt.Rows.Add(r); 
                 //dt.AcceptChanges();
                 //dgvAkten.DataSource= dt;
                 //dgvAkten.Update();
+                
+                testTask(Int32.Parse(tbFallScann.Text));
                 tbFallScann.Text = "";
 
-                //testDBSelect(tbFallScann.Text);
+                
             }
         }
 
-        private void testDBSelect(string _Fallnr)
+
+        #region test async Tasks
+
+        //private async void testTask(object sender, EventArgs e)
+        private async void testTask(Int32 _Fall)
         {
-
-            PatientVisit pv  = archDB.GetVisit(_Fallnr);
-            if(pv != null)
+            PatientVisit pv=null;
+            try
             {
-                Boolean dupCheck = false;
 
-                foreach (DataRow row in dt.Rows)
+
+                // Start a new task with parameters
+                //Task<int> myTask = Task.Run(() => MyMethodWithParameters(_Fall));
+                Task<PatientVisit> myTask = Task.Run(() => GetVisit(_Fall));
+
+                // Wait for the task to complete without blocking the UI
+                await myTask;
+
+
+                // Set the TextBox text with the result
+                //textBox3.Text = myTask.Result;
+                pv = myTask.Result;
+
+                if (pv != null)
                 {
-                    if ( row["Visit"].ToString() == pv.Pat.ToString())
-                    {
-                        dupCheck = true;
-                        String Errmsg = "Fallnummer " + pv.Pat.ToString() + " schon vorhanden! Bitte Akte prüfen.";
-                        MessageBox.Show(Errmsg, "error");                    }
+
+                    updateData(pv);                                        
+
+                }
+                else
+                {
+                    //MessageBox.Show("Fallnummer wurde nicht gefunden: " + _Fall.ToString(), "Fehler");
+                    tbStatus.BackColor = Color.Red;
+                    tbStatus.Text = "Fallnummer wurde nicht gefunden: " + _Fall.ToString();
+                    playSoundER();
                 }
 
-                if (!dupCheck) {
-                    dt.Rows.Add(tbCharge.Text, tbKiste.Text, pv.Pat, pv.Per, pv.Givenname, pv.Surname);
-                    dt.AcceptChanges();
-                    dgvAkten.Update();
-                }
-
-
-
+            } catch (Exception ex)
+            {
+                //MessageBox.Show(ex.Message, "error");
+                tbStatus.BackColor = Color.Red;
+                tbStatus.Text = "Fehler: " + ex.Message;
+                playSoundER();
             }
-
+           
 
         }
+
+
+        #endregion
+
+
+
+
+
+
+        #region test Async threads
+      
+
+        private void updateData(PatientVisit pv)
+        {
+            Boolean dupCheck = false;
+
+            foreach (DataRow row in dt.Rows)
+            {
+                if (row["Visit"].ToString() == pv.Pat.ToString())
+                {
+                    dupCheck = true;
+                    String Errmsg = "Fallnummer " + pv.Pat.ToString() + " schon vorhanden! Bitte Akte prüfen.";
+                    //MessageBox.Show(Errmsg, "error");
+                    tbStatus.BackColor = Color.Red;
+                    tbStatus.Text = "Fehler: " + Errmsg;
+                    playSoundER();
+                }
+            }
+
+            if (!dupCheck)
+            {
+                dt.Rows.Add(tbCharge.Text, tbKiste.Text, pv.Pat, pv.Per, pv.Givenname, pv.Surname);
+                dt.AcceptChanges();
+                dgvAkten.Update();
+                tbStatus.BackColor = Color.Green;
+                tbStatus.Text = "Fall " + pv.Pat + " zur Charge hinzugefügt.";
+                playSoundOK();
+            }
+        }
+
+        #endregion
+
+
+
+        #region Audio
+
+        private void playSoundOK()
+        {
+            try
+            {
+                //SoundPlayer sndplayrOK = new SoundPlayer(Properties.Resources.ok);
+                sndplayrOK.Play();
+            }catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + ": " + ex.StackTrace.ToString(), "Error");
+            }
+        }
+        private void playSoundER()
+        {
+            try
+            {
+                //SoundPlayer sndplayrOK = new SoundPlayer(Properties.Resources.ok);
+                sndplayrER.Play();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + ": " + ex.StackTrace.ToString(), "Error");
+            }
+        }
+  
+
+        #endregion
     }
 }
