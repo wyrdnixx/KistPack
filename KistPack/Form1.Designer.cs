@@ -30,6 +30,8 @@
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.btnDeleteEntry = new System.Windows.Forms.Button();
+            this.tbStatus = new System.Windows.Forms.TextBox();
             this.tbFallScann = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.btnApplyNewBox = new System.Windows.Forms.Button();
@@ -43,7 +45,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.tbKiste = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.tbStatus = new System.Windows.Forms.TextBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAkten)).BeginInit();
@@ -61,6 +62,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.btnDeleteEntry);
             this.tabPage1.Controls.Add(this.tbStatus);
             this.tabPage1.Controls.Add(this.tbFallScann);
             this.tabPage1.Controls.Add(this.label3);
@@ -81,6 +83,30 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Kiste packen";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // btnDeleteEntry
+            // 
+            this.btnDeleteEntry.BackColor = System.Drawing.Color.Red;
+            this.btnDeleteEntry.Location = new System.Drawing.Point(3, 214);
+            this.btnDeleteEntry.Name = "btnDeleteEntry";
+            this.btnDeleteEntry.Size = new System.Drawing.Size(27, 23);
+            this.btnDeleteEntry.TabIndex = 12;
+            this.btnDeleteEntry.TabStop = false;
+            this.btnDeleteEntry.Text = "X";
+            this.btnDeleteEntry.UseVisualStyleBackColor = false;
+            this.btnDeleteEntry.Click += new System.EventHandler(this.btnDeleteEntry_Click);
+            // 
+            // tbStatus
+            // 
+            this.tbStatus.Font = new System.Drawing.Font("Arial", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbStatus.Location = new System.Drawing.Point(705, 127);
+            this.tbStatus.Multiline = true;
+            this.tbStatus.Name = "tbStatus";
+            this.tbStatus.ReadOnly = true;
+            this.tbStatus.Size = new System.Drawing.Size(460, 81);
+            this.tbStatus.TabIndex = 11;
+            this.tbStatus.TabStop = false;
+            this.tbStatus.Text = "Status";
             // 
             // tbFallScann
             // 
@@ -154,10 +180,15 @@
             // 
             // dgvAkten
             // 
+            this.dgvAkten.AllowUserToAddRows = false;
             this.dgvAkten.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvAkten.Location = new System.Drawing.Point(3, 214);
+            this.dgvAkten.Location = new System.Drawing.Point(34, 214);
+            this.dgvAkten.MultiSelect = false;
             this.dgvAkten.Name = "dgvAkten";
-            this.dgvAkten.Size = new System.Drawing.Size(1162, 615);
+            this.dgvAkten.ReadOnly = true;
+            this.dgvAkten.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvAkten.ShowEditingIcon = false;
+            this.dgvAkten.Size = new System.Drawing.Size(1131, 615);
             this.dgvAkten.TabIndex = 5;
             // 
             // btnNewCharge
@@ -209,7 +240,7 @@
             this.tbKiste.Enabled = false;
             this.tbKiste.Font = new System.Drawing.Font("Arial", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbKiste.Location = new System.Drawing.Point(401, 81);
-            this.tbKiste.MaxLength = 6;
+            this.tbKiste.MaxLength = 8;
             this.tbKiste.Name = "tbKiste";
             this.tbKiste.Size = new System.Drawing.Size(261, 41);
             this.tbKiste.TabIndex = 6;
@@ -225,18 +256,6 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Suche";
             this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // tbStatus
-            // 
-            this.tbStatus.Font = new System.Drawing.Font("Arial", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbStatus.Location = new System.Drawing.Point(705, 127);
-            this.tbStatus.Multiline = true;
-            this.tbStatus.Name = "tbStatus";
-            this.tbStatus.ReadOnly = true;
-            this.tbStatus.Size = new System.Drawing.Size(460, 81);
-            this.tbStatus.TabIndex = 11;
-            this.tbStatus.TabStop = false;
-            this.tbStatus.Text = "Status";
             // 
             // Form1
             // 
@@ -272,6 +291,7 @@
         private System.Windows.Forms.TextBox tbFallScann;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox tbStatus;
+        private System.Windows.Forms.Button btnDeleteEntry;
     }
 }
 

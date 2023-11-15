@@ -108,9 +108,8 @@ namespace KistPack
                 //display error message
                 Console.WriteLine("Exception: " + ex.Message);
                 //global::System.Windows.Forms.MessageBox.Show(ex.Message,"error");
-                
-                // ToDO : Hier muss noch die richtige Exception an das Hauptprog. gesendet werden.
-                return null;
+                throw new InvalidOperationException(ex.Message);
+   
             }
 
             return null;

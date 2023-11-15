@@ -44,6 +44,9 @@ namespace KistPack
             //ds.Tables.Add(dt);
             //dgvAkten.DataSource = ds;
             dgvAkten.DataSource = dt;
+            
+            
+
 
         }
 
@@ -107,7 +110,7 @@ namespace KistPack
 
         private void tbKiste_TextChanged(object sender, EventArgs e)
         {
-            if (tbKiste.Text.Length ==6)
+            if (tbKiste.Text.Length ==8)
             {
                 tbKiste.Enabled = false;
                 btnApplyNewBox.Enabled = true;
@@ -155,8 +158,8 @@ namespace KistPack
                 //dgvAkten.DataSource= dt;
                 //dgvAkten.Update();
                 
-                testTask(Int32.Parse(tbFallScann.Text));
-                tbFallScann.Text = "";
+                getVisitFromArchivDB(Int32.Parse(tbFallScann.Text));
+                
 
                 
             }
@@ -166,9 +169,15 @@ namespace KistPack
         #region test async Tasks
 
         //private async void testTask(object sender, EventArgs e)
-        private async void testTask(Int32 _Fall)
+        private async void getVisitFromArchivDB(Int32 _Fall)
         {
             PatientVisit pv=null;
+            tbFallScann.Enabled = false;
+            btnNewCharge.Enabled=false;
+            btnNextBox.Enabled=false;
+            btnApplyNewBox.Enabled=false;
+            tbStatus.BackColor = Color.Gray;
+            tbStatus.Text = "Suche Fallnummer: " + _Fall.ToString();
             try
             {
 
@@ -205,6 +214,15 @@ namespace KistPack
                 tbStatus.BackColor = Color.Red;
                 tbStatus.Text = "Fehler: " + ex.Message;
                 playSoundER();
+            }
+            finally
+            {
+                btnNewCharge.Enabled = true;
+                btnNextBox.Enabled = true;
+                btnApplyNewBox.Enabled = true;
+                tbFallScann.Text = "";
+                tbFallScann.Enabled = true;
+                tbFallScann.Focus();
             }
            
 
@@ -278,8 +296,16 @@ namespace KistPack
                 MessageBox.Show(ex.Message + ": " + ex.StackTrace.ToString(), "Error");
             }
         }
-  
+
 
         #endregion
+
+        private void btnDeleteEntry_Click(object sender, EventArgs e)
+        {
+            if (!dgvAkten.SelectedRows[0].IsNewRow)            
+                dt.Rows.RemoveAt(dgvAkten.SelectedRows[0].Index);
+            dgvAkten.Update();
+
+        }
     }
 }
