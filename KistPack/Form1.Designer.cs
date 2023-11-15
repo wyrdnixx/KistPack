@@ -30,6 +30,7 @@
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.btnDeleteEntry = new System.Windows.Forms.Button();
             this.tbStatus = new System.Windows.Forms.TextBox();
             this.tbFallScann = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -44,7 +45,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.tbKiste = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.btnDeleteEntry = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAkten)).BeginInit();
@@ -83,6 +83,18 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Kiste packen";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // btnDeleteEntry
+            // 
+            this.btnDeleteEntry.BackColor = System.Drawing.Color.Red;
+            this.btnDeleteEntry.Location = new System.Drawing.Point(3, 214);
+            this.btnDeleteEntry.Name = "btnDeleteEntry";
+            this.btnDeleteEntry.Size = new System.Drawing.Size(27, 23);
+            this.btnDeleteEntry.TabIndex = 12;
+            this.btnDeleteEntry.TabStop = false;
+            this.btnDeleteEntry.Text = "X";
+            this.btnDeleteEntry.UseVisualStyleBackColor = false;
+            this.btnDeleteEntry.Click += new System.EventHandler(this.btnDeleteEntry_Click);
             // 
             // tbStatus
             // 
@@ -228,7 +240,7 @@
             this.tbKiste.Enabled = false;
             this.tbKiste.Font = new System.Drawing.Font("Arial", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbKiste.Location = new System.Drawing.Point(401, 81);
-            this.tbKiste.MaxLength = 6;
+            this.tbKiste.MaxLength = 8;
             this.tbKiste.Name = "tbKiste";
             this.tbKiste.Size = new System.Drawing.Size(261, 41);
             this.tbKiste.TabIndex = 6;
@@ -244,18 +256,6 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Suche";
             this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // btnDeleteEntry
-            // 
-            this.btnDeleteEntry.BackColor = System.Drawing.Color.Red;
-            this.btnDeleteEntry.Location = new System.Drawing.Point(3, 214);
-            this.btnDeleteEntry.Name = "btnDeleteEntry";
-            this.btnDeleteEntry.Size = new System.Drawing.Size(27, 23);
-            this.btnDeleteEntry.TabIndex = 12;
-            this.btnDeleteEntry.TabStop = false;
-            this.btnDeleteEntry.Text = "X";
-            this.btnDeleteEntry.UseVisualStyleBackColor = false;
-            this.btnDeleteEntry.Click += new System.EventHandler(this.btnDeleteEntry_Click);
             // 
             // Form1
             // 

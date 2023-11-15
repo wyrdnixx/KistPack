@@ -110,7 +110,7 @@ namespace KistPack
 
         private void tbKiste_TextChanged(object sender, EventArgs e)
         {
-            if (tbKiste.Text.Length ==6)
+            if (tbKiste.Text.Length ==8)
             {
                 tbKiste.Enabled = false;
                 btnApplyNewBox.Enabled = true;
