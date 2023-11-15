@@ -316,6 +316,7 @@ namespace KistPack
 
      
 
+
         private void ExportToPdf(DataGridView dataGridView, string pdfFilePath)
         {
             try
@@ -326,27 +327,40 @@ namespace KistPack
 
                 var paragraph = new Paragraph("MCB Akten - Charge: " + tbCharge.Text);
                 document.Add(paragraph);
+               
 
-                // Add a table to the document
-                iText.Layout.Element.Table table = new iText.Layout.Element.Table(dataGridView.Columns.Count);
+                String currentBox = null;
+                
+                iText.Layout.Element.Table table = null;
 
-                // Add header row
-                foreach (DataGridViewColumn column in dataGridView.Columns)
-                {
-                    table.AddHeaderCell(new Cell().Add(new Paragraph(column.HeaderText)));
-                }
-
-                // Add data rows
                 foreach (DataGridViewRow row in dataGridView.Rows)
                 {
-                    foreach (DataGridViewCell cell in row.Cells)
-                    {
-                        table.AddCell(new Cell().Add(new Paragraph(cell.Value?.ToString())));
-                    }
-                }
 
-                // Add table to the document
+                    if (currentBox != row.Cells[1].Value.ToString())
+                    {
+                        currentBox = row.Cells[1].Value.ToString();
+                        var boxPara = new Paragraph("Kiste: " + currentBox);
+                        document.Add(boxPara);
+                        table = new iText.Layout.Element.Table(2);
+                        table.AddHeaderCell(new Cell().Add(new Paragraph("Fallnummer")));
+                        table.AddHeaderCell(new Cell().Add(new Paragraph("Person")));
+                        table.AddCell(new Cell().Add(new Paragraph(row.Cells[2].Value.ToString())));
+                        table.AddCell(new Cell().Add(new Paragraph(row.Cells[3].Value.ToString())));
+                        
+                    }
+                    else
+                    {
+
+                        table.AddCell(new Cell().Add(new Paragraph(row.Cells[2].Value.ToString())));
+                        table.AddCell(new Cell().Add(new Paragraph(row.Cells[3].Value.ToString())));
+                        
+
+                    }
+
+                    
+                }
                 document.Add(table);
+
                 document.Close();
                 MessageBox.Show("Exported to PDF successfully!", "Export to PDF", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
