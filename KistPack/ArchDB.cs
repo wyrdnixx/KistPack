@@ -41,9 +41,10 @@ namespace KistPack
 
 
 
-        private static string connString = @"Server = MSSQL; Database = TestDB; Trusted_Connection = True;";
+        //private static string connString = @"Server = MSSQL; Database = TestDB; Trusted_Connection = True;";
+        private static string connString = Properties.Settings.Default.SQLDBArchive;
 
-        
+
         public static PatientVisit GetVisit(Int32 _Fallnummer)
         {
             try

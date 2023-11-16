@@ -113,7 +113,7 @@ namespace KistPack
 
         private void tbKiste_TextChanged(object sender, EventArgs e)
         {
-            if (tbKiste.Text.Length ==8)
+            if (tbKiste.Text.Length == Properties.Settings.Default.LengthKiste)
             {
                 tbKiste.Enabled = false;
                 btnApplyNewBox.Enabled = true;
@@ -145,7 +145,7 @@ namespace KistPack
 
         private void tbFallScann_TextChanged(object sender, EventArgs e)
         {
-            if (tbFallScann.Text.Length == 8)
+            if (tbFallScann.Text.Length == Properties.Settings.Default.LenghtFallnummer)
             {
                 // Test Textbox
                 //tbTest.Text = tbTest.Text + System.Environment.NewLine + tbCharge.Text + ";" + tbKiste.Text + ";" + tbFallScann.Text;
