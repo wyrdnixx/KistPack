@@ -58,5 +58,17 @@ namespace KistPack.Properties {
                 this["LenghtFallnummer"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("logo-mcb.png")]
+        public string LogoFile {
+            get {
+                return ((string)(this["LogoFile"]));
+            }
+            set {
+                this["LogoFile"] = value;
+            }
+        }
     }
 }

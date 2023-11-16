@@ -1,4 +1,5 @@
-﻿using iText.Kernel.Pdf;
+﻿using iText.IO.Image;
+using iText.Kernel.Pdf;
 using iText.Layout;
 using iText.Layout.Element;
 using System;
@@ -47,8 +48,10 @@ namespace KistPack
             //ds.Tables.Add(dt);
             //dgvAkten.DataSource = ds;
             dgvAkten.DataSource = dt;
+
+            dgvAkten.DefaultCellStyle.Font = new Font("Arial", 12);
             
-            
+
 
 
         }
@@ -363,12 +366,31 @@ namespace KistPack
 
 
             var paragraph = new Paragraph("MCB Akten - Charge: " + tbCharge.Text);
-            document.Add(paragraph);
+            document.Add(paragraph.SetBold());
+
+                // Logo
+                try
+                {
+                
+                // Load image from disk
+
+                ImageData imageData = ImageDataFactory.Create(AppDomain.CurrentDomain.BaseDirectory + "\\Resources\\" + Properties.Settings.Default.LogoFile);
+                    // Create layout image object and provide parameters. Page number = 1
+                    //iText.Layout.Element.Image image = new iText.Layout.Element.Image(imageData).SetFixedPosition  ScaleAbsolute(100, 200).SetFixedPosition(1, 25,400);
+                    //ToD: Auf App-Settings umstellen
+                    iText.Layout.Element.Image image = new iText.Layout.Element.Image(imageData).SetFixedPosition(1, 450, 790);
+                    image.ScaleToFit(100, 100);
+                    // This adds the image to the page
+                    document.Add(image);
+                } catch (Exception imEx)
+                {
+                    MessageBox.Show("Error loading Logo: " + imEx.Message, "Error");
+                }
 
 
 
-            // Iterate through DataGridView rows and group data by box number
-            foreach (DataGridViewRow row in dataGridView.Rows)
+                // Iterate through DataGridView rows and group data by box number
+                foreach (DataGridViewRow row in dataGridView.Rows)
             {
                     string charge = row.Cells["Charge"].Value.ToString();
                     string boxNumber = row.Cells["Box"].Value.ToString();

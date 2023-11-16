@@ -176,5 +176,10 @@
   <ItemGroup>
     <None Include="Resources\exception.wav" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\logo-mcb.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

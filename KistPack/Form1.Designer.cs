@@ -30,6 +30,7 @@
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.btnTestData = new System.Windows.Forms.Button();
             this.btnFinishCharge = new System.Windows.Forms.Button();
             this.btnDeleteEntry = new System.Windows.Forms.Button();
             this.tbStatus = new System.Windows.Forms.TextBox();
@@ -46,7 +47,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.tbKiste = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.button1 = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAkten)).BeginInit();
@@ -64,7 +64,7 @@
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.button1);
+            this.tabPage1.Controls.Add(this.btnTestData);
             this.tabPage1.Controls.Add(this.btnFinishCharge);
             this.tabPage1.Controls.Add(this.btnDeleteEntry);
             this.tabPage1.Controls.Add(this.tbStatus);
@@ -87,6 +87,18 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Kiste packen";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // btnTestData
+            // 
+            this.btnTestData.BackColor = System.Drawing.Color.PowderBlue;
+            this.btnTestData.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnTestData.Location = new System.Drawing.Point(997, 218);
+            this.btnTestData.Name = "btnTestData";
+            this.btnTestData.Size = new System.Drawing.Size(168, 23);
+            this.btnTestData.TabIndex = 14;
+            this.btnTestData.Text = "Testdaten erzeugen";
+            this.btnTestData.UseVisualStyleBackColor = false;
+            this.btnTestData.Click += new System.EventHandler(this.button1_Click);
             // 
             // btnFinishCharge
             // 
@@ -196,6 +208,7 @@
             // dgvAkten
             // 
             this.dgvAkten.AllowUserToAddRows = false;
+            this.dgvAkten.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvAkten.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvAkten.Location = new System.Drawing.Point(34, 247);
             this.dgvAkten.MultiSelect = false;
@@ -272,16 +285,6 @@
             this.tabPage2.Text = "Suche";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(476, 215);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 14;
-            this.button1.Text = "test";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -318,7 +321,7 @@
         private System.Windows.Forms.TextBox tbStatus;
         private System.Windows.Forms.Button btnDeleteEntry;
         private System.Windows.Forms.Button btnFinishCharge;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnTestData;
     }
 }
 
