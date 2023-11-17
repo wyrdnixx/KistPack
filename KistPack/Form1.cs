@@ -1,5 +1,7 @@
 ﻿using iText.IO.Image;
+using iText.Kernel.Events;
 using iText.Kernel.Pdf;
+using iText.Kernel.Pdf.Canvas;
 using iText.Layout;
 using iText.Layout.Element;
 using System;
@@ -17,6 +19,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static KistPack.ArchDB;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+
+
 
 namespace KistPack
 {
@@ -357,16 +361,21 @@ namespace KistPack
             try
             {
             
-            // Dictionary to store box numbers and their corresponding data
-            Dictionary<string, List<string[]>> boxData = new Dictionary<string, List<string[]>>();
+                // Dictionary to store box numbers and their corresponding data
+                Dictionary<string, List<string[]>> boxData = new Dictionary<string, List<string[]>>();
 
-            PdfWriter writer = new PdfWriter(pdfFilePath);
-            PdfDocument pdf = new PdfDocument(writer);
-            Document document = new Document(pdf);
+                PdfWriter writer = new PdfWriter(pdfFilePath);
+                PdfDocument pdf = new PdfDocument(writer);
+                Document document = new Document(pdf);
+
+                // ToDO: Eventhandler überschreibt Text am Anfang der Seite / Header prüfen wie das geht.
+                // Eventhandler for new page to add header            
+                var eventHandler = new NewPageEventHandler();
+                pdf.AddEventHandler(PdfDocumentEvent.END_PAGE, eventHandler);
 
 
-            var paragraph = new Paragraph("MCB Akten - Charge: " + tbCharge.Text);
-            document.Add(paragraph.SetBold());
+                var paragraph = new Paragraph("MCB Akten - Charge: " + tbCharge.Text);
+                document.Add(paragraph.SetBold());
 
                 // Logo
                 try
@@ -477,4 +486,32 @@ namespace KistPack
             
         }
     }
+
+
+    public class NewPageEventHandler : IEventHandler
+    {
+        public void HandleEvent(Event @event)
+        {
+            PdfDocumentEvent docEvent = (PdfDocumentEvent)@event;
+
+            // Check if the event is triggered by the creation of a new page
+            if (docEvent.GetEventType() == PdfDocumentEvent.END_PAGE)
+            {
+                int pageNumber = docEvent.GetDocument().GetPageNumber(docEvent.GetPage());
+                //Console.WriteLine($"New page created: {pageNumber}");
+                //MessageBox.Show($"new page created:{pageNumber} ", "info");
+
+
+                var paragraph = new Paragraph("-----------------MCB Akten - Seite: "+ pageNumber);
+                PdfDocument pdf = docEvent.GetDocument();                
+                Document document = new Document(pdf);
+                document.Add(paragraph.SetBold());
+
+            }
+        }
+    }
+
+
+
+
 }
