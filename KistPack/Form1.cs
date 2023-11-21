@@ -1,14 +1,4 @@
-﻿using iText.IO.Font.Constants;
-using iText.IO.Image;
-using iText.Kernel.Events;
-using iText.Kernel.Font;
-using iText.Kernel.Pdf;
-using iText.Kernel.Pdf.Canvas;
-using iText.Layout;
-using iText.Layout.Element;
-using iText.Pdfa;
-using iText.StyledXmlParser.Jsoup.Nodes;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -24,7 +14,13 @@ using System.Windows.Forms;
 using System.Xml.Linq;
 using static KistPack.ArchDB;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using Document = iText.Layout.Document;
+using PdfSharp;
+using PdfSharp.Drawing;
+using PdfSharp.Pdf;
+using PdfSharp.Pdf.IO;
+using MigraDoc.DocumentObjectModel.Tables;
+using MigraDoc.DocumentObjectModel;
+using MigraDoc.Rendering;
 
 namespace KistPack
 {
@@ -57,7 +53,7 @@ namespace KistPack
             //dgvAkten.DataSource = ds;
             dgvAkten.DataSource = dt;
 
-            dgvAkten.DefaultCellStyle.Font = new Font("Arial", 12);
+            dgvAkten.DefaultCellStyle.Font = new System.Drawing.Font("Arial", 12);
             
 
 
@@ -190,7 +186,7 @@ namespace KistPack
             btnNewCharge.Enabled=false;
             btnNextBox.Enabled=false;
             btnApplyNewBox.Enabled=false;
-            tbStatus.BackColor = Color.Gray;
+            tbStatus.BackColor = System.Drawing.Color.Gray;
             tbStatus.Text = "Suche Fallnummer: " + _Fall.ToString();
             try
             {
@@ -217,7 +213,7 @@ namespace KistPack
                 else
                 {
                     //MessageBox.Show("Fallnummer wurde nicht gefunden: " + _Fall.ToString(), "Fehler");
-                    tbStatus.BackColor = Color.Red;
+                    tbStatus.BackColor = System.Drawing.Color.Red;
                     tbStatus.Text = "Fallnummer wurde nicht gefunden: " + _Fall.ToString();
                     playSoundER();
                 }
@@ -225,7 +221,7 @@ namespace KistPack
             } catch (Exception ex)
             {
                 //MessageBox.Show(ex.Message, "error");
-                tbStatus.BackColor = Color.Red;
+                tbStatus.BackColor = System.Drawing.Color.Red;
                 tbStatus.Text = "Fehler: " + ex.Message;
                 playSoundER();
             }
@@ -264,7 +260,7 @@ namespace KistPack
                     dupCheck = true;
                     String Errmsg = "Fallnummer " + pv.Pat.ToString() + " schon vorhanden! Bitte Akte prüfen.";
                     //MessageBox.Show(Errmsg, "error");
-                    tbStatus.BackColor = Color.Red;
+                    tbStatus.BackColor = System.Drawing.Color.Red;
                     tbStatus.Text = "Fehler: " + Errmsg;
                     playSoundER();
                 }
@@ -275,7 +271,7 @@ namespace KistPack
                 dt.Rows.Add(tbCharge.Text, tbKiste.Text, pv.Pat, pv.Per, pv.Givenname, pv.Surname);
                 dt.AcceptChanges();
                 dgvAkten.Update();
-                tbStatus.BackColor = Color.Green;
+                tbStatus.BackColor = System.Drawing.Color.Green;
                 tbStatus.Text = "Fall " + pv.Pat + " zur Charge hinzugefügt.";
                 playSoundOK();
             }
@@ -331,76 +327,66 @@ namespace KistPack
             // Assuming you have already populated your DataGridView with data
             // This is just an example; replace it with your actual data
             tbCharge.Text = "testCharge_000001";
-            dt.Rows.Add("TESTCharge", "100001", "10001","1","Hans","Hansen");
-            dt.Rows.Add("TESTCharge", "100001", "10002", "2", "Peter", "Peterson");
-            dt.Rows.Add("TESTCharge", "100001", "10003", "3", "Susi", "Susen");
-            dt.Rows.Add("TESTCharge", "100002", "10004", "4", "Maja", "Majar");
-            dt.Rows.Add("TESTCharge", "100002", "10005", "5", "Ede", "Edwind");
-            dt.Rows.Add("TESTCharge", "100003", "10006", "6", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100003", "10007", "7", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100003", "10008", "8", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100003", "10009", "9", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100004", "10010", "10", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100004", "10011", "11", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100005", "10012", "12", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100006", "10013", "13", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100006", "10014", "14", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100006", "10015", "15", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100006", "10016", "16", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100006", "10017", "17", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100007", "10018", "18", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100008", "10019", "19", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100008", "10020", "20", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100008", "10021", "21", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100008", "10022", "22", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100009", "10023", "23", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100001", "10001", "1", "Hans", "Hansen");
-            dt.Rows.Add("TESTCharge", "100001", "10002", "2", "Peter", "Peterson");
-            dt.Rows.Add("TESTCharge", "100001", "10003", "3", "Susi", "Susen");
-            dt.Rows.Add("TESTCharge", "100002", "10004", "4", "Maja", "Majar");
-            dt.Rows.Add("TESTCharge", "100002", "10005", "5", "Ede", "Edwind");
-            dt.Rows.Add("TESTCharge", "100003", "10006", "6", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100003", "10007", "7", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100003", "10008", "8", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100003", "10009", "9", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100004", "10010", "10", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100004", "10011", "11", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100005", "10012", "12", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100006", "10013", "13", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100006", "10014", "14", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100006", "10015", "15", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100006", "10016", "16", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100006", "10017", "17", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100007", "10018", "18", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100008", "10019", "19", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100008", "10020", "20", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100008", "10021", "21", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100008", "10022", "22", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100009", "10023", "23", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100001", "10001", "1", "Hans", "Hansen");
-            dt.Rows.Add("TESTCharge", "100001", "10002", "2", "Peter", "Peterson");
-            dt.Rows.Add("TESTCharge", "100001", "10003", "3", "Susi", "Susen");
-            dt.Rows.Add("TESTCharge", "100002", "10004", "4", "Maja", "Majar");
-            dt.Rows.Add("TESTCharge", "100002", "10005", "5", "Ede", "Edwind");
-            dt.Rows.Add("TESTCharge", "100003", "10006", "6", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100003", "10007", "7", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100003", "10008", "8", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100003", "10009", "9", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100004", "10010", "10", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100004", "10011", "11", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100005", "10012", "12", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100006", "10013", "13", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100006", "10014", "14", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100006", "10015", "15", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100006", "10016", "16", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100006", "10017", "17", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100007", "10018", "18", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100008", "10019", "19", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100008", "10020", "20", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100008", "10021", "21", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100008", "10022", "22", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "100009", "10023", "23", "Max", "Maxer");
-
+            dt.Rows.Add("TESTCharge", "101", "23001","1","Hans","Hansen");
+            dt.Rows.Add("TESTCharge", "101", "23002", "2", "Peter", "Peterson");
+            dt.Rows.Add("TESTCharge", "101", "23003", "3", "Susi", "Susen");
+            dt.Rows.Add("TESTCharge", "101", "23004", "4", "Maja", "Majar");
+            dt.Rows.Add("TESTCharge", "102", "23005", "5", "Ede", "Edwind");
+            dt.Rows.Add("TESTCharge", "102", "23006", "6", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "102", "23007", "7", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "104", "23008", "8", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "104", "23009", "9", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "104", "23010", "10", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "104", "23011", "11", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "104", "23012", "12", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "104", "23013", "13", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "105", "23014", "14", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "105", "23015", "15", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "105", "23016", "16", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "105", "23017", "17", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "105", "23018", "18", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "105", "23019", "19", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "105", "23020", "20", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "105", "23021", "21", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "105", "23022", "22", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "105", "23023", "23", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "106", "23024", "1", "Hans", "Hansen");
+            dt.Rows.Add("TESTCharge", "106", "23025", "2", "Peter", "Peterson");
+            dt.Rows.Add("TESTCharge", "106", "23026", "3", "Susi", "Susen");
+            dt.Rows.Add("TESTCharge", "106", "23027", "4", "Maja", "Majar");
+            dt.Rows.Add("TESTCharge", "106", "23028", "5", "Ede", "Edwind");
+            dt.Rows.Add("TESTCharge", "106", "23029", "6", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "106", "23030", "7", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "107", "23031", "8", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "107", "23032", "9", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "107", "23033", "10", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "107", "23034", "11", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "108", "23035", "12", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "108", "23036", "13", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "108", "23037", "14", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "108", "23038", "15", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "108", "23039", "16", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "108", "23040", "17", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "108", "23041", "18", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "109", "23042", "19", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "109", "23043", "20", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "109", "23044", "21", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "109", "23045", "22", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "109", "23046", "23", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "109", "23047", "1", "Hans", "Hansen");
+            dt.Rows.Add("TESTCharge", "109", "23048", "2", "Peter", "Peterson");
+            dt.Rows.Add("TESTCharge", "109", "23049", "3", "Susi", "Susen");
+            dt.Rows.Add("TESTCharge", "109", "23050", "4", "Maja", "Majar");
+            dt.Rows.Add("TESTCharge", "109", "23051", "5", "Ede", "Edwind");
+            dt.Rows.Add("TESTCharge", "109", "23052", "6", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "109", "23053", "7", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "109", "23054", "8", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "109", "23055", "9", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "109", "23056", "10", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "109", "23057", "11", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "109", "23058", "12", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "109", "23059", "13", "Max", "Maxer");
+            
             dt.AcceptChanges();
 
         }
@@ -410,55 +396,30 @@ namespace KistPack
             // Dictionary to store box numbers and their corresponding data
             Dictionary<string, List<string[]>> boxData = new Dictionary<string, List<string[]>>();
 
-            PdfWriter writer = new PdfWriter(pdfFilePath);
-            PdfDocument pdf = new PdfDocument(writer);
-            Document document = new Document(pdf);
             
             try
             {
+                // NEW PDFSharp
+                // Create a new MigraDoc document
+                Document document = new Document();
 
+     
+                Section section = document.AddSection();
 
+                // Add a header to the section
+                Table headerTable = section.Headers.Primary.AddTable();
+                headerTable.AddColumn(Unit.FromCentimeter(5));
+                headerTable.AddColumn(Unit.FromCentimeter(8));
+                headerTable.AddColumn(Unit.FromCentimeter(7));
+                Row headerRow = headerTable.AddRow();
+                headerRow.Cells[0].AddParagraph("MCB-Charge: " + tbCharge.Text); // Replace with your logo
+                //headerRow.Cells[1].AddParagraph($"Page {i + 1}");
+                //headerRow.Cells[1].AddParagraph($"Page ?");
 
-                // ToDO: Eventhandler überschreibt Text am Anfang der Seite / Header prüfen wie das geht.
-                // Eventhandler for new page to add header            
-                //var eventHandler = new NewPageEventHandler();                
-                //pdf.AddEventHandler(PdfDocumentEvent.END_PAGE, new HeaderEventHandler());
+            String logoFile = AppDomain.CurrentDomain.BaseDirectory + "\\Resources\\" + Properties.Settings.Default.LogoFile;
+                MigraDoc.DocumentObjectModel.Shapes.Image logo = headerRow.Cells[2].AddImage(logoFile);
+                logo.Width = MigraDoc.DocumentObjectModel.Unit.FromCentimeter(2.5);
 
-                // Add logo to each page
-                iText.Layout.Element.Image logo = new iText.Layout.Element.Image(ImageDataFactory.Create(AppDomain.CurrentDomain.BaseDirectory + "\\Resources\\" + Properties.Settings.Default.LogoFile))
-                //.SetAutoScale(false)
-                //.ScaleAbsolute(10f, 12f);
-                ;
-                //logo.SetHeight(10);
-
-                
-
-                pdf.AddEventHandler(PdfDocumentEvent.END_PAGE, new HeaderEventHandler(logo));
-
-
-                var paragraph = new Paragraph("MCB Akten - Charge: " + tbCharge.Text);
-                document.Add(paragraph.SetBold());
-
-                // Logo
-                try
-                {
-                
-                // Load image from disk
-
-                //ImageData imageData = ImageDataFactory.Create(AppDomain.CurrentDomain.BaseDirectory + "\\Resources\\" + Properties.Settings.Default.LogoFile);
-                //    // Create layout image object and provide parameters. Page number = 1
-                //    //iText.Layout.Element.Image image = new iText.Layout.Element.Image(imageData).SetFixedPosition  ScaleAbsolute(100, 200).SetFixedPosition(1, 25,400);
-                //    //ToD: Auf App-Settings umstellen
-                //    iText.Layout.Element.Image image = new iText.Layout.Element.Image(imageData).SetFixedPosition(1, 450, 790);
-                //    image.ScaleToFit(100, 100);
-                //    // This adds the image to the page
-                //    document.Add(image);
-
-
-                } catch (Exception imEx)
-                {
-                    MessageBox.Show("Error loading Logo: " + imEx.Message, "Error");
-                }
 
 
 
@@ -481,38 +442,65 @@ namespace KistPack
                 boxData[boxNumber].Add(new string[] { visit, person, givenname, surname });
             }
 
-            // Create a PDF document and add tables for each box
-           
-               
-                    foreach (var kvp in boxData)
-                    {
-                        // Create a table for each box
-                        Table table = new Table(new float[] { 1, 1,1,1})
-                            .UseAllAvailableWidth();
+                // Create a PDF document and add tables for each box
 
-                        // Add header row to the table
-                        table.AddHeaderCell("Visit");
-                        table.AddHeaderCell("Person");
-                        table.AddHeaderCell("Givenname");
-                        table.AddHeaderCell("Surname");
+                foreach (var kvp in boxData)
+                {
+                    //Kistennummer 
+                    section.AddParagraph(); // Leerzeile                    
+                    section.AddParagraph("Kiste: " + kvp.Key.ToString());
+                    section.LastParagraph.Format.Font.Bold = true;
+                    section.LastParagraph.Format.Font.Size=12;
+                    section.AddParagraph(); // Leerzeile
+
+                    // Create a table for each box
+                    // Add a table to the section
+                    Table dataTable = section.AddTable();
+                    dataTable.Borders.Width = 0.75;
+                    //dataTable.Rows.Height = Unit.FromCentimeter(1.5);
+
+                    // Add columns to the table
+                    for (int j = 0; j < 4; j++)
+                    {
+                        dataTable.AddColumn(Unit.FromCentimeter(4));
+                    }
+                    // Add a row for column headers
+                    Row headerRowTable = dataTable.AddRow();
+                    //headerRowTable.Cells[0].AddParagraph("Box");
+                    headerRowTable.Cells[0].AddParagraph("Fall");
+                    headerRowTable.Cells[1].AddParagraph("Person");
+                    headerRowTable.Cells[2].AddParagraph("Vorname");
+                    headerRowTable.Cells[3].AddParagraph("Nachname");
+
 
                     // Add data rows to the table
                     foreach (var rowData in kvp.Value)
+                    {
+                        //table.AddCell(rowData[0]); // Visit
+                        //table.AddCell(rowData[1]); // Person
+                        //table.AddCell(rowData[2]); // givenname
+                        //table.AddCell(rowData[3]); // surname
+                        Row dataRow = dataTable.AddRow();
+                        for (int k = 0; k < 4; k++)
                         {
-                            table.AddCell(rowData[0]); // Visit
-                            table.AddCell(rowData[1]); // Person
-                            table.AddCell(rowData[2]); // givenname
-                            table.AddCell(rowData[3]); // surname
+                            dataRow.Cells[k].AddParagraph($"{rowData[k]}");
+                        }
+
                     }
 
-                // Add the table to the PDF document
-                document.Add(new Paragraph($"Charge: {tbCharge.Text} Box: {kvp.Key}"));
-                document.Add(table);
-                    }
+                    // Add the table to the PDF document
+                    //document.Add(new Paragraph($"Charge: {tbCharge.Text} Box: {kvp.Key}"));
+                    //document.Add(table);
+                }
 
 
+                // Create a PDF renderer and save the document to a file
+                PdfDocumentRenderer pdfRenderer = new PdfDocumentRenderer();
+                pdfRenderer.Document = document;
+                pdfRenderer.RenderDocument();
+                pdfRenderer.PdfDocument.Save(pdfFilePath);
                 //MessageBox.Show("PDF generated successfully!");
-                tbStatus.BackColor = Color.Green;
+                tbStatus.BackColor = System.Drawing.Color.Green;
                 tbStatus.Text = "PDF erfolgreich erstellt";
             }
             catch (Exception ex)
@@ -521,7 +509,7 @@ namespace KistPack
             }
 
             
-            document.Close();
+            //document.Close();
 
         }
 
@@ -554,134 +542,42 @@ namespace KistPack
         }
     }
 
-    class HeaderEventHandler : IEventHandler
-    {
-        private  iText.Layout.Element.Image logo;
+    //class HeaderEventHandler : IEventHandler
+    //{
+    //    private  iText.Layout.Element.Image logo;
 
-        public HeaderEventHandler(iText.Layout.Element.Image logo)
-        {
-            this.logo = logo;
-        }
+    //    public HeaderEventHandler(iText.Layout.Element.Image logo)
+    //    {
+    //        this.logo = logo;
+    //    }
 
-        public void HandleEvent(Event currentEvent)
-        {
-            var documentEvent = (PdfDocumentEvent)currentEvent;
-            var pdf = documentEvent.GetDocument();
-            var page = documentEvent.GetPage();
-            var canvas = new PdfCanvas(page.NewContentStreamBefore(), page.GetResources(), pdf);
+    //    public void HandleEvent(Event currentEvent)
+    //    {
+    //        var documentEvent = (PdfDocumentEvent)currentEvent;
+    //        var pdf = documentEvent.GetDocument();
+    //        var page = documentEvent.GetPage();
+    //        var canvas = new PdfCanvas(page.NewContentStreamBefore(), page.GetResources(), pdf);
 
-            // Add logo at the top
-            //logo.SetFixedPosition(450, page.GetPageSize().GetTop() - 100);           
-            logo.GetAccessibilityProperties().SetAlternateDescription("Logo");
-            logo.SetHeight(150);
-            canvas.AddXObjectAt(logo.GetXObject(), 400, page.GetPageSize().GetTop() - 100);
+    //        // Add logo at the top
+    //        //logo.SetFixedPosition(450, page.GetPageSize().GetTop() - 100);           
+    //        logo.GetAccessibilityProperties().SetAlternateDescription("Logo");
+    //        logo.SetHeight(150);
+    //        canvas.AddXObjectAt(logo.GetXObject(), 400, page.GetPageSize().GetTop() - 100);
             
 
 
 
-            // Add page number at the top right
-            canvas.BeginText()
-                .SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 12)
-                .MoveText(page.GetPageSize().GetRight() - 72, page.GetPageSize().GetTop() - 36)
-                .ShowText("Page " + pdf.GetPageNumber(page))
-                .EndText();
+    //        // Add page number at the top right
+    //        canvas.BeginText()
+    //            .SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 12)
+    //            .MoveText(page.GetPageSize().GetRight() - 72, page.GetPageSize().GetTop() - 36)
+    //            .ShowText("Page " + pdf.GetPageNumber(page))
+    //            .EndText();
 
-            canvas.Release();
-        }
-    }
-    class HeaderEventHandlerOLD : IEventHandler
-    {
-        public void HandleEvent(Event currentEvent)
-        {
-            var documentEvent = (PdfDocumentEvent)currentEvent;
-            var pdf = documentEvent.GetDocument();
-            var page = documentEvent.GetPage();
-            var canvas = new PdfCanvas(page.NewContentStreamBefore(), page.GetResources(), pdf);
-            Document document = new Document(page.GetDocument());
-
-
-            int pageNumber = documentEvent.GetDocument().GetPageNumber(documentEvent.GetPage());
-            int pagecounter = documentEvent.GetDocument().GetNumberOfPages();
-
-
-            // Add empty lines at the top of each page
-            int numberOfEmptyLines = 1; // Adjust as needed
-            for (int i = 0; i < numberOfEmptyLines; i++)
-            {
-                canvas.MoveTo(36, page.GetPageSize().GetTop() - (i + 1) * 12);
-                canvas.LineTo(page.GetPageSize().GetRight() - 36, page.GetPageSize().GetTop() - (i + 1) * 12);
-                canvas.Stroke();
-            }
-            // Add your header content here
-            canvas.BeginText()
-                .SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 12)
-                .MoveText(36, page.GetPageSize().GetTop() - 36)
-                .ShowText("-----------------MCB Akten - Seite: " + pageNumber + "/"+ pagecounter)
-                .EndText();
-            canvas.Release();
-
-            
-            //Console.WriteLine($"New page created: {pageNumber}");
-            //MessageBox.Show($"new page created:{pageNumber} ", "info");
-
-            //var paragraph = new Paragraph("-----------------MCB Akten - Seite: " + pageNumber);
-            //document.Add(paragraph.SetBold());
-
-        }
-    }
-
-    public class NewPageEventHandler : IEventHandler
-    {
-        public void HandleEvent(Event @event)
-        {
-            PdfDocumentEvent docEvent = (PdfDocumentEvent)@event;
-
-            // Check if the event is triggered by the creation of a new page
-            if (docEvent.GetEventType() == PdfDocumentEvent.END_PAGE)
-                //if (docEvent.GetEventType() == PdfDocumentEvent.START_PAGE)
-                {
-                int pageNumber = docEvent.GetDocument().GetPageNumber(docEvent.GetPage());
-                //Console.WriteLine($"New page created: {pageNumber}");
-                //MessageBox.Show($"new page created:{pageNumber} ", "info");
-
-
-                var paragraph = new Paragraph("-----------------MCB Akten - Seite: "+ pageNumber);
-                PdfDocument pdf = docEvent.GetDocument();
-                //Document document = new Document(pdf);                
-                PdfPage page = docEvent.GetPage();
-                Document document = new Document(page.GetDocument());
-                document.Add(paragraph.SetBold());
-
-                // Add header content, you can customize this based on your needs
-                float pageWidth = page.GetPageSize().GetWidth();
-                float pageHeight = page.GetPageSize().GetHeight();
-                Paragraph header = new Paragraph($"Header for Page {pageNumber}")
-                    .SetFontColor(iText.Kernel.Colors.ColorConstants.BLACK)
-                    .SetFontSize(12)
-                    .SetFixedPosition(1, pageWidth / 2, pageHeight - 20, pageWidth);
-
-                
-                document.Add(header);
-            }
-        }
-        //private void AddHeader(PdfPage page, int pageNumber)
-        //{
-        //    float pageWidth = page.GetPageSize().GetWidth();
-        //    float pageHeight = page.GetPageSize().GetHeight();
-
-        //    // Create a layout document for the header
-        //    Document document = new Document(new PdfDocument(page.GetPdfDocument()));
-
-        //    // Add header content, you can customize this based on your needs
-        //    Paragraph header = new Paragraph($"Header for Page {pageNumber}")
-        //        .SetFontColor(iText.Kernel.Colors.ColorConstants.BLACK)
-        //        .SetFontSize(12)
-        //        .SetFixedPosition(1, pageWidth / 2, pageHeight - 20, pageWidth);
-
-        //    document.Add(header);
-        //}
-    }
-
+    //        canvas.Release();
+    //    }
+    //}
+    
 
 
 
