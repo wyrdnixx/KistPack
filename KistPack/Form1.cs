@@ -415,8 +415,20 @@ namespace KistPack
                 headerRow.Cells[0].AddParagraph("MCB-Charge: " + tbCharge.Text); // Replace with your logo
                 //headerRow.Cells[1].AddParagraph($"Page {i + 1}");
                 //headerRow.Cells[1].AddParagraph($"Page ?");
+                Paragraph headerPageIndex = headerRow.Cells[1].AddParagraph();
+                headerPageIndex.AddText("Seite: ");
+                headerPageIndex.AddPageField();
+                headerPageIndex.AddText(" / ");
+                headerPageIndex.AddNumPagesField();                
+                
+                Paragraph foot = section.Footers.Primary.AddParagraph();                               
+                foot.AddText("Seite ");
+                foot.AddPageField();
+                foot.AddText(" / ");
+                foot.AddNumPagesField();
 
-            String logoFile = AppDomain.CurrentDomain.BaseDirectory + "\\Resources\\" + Properties.Settings.Default.LogoFile;
+
+                String logoFile = AppDomain.CurrentDomain.BaseDirectory + "\\Resources\\" + Properties.Settings.Default.LogoFile;
                 MigraDoc.DocumentObjectModel.Shapes.Image logo = headerRow.Cells[2].AddImage(logoFile);
                 logo.Width = MigraDoc.DocumentObjectModel.Unit.FromCentimeter(2.5);
 
@@ -488,18 +500,19 @@ namespace KistPack
 
                     }
 
-                    // Add the table to the PDF document
-                    //document.Add(new Paragraph($"Charge: {tbCharge.Text} Box: {kvp.Key}"));
-                    //document.Add(table);
+         
                 }
 
+
+                
 
                 // Create a PDF renderer and save the document to a file
                 PdfDocumentRenderer pdfRenderer = new PdfDocumentRenderer();
                 pdfRenderer.Document = document;
+
                 pdfRenderer.RenderDocument();
                 pdfRenderer.PdfDocument.Save(pdfFilePath);
-                //MessageBox.Show("PDF generated successfully!");
+
                 tbStatus.BackColor = System.Drawing.Color.Green;
                 tbStatus.Text = "PDF erfolgreich erstellt";
             }
