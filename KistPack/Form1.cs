@@ -1,9 +1,13 @@
-﻿using iText.IO.Image;
+﻿using iText.IO.Font.Constants;
+using iText.IO.Image;
 using iText.Kernel.Events;
+using iText.Kernel.Font;
 using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Canvas;
 using iText.Layout;
 using iText.Layout.Element;
+using iText.Pdfa;
+using iText.StyledXmlParser.Jsoup.Nodes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,10 +21,10 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using static KistPack.ArchDB;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-
-
+using Document = iText.Layout.Document;
 
 namespace KistPack
 {
@@ -350,6 +354,52 @@ namespace KistPack
             dt.Rows.Add("TESTCharge", "100008", "10021", "21", "Max", "Maxer");
             dt.Rows.Add("TESTCharge", "100008", "10022", "22", "Max", "Maxer");
             dt.Rows.Add("TESTCharge", "100009", "10023", "23", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100001", "10001", "1", "Hans", "Hansen");
+            dt.Rows.Add("TESTCharge", "100001", "10002", "2", "Peter", "Peterson");
+            dt.Rows.Add("TESTCharge", "100001", "10003", "3", "Susi", "Susen");
+            dt.Rows.Add("TESTCharge", "100002", "10004", "4", "Maja", "Majar");
+            dt.Rows.Add("TESTCharge", "100002", "10005", "5", "Ede", "Edwind");
+            dt.Rows.Add("TESTCharge", "100003", "10006", "6", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100003", "10007", "7", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100003", "10008", "8", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100003", "10009", "9", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100004", "10010", "10", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100004", "10011", "11", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100005", "10012", "12", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100006", "10013", "13", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100006", "10014", "14", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100006", "10015", "15", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100006", "10016", "16", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100006", "10017", "17", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100007", "10018", "18", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100008", "10019", "19", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100008", "10020", "20", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100008", "10021", "21", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100008", "10022", "22", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100009", "10023", "23", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100001", "10001", "1", "Hans", "Hansen");
+            dt.Rows.Add("TESTCharge", "100001", "10002", "2", "Peter", "Peterson");
+            dt.Rows.Add("TESTCharge", "100001", "10003", "3", "Susi", "Susen");
+            dt.Rows.Add("TESTCharge", "100002", "10004", "4", "Maja", "Majar");
+            dt.Rows.Add("TESTCharge", "100002", "10005", "5", "Ede", "Edwind");
+            dt.Rows.Add("TESTCharge", "100003", "10006", "6", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100003", "10007", "7", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100003", "10008", "8", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100003", "10009", "9", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100004", "10010", "10", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100004", "10011", "11", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100005", "10012", "12", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100006", "10013", "13", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100006", "10014", "14", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100006", "10015", "15", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100006", "10016", "16", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100006", "10017", "17", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100007", "10018", "18", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100008", "10019", "19", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100008", "10020", "20", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100008", "10021", "21", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100008", "10022", "22", "Max", "Maxer");
+            dt.Rows.Add("TESTCharge", "100009", "10023", "23", "Max", "Maxer");
 
             dt.AcceptChanges();
 
@@ -357,21 +407,33 @@ namespace KistPack
 
         private void ExportToPDF(DataGridView dataGridView, string pdfFilePath)
         {
+            // Dictionary to store box numbers and their corresponding data
+            Dictionary<string, List<string[]>> boxData = new Dictionary<string, List<string[]>>();
 
+            PdfWriter writer = new PdfWriter(pdfFilePath);
+            PdfDocument pdf = new PdfDocument(writer);
+            Document document = new Document(pdf);
+            
             try
             {
-            
-                // Dictionary to store box numbers and their corresponding data
-                Dictionary<string, List<string[]>> boxData = new Dictionary<string, List<string[]>>();
 
-                PdfWriter writer = new PdfWriter(pdfFilePath);
-                PdfDocument pdf = new PdfDocument(writer);
-                Document document = new Document(pdf);
+
 
                 // ToDO: Eventhandler überschreibt Text am Anfang der Seite / Header prüfen wie das geht.
                 // Eventhandler for new page to add header            
-                var eventHandler = new NewPageEventHandler();
-                pdf.AddEventHandler(PdfDocumentEvent.END_PAGE, eventHandler);
+                //var eventHandler = new NewPageEventHandler();                
+                //pdf.AddEventHandler(PdfDocumentEvent.END_PAGE, new HeaderEventHandler());
+
+                // Add logo to each page
+                iText.Layout.Element.Image logo = new iText.Layout.Element.Image(ImageDataFactory.Create(AppDomain.CurrentDomain.BaseDirectory + "\\Resources\\" + Properties.Settings.Default.LogoFile))
+                //.SetAutoScale(false)
+                //.ScaleAbsolute(10f, 12f);
+                ;
+                //logo.SetHeight(10);
+
+                
+
+                pdf.AddEventHandler(PdfDocumentEvent.END_PAGE, new HeaderEventHandler(logo));
 
 
                 var paragraph = new Paragraph("MCB Akten - Charge: " + tbCharge.Text);
@@ -383,14 +445,16 @@ namespace KistPack
                 
                 // Load image from disk
 
-                ImageData imageData = ImageDataFactory.Create(AppDomain.CurrentDomain.BaseDirectory + "\\Resources\\" + Properties.Settings.Default.LogoFile);
-                    // Create layout image object and provide parameters. Page number = 1
-                    //iText.Layout.Element.Image image = new iText.Layout.Element.Image(imageData).SetFixedPosition  ScaleAbsolute(100, 200).SetFixedPosition(1, 25,400);
-                    //ToD: Auf App-Settings umstellen
-                    iText.Layout.Element.Image image = new iText.Layout.Element.Image(imageData).SetFixedPosition(1, 450, 790);
-                    image.ScaleToFit(100, 100);
-                    // This adds the image to the page
-                    document.Add(image);
+                //ImageData imageData = ImageDataFactory.Create(AppDomain.CurrentDomain.BaseDirectory + "\\Resources\\" + Properties.Settings.Default.LogoFile);
+                //    // Create layout image object and provide parameters. Page number = 1
+                //    //iText.Layout.Element.Image image = new iText.Layout.Element.Image(imageData).SetFixedPosition  ScaleAbsolute(100, 200).SetFixedPosition(1, 25,400);
+                //    //ToD: Auf App-Settings umstellen
+                //    iText.Layout.Element.Image image = new iText.Layout.Element.Image(imageData).SetFixedPosition(1, 450, 790);
+                //    image.ScaleToFit(100, 100);
+                //    // This adds the image to the page
+                //    document.Add(image);
+
+
                 } catch (Exception imEx)
                 {
                     MessageBox.Show("Error loading Logo: " + imEx.Message, "Error");
@@ -442,12 +506,11 @@ namespace KistPack
                     }
 
                 // Add the table to the PDF document
-                document.Add(new Paragraph($"Box: {kvp.Key}"));
+                document.Add(new Paragraph($"Charge: {tbCharge.Text} Box: {kvp.Key}"));
                 document.Add(table);
                     }
 
 
-            document.Close();
                 //MessageBox.Show("PDF generated successfully!");
                 tbStatus.BackColor = Color.Green;
                 tbStatus.Text = "PDF erfolgreich erstellt";
@@ -456,6 +519,10 @@ namespace KistPack
             {
                 MessageBox.Show("Error: " + ex.Message, "Export to PDF", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
+            
+            document.Close();
+
         }
 
 
@@ -487,6 +554,81 @@ namespace KistPack
         }
     }
 
+    class HeaderEventHandler : IEventHandler
+    {
+        private  iText.Layout.Element.Image logo;
+
+        public HeaderEventHandler(iText.Layout.Element.Image logo)
+        {
+            this.logo = logo;
+        }
+
+        public void HandleEvent(Event currentEvent)
+        {
+            var documentEvent = (PdfDocumentEvent)currentEvent;
+            var pdf = documentEvent.GetDocument();
+            var page = documentEvent.GetPage();
+            var canvas = new PdfCanvas(page.NewContentStreamBefore(), page.GetResources(), pdf);
+
+            // Add logo at the top
+            //logo.SetFixedPosition(450, page.GetPageSize().GetTop() - 100);           
+            logo.GetAccessibilityProperties().SetAlternateDescription("Logo");
+            logo.SetHeight(150);
+            canvas.AddXObjectAt(logo.GetXObject(), 400, page.GetPageSize().GetTop() - 100);
+            
+
+
+
+            // Add page number at the top right
+            canvas.BeginText()
+                .SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 12)
+                .MoveText(page.GetPageSize().GetRight() - 72, page.GetPageSize().GetTop() - 36)
+                .ShowText("Page " + pdf.GetPageNumber(page))
+                .EndText();
+
+            canvas.Release();
+        }
+    }
+    class HeaderEventHandlerOLD : IEventHandler
+    {
+        public void HandleEvent(Event currentEvent)
+        {
+            var documentEvent = (PdfDocumentEvent)currentEvent;
+            var pdf = documentEvent.GetDocument();
+            var page = documentEvent.GetPage();
+            var canvas = new PdfCanvas(page.NewContentStreamBefore(), page.GetResources(), pdf);
+            Document document = new Document(page.GetDocument());
+
+
+            int pageNumber = documentEvent.GetDocument().GetPageNumber(documentEvent.GetPage());
+            int pagecounter = documentEvent.GetDocument().GetNumberOfPages();
+
+
+            // Add empty lines at the top of each page
+            int numberOfEmptyLines = 1; // Adjust as needed
+            for (int i = 0; i < numberOfEmptyLines; i++)
+            {
+                canvas.MoveTo(36, page.GetPageSize().GetTop() - (i + 1) * 12);
+                canvas.LineTo(page.GetPageSize().GetRight() - 36, page.GetPageSize().GetTop() - (i + 1) * 12);
+                canvas.Stroke();
+            }
+            // Add your header content here
+            canvas.BeginText()
+                .SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 12)
+                .MoveText(36, page.GetPageSize().GetTop() - 36)
+                .ShowText("-----------------MCB Akten - Seite: " + pageNumber + "/"+ pagecounter)
+                .EndText();
+            canvas.Release();
+
+            
+            //Console.WriteLine($"New page created: {pageNumber}");
+            //MessageBox.Show($"new page created:{pageNumber} ", "info");
+
+            //var paragraph = new Paragraph("-----------------MCB Akten - Seite: " + pageNumber);
+            //document.Add(paragraph.SetBold());
+
+        }
+    }
 
     public class NewPageEventHandler : IEventHandler
     {
@@ -496,19 +638,48 @@ namespace KistPack
 
             // Check if the event is triggered by the creation of a new page
             if (docEvent.GetEventType() == PdfDocumentEvent.END_PAGE)
-            {
+                //if (docEvent.GetEventType() == PdfDocumentEvent.START_PAGE)
+                {
                 int pageNumber = docEvent.GetDocument().GetPageNumber(docEvent.GetPage());
                 //Console.WriteLine($"New page created: {pageNumber}");
                 //MessageBox.Show($"new page created:{pageNumber} ", "info");
 
 
                 var paragraph = new Paragraph("-----------------MCB Akten - Seite: "+ pageNumber);
-                PdfDocument pdf = docEvent.GetDocument();                
-                Document document = new Document(pdf);
+                PdfDocument pdf = docEvent.GetDocument();
+                //Document document = new Document(pdf);                
+                PdfPage page = docEvent.GetPage();
+                Document document = new Document(page.GetDocument());
                 document.Add(paragraph.SetBold());
 
+                // Add header content, you can customize this based on your needs
+                float pageWidth = page.GetPageSize().GetWidth();
+                float pageHeight = page.GetPageSize().GetHeight();
+                Paragraph header = new Paragraph($"Header for Page {pageNumber}")
+                    .SetFontColor(iText.Kernel.Colors.ColorConstants.BLACK)
+                    .SetFontSize(12)
+                    .SetFixedPosition(1, pageWidth / 2, pageHeight - 20, pageWidth);
+
+                
+                document.Add(header);
             }
         }
+        //private void AddHeader(PdfPage page, int pageNumber)
+        //{
+        //    float pageWidth = page.GetPageSize().GetWidth();
+        //    float pageHeight = page.GetPageSize().GetHeight();
+
+        //    // Create a layout document for the header
+        //    Document document = new Document(new PdfDocument(page.GetPdfDocument()));
+
+        //    // Add header content, you can customize this based on your needs
+        //    Paragraph header = new Paragraph($"Header for Page {pageNumber}")
+        //        .SetFontColor(iText.Kernel.Colors.ColorConstants.BLACK)
+        //        .SetFontSize(12)
+        //        .SetFixedPosition(1, pageWidth / 2, pageHeight - 20, pageWidth);
+
+        //    document.Add(header);
+        //}
     }
 
 
