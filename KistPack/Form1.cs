@@ -31,13 +31,14 @@ namespace KistPack
         private static ArchDB archDB;
         private static SoundPlayer sndplayrOK;
         private static SoundPlayer sndplayrER;
+        KistPackDB kistPackDB;
 
-            
+
         public Form1()
         {
             InitializeComponent();
 
-            KistPackDB kistPackDB = new KistPackDB();
+            kistPackDB = new KistPackDB();
             string dbversion = kistPackDB.getKistPackDBVersion();
             string assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             
@@ -191,7 +192,7 @@ namespace KistPack
         }
 
 
-        #region test async Tasks
+        #region CheckAndInserttoDataTable
 
         //private async void testTask(object sender, EventArgs e)
         private async void getVisitFromArchivDB(Int32 _Fall)
@@ -252,16 +253,6 @@ namespace KistPack
            
 
         }
-
-
-        #endregion
-
-
-
-
-
-
-        #region test Async threads
       
 
         private void updateData(PatientVisit pv)
@@ -565,7 +556,9 @@ namespace KistPack
         private void button1_Click(object sender, EventArgs e)
         {
             InitializeDataGridView();
-            btnFinishCharge_Click(sender, e);
+            kistPackDB.testInsertDb("1001", "1", "23001", "101", "hans", "mayer", "testpc", "hostname");
+            
+            //btnFinishCharge_Click(sender, e);
             
         }
     }
