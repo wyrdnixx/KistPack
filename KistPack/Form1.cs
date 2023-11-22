@@ -36,6 +36,21 @@ namespace KistPack
         public Form1()
         {
             InitializeComponent();
+
+            KistPackDB kistPackDB = new KistPackDB();
+            string dbversion = kistPackDB.getKistPackDBVersion();
+            string assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            
+            if (dbversion != assemblyVersion )
+            {
+                MessageBox.Show("Sorry..." + Environment.NewLine +
+                    "Programmversion " + assemblyVersion + " stimmt nicht mit Datenbank Version " + dbversion + " überein." + Environment.NewLine +
+                    "Programm wird beendet.", "Error");
+                Environment.Exit(-1);
+            }
+
+
+
             archDB = new ArchDB();
             //ds = new DataSet();
             dt = new DataTable();

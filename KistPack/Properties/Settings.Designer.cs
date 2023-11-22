@@ -70,5 +70,17 @@ namespace KistPack.Properties {
                 this["LogoFile"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Server = MSSQL; Database = KistPackDB; Trusted_Connection = True;")]
+        public string KistPackDB {
+            get {
+                return ((string)(this["KistPackDB"]));
+            }
+            set {
+                this["KistPackDB"] = value;
+            }
+        }
     }
 }
