@@ -55,15 +55,50 @@ namespace KistPack
                 MessageBox.Show("Fehler beim Verbinden zur KistPackDB: " + Environment.NewLine +  ex.Message, "Error");
                 
             }
-            finally
-            {
-
-            }
 
             return dbVersion;
 
         }
 
+        public List<String> searchPat(String _Fallnummer)
+        {
+            List<String> list = new List<String>();
+            try
+            {
+                //sql connection object
+                using (SqlConnection conn = new SqlConnection(connString))
+                {
+                    //retrieve the SQL Server instance version
+                    string query = @"SELECT Fallnummer
+                                     FROM Chargen
+                                     where Fallnummer = '" + _Fallnummer + "';";
+                    //define the SqlCommand object
+                    SqlCommand cmd = new SqlCommand(query, conn);
+
+                    //open connection
+                    conn.Open();
+
+                    //execute the SQLCommand
+                    SqlDataReader dr = cmd.ExecuteReader();
+
+                    while (dr.Read())
+                    {
+                        list.Add(dr.GetString(0));
+                    }
+                    dr.Close();
+
+                    conn.Close();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Fehler beim Verbinden zur KistPackDB: " + Environment.NewLine + ex.Message, "Error");
+
+            }
+            return list;
+
+        }
 
         public bool saveDtToDB(DataTable _dt)
         {

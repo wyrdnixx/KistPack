@@ -254,6 +254,13 @@ namespace KistPack
                 {
                     //insert new visit to datatable
                     // ToDo: Test if the has alreasy been scanned to the kistpackDB
+
+                    List<String> list = kistPackDB.searchPat(_Fall.ToString());
+                    if (list.Count > 0)
+                    {
+                        MessageBox.Show("Fallnummer wurde bereits in DB gefunden." + Environment.NewLine +
+                            "Anzahl: " + list.Count, "Warnung");
+                    }
                     updateData(pv);                                        
 
                 }
