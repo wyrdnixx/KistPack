@@ -3,6 +3,7 @@ using Org.BouncyCastle.Asn1.X509;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -61,6 +62,65 @@ namespace KistPack
 
             return dbVersion;
 
+        }
+
+
+        public bool savetodb(DataTable _dt)
+        {
+
+            Boolean result = false;
+
+            String datum = DateTime.Now.ToString();
+            String username = Environment.GetEnvironmentVariable("USERNAME");
+            String clientname = Environment.GetEnvironmentVariable("CLIENTNAME");
+            String computername = Environment.GetEnvironmentVariable("COMPUTERNAME");
+
+            //sql connection object
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                conn.Open();
+                using (SqlTransaction transaction = conn.BeginTransaction())
+                {
+                   // Perform transactional operations here
+                   SqlCommand cmd = new SqlCommand();
+                   cmd.Connection = conn;
+                   cmd.Transaction = transaction;
+                   try
+                   {
+                        foreach (DataRow row in _dt.Rows)
+                        {
+                            cmd.CommandText = "INSERT INTO Chargen (" +
+                                "[Charge],[Kiste],[Fallnummer],[Person],[Vorname],[Nachname],[Scandatum],[Scanuser],[Scanclient],[Scanhostname]" +
+                                ") VALUES ('" +
+                                row[0].ToString() + "','" +
+                                row[1].ToString() + "','" +
+                                row[2].ToString() + "','" +
+                                row[3].ToString()  + "','" +
+                                row[4].ToString() + "','" +
+                                row[5].ToString() + "','" +
+                                datum + "','" +
+                                username + "','" +
+                                clientname+ "','" +
+                                computername+ "')";
+
+                            //MessageBox.Show(cmd.CommandText, "info");                        
+                            cmd.ExecuteNonQuery();
+                        }
+                        transaction.Commit();
+                        result = true;
+
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Fehler beim Speichern in Datenbank: " + Environment.NewLine + ex.Message, "Error");
+                    }
+
+
+
+
+                }
+            }
+                return result;
         }
 
 

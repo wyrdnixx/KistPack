@@ -557,8 +557,8 @@ namespace KistPack
         {
             InitializeDataGridView();
             //kistPackDB.testInsertDb("1001", "1", "23001", "101", "hans", "mayer", "testpc", "hostname");
-            kistPackDB.testInsertDbTransaction("1001", "1", "23001", "101", "hans", "mayer", "testpc", "hostname");
-
+            //kistPackDB.testInsertDbTransaction("1001", "1", "23001", "101", "hans", "mayer", "testpc", "hostname");
+            kistPackDB.savetodb(dt);
 
             //btnFinishCharge_Click(sender, e);
 
