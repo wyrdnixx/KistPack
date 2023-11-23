@@ -556,10 +556,12 @@ namespace KistPack
         private void button1_Click(object sender, EventArgs e)
         {
             InitializeDataGridView();
-            kistPackDB.testInsertDb("1001", "1", "23001", "101", "hans", "mayer", "testpc", "hostname");
-            
+            //kistPackDB.testInsertDb("1001", "1", "23001", "101", "hans", "mayer", "testpc", "hostname");
+            kistPackDB.testInsertDbTransaction("1001", "1", "23001", "101", "hans", "mayer", "testpc", "hostname");
+
+
             //btnFinishCharge_Click(sender, e);
-            
+
         }
     }
 

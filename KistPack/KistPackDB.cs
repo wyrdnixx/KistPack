@@ -1,6 +1,7 @@
 ﻿using Org.BouncyCastle.Asn1;
 using Org.BouncyCastle.Asn1.X509;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -63,7 +64,77 @@ namespace KistPack
         }
 
 
-        public bool testInsertDb(String _charge, String _kiste, String _fallnummer, String _person, String _vorname, String _nachname, String _clientname, String _hostname)
+        public bool testInsertDbTransaction(String _charge, String _kiste, String _fallnummer, String _person, String _vorname, String _nachname, String _clientname, String _hostname)
+        {
+            Boolean result = false;
+
+            //sql connection object
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                conn.Open();
+
+                using (SqlTransaction transaction = conn.BeginTransaction())
+                {
+                    try
+                    {
+                        // Perform transactional operations here
+                        SqlCommand cmd = new SqlCommand();
+                        cmd.Connection = conn;
+                        cmd.Transaction=transaction;
+
+                        cmd.CommandText = "INSERT INTO Chargen (" +
+                        "[Charge],[Kiste],[Fallnummer],[Person],[Vorname],[Nachname],[Scandatum],[Scanuser],[Scanclient],[Scanhostname]" +
+                        ") VALUES ('" +
+                        _charge + "','" +
+                        _kiste + "','" +
+                        _fallnummer + "','" +
+                        _person + "','" +
+                        _vorname + "','" +
+                        _nachname + "','" +
+                        DateTime.Now.ToString() + "','" +
+                        Environment.GetEnvironmentVariable("USERNAME") + "','" +
+                        Environment.GetEnvironmentVariable("CLIENTNAME") + "','" +
+                        Environment.GetEnvironmentVariable("COMPUTERNAME") + "')";
+
+                        //MessageBox.Show(cmd.CommandText, "info");                        
+                        cmd.ExecuteNonQuery();
+
+                        cmd.CommandText = "INSERT INTO Chargen (" +
+                        "[Charge],[Kiste],[Fallnummer],[Person],[Vorname],[Nachname],[Scandatum],[Scanuser],[Scanclient],[Scanhostname]" +
+                        ") VALUES ('" +
+                        _charge + "','" +
+                        _kiste + "','" +
+                        _fallnummer + "','" +
+                        _person + "','" +
+                        _vorname + "','" +
+                        _nachname + "','" +
+                        DateTime.Now.ToString() + "','" +
+                        Environment.GetEnvironmentVariable("USERNAME") + "','" +
+                        Environment.GetEnvironmentVariable("CLIENTNAME") + "','" +
+                        Environment.GetEnvironmentVariable("COMPUTERNAME") + "')";
+
+                        //MessageBox.Show(cmd.CommandText, "info");                        
+                        cmd.ExecuteNonQuery();
+
+
+                        transaction.Commit();
+                        result = true;
+                        
+                    }
+                    catch (Exception ex)
+                    {
+                        // Handle the exception and roll back the transaction
+                        transaction.Rollback();
+                        MessageBox.Show("error: " + ex.Message, "Error");
+                        return false;
+                    }
+                }
+            }
+            return result;
+
+        }
+
+            public bool testInsertDb(String _charge, String _kiste, String _fallnummer, String _person, String _vorname, String _nachname, String _clientname, String _hostname)
         {
             Boolean result = false;
             try
