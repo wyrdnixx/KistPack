@@ -8,24 +8,54 @@ namespace KistPack
 {
     internal class PatientVisit
     {
-        private int pat;
-        private int per;
-        private string surname;
-        private string givenname;
+        private string charge;
+        private string kiste;
+        private string fallnummer;
+        private string person;
+        private string nachname;
+        private string vorname;
+        private string scandatum;
+        private string scanuser;
+        private string scanclient;
+        private string scanhostname;
 
-        public PatientVisit(int _pat, int _per, String _surname, String _givenname)
+
+
+        public PatientVisit(String _fallnummer, String _person, String _vorname , String _nachname)
         {
-            this.Pat = _pat;
-            this.Per = _per;    
-            this.Surname = _surname;
-            this.Givenname = _givenname;
+            this.Fallnummer = _fallnummer;
+            this.Person = _person;                
+            this.Vorname = _vorname;
+            this.Nachname = _nachname;
 
 
         }
 
-        public int Pat { get => pat; set => pat = value; }
-        public int Per { get => per; set => per = value; }
-        public string Surname { get => surname; set => surname = value; }
-        public string Givenname { get => givenname; set => givenname = value; }
+        public PatientVisit(String _charge, String _kiste, String _fallnummer, String _person, String _vorname, String _nachname, String _scandatum, String _scanuser, String _scanclient, String _scanhostname)
+        {
+            this.charge = _charge;
+            this.kiste = _kiste;
+            this.Fallnummer = _fallnummer;
+            this.Person = _person;
+            this.Vorname = _vorname;
+            this.Nachname = _nachname;            
+            this.Scandatum = _scandatum;
+            this.Scanuser = _scanuser; 
+            this.Scanhostname = _scanhostname;
+            this.Scanclient = _scanclient;            
+            
+
+
+        }
+        public string Fallnummer { get => fallnummer; set => fallnummer = value; }
+        public string Person { get => person; set => person = value; }
+        public string Nachname { get => nachname; set => nachname = value; }
+        public string Vorname { get => vorname; set => vorname = value; }
+        public string Charge { get => charge; set => charge = value; }
+        public string Kiste { get => kiste; set => kiste = value; }
+        public string Scandatum { get => scandatum; set => scandatum = value; }
+        public string Scanuser { get => scanuser; set => scanuser = value; }
+        public string Scanclient { get => scanclient; set => scanclient = value; }
+        public string Scanhostname { get => scanhostname; set => scanhostname = value; }
     }
 }

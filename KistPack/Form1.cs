@@ -255,7 +255,7 @@ namespace KistPack
                     //insert new visit to datatable
                     // ToDo: Test if the has alreasy been scanned to the kistpackDB
 
-                    List<String> list = kistPackDB.searchPat(_Fall.ToString());
+                    List<PatientVisit> list = kistPackDB.searchPat(_Fall.ToString());
                     if (list.Count > 0)
                     {
                         MessageBox.Show("Fallnummer wurde bereits in DB gefunden." + Environment.NewLine +
@@ -299,10 +299,10 @@ namespace KistPack
 
             foreach (DataRow row in dt.Rows)
             {
-                if (row["Visit"].ToString() == pv.Pat.ToString())
+                if (row["Visit"].ToString() == pv.Fallnummer.ToString())
                 {
                     dupCheck = true;
-                    String Errmsg = "Fallnummer " + pv.Pat.ToString() + " schon vorhanden! Bitte Akte prüfen.";
+                    String Errmsg = "Fallnummer " + pv.Fallnummer.ToString() + " schon vorhanden! Bitte Akte prüfen.";
                     //MessageBox.Show(Errmsg, "error");
                     tbStatus.BackColor = System.Drawing.Color.Red;
                     tbStatus.Text = "Fehler: " + Errmsg;
@@ -312,11 +312,11 @@ namespace KistPack
 
             if (!dupCheck)
             {
-                dt.Rows.Add(tbCharge.Text, tbKiste.Text, pv.Pat, pv.Per, pv.Givenname, pv.Surname);
+                dt.Rows.Add(tbCharge.Text, tbKiste.Text, pv.Fallnummer, pv.Person, pv.Vorname, pv.Nachname);
                 dt.AcceptChanges();
                 dgvAkten.Update();
                 tbStatus.BackColor = System.Drawing.Color.Green;
-                tbStatus.Text = "Fall " + pv.Pat + " zur Charge hinzugefügt.";
+                tbStatus.Text = "Fall " + pv.Fallnummer + " zur Charge hinzugefügt.";
                 playSoundOK();
             }
         }

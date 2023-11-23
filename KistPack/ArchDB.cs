@@ -75,13 +75,13 @@ namespace KistPack
 
                         while (dr.Read())
                         {
-                            int PAT = Int32.Parse(dr.GetString(0));
-                            int PER = Int32.Parse(dr.GetString(1));
-                            string surname = dr.GetString(2);
-                            string givenname = dr.GetString(3);
+                            string fallnummer = dr.GetString(0);
+                            string person = dr.GetString(1);
+                            string nachname = dr.GetString(2);
+                            string vorname = dr.GetString(3);
 
 
-                            PatientVisit pv = new PatientVisit(PAT,PER,surname,givenname);
+                            PatientVisit pv = new PatientVisit(fallnummer,person,vorname,nachname);
 
 
                             

@@ -60,16 +60,16 @@ namespace KistPack
 
         }
 
-        public List<String> searchPat(String _Fallnummer)
+        public List<PatientVisit> searchPat(String _Fallnummer)
         {
-            List<String> list = new List<String>();
+            List<PatientVisit> patList = new List<PatientVisit>();
             try
             {
                 //sql connection object
                 using (SqlConnection conn = new SqlConnection(connString))
                 {
                     //retrieve the SQL Server instance version
-                    string query = @"SELECT Fallnummer
+                    string query = @"SELECT *
                                      FROM Chargen
                                      where Fallnummer = '" + _Fallnummer + "';";
                     //define the SqlCommand object
@@ -83,7 +83,8 @@ namespace KistPack
 
                     while (dr.Read())
                     {
-                        list.Add(dr.GetString(0));
+                        PatientVisit tmp = new PatientVisit(dr.GetString(1), dr.GetString(2), dr.GetString(3), dr.GetString(4), dr.GetString(5), dr.GetString(6), dr.GetString(7), dr.GetString(8), dr.GetString(9), dr.GetString(10));
+                        patList.Add(tmp);
                     }
                     dr.Close();
 
@@ -96,7 +97,7 @@ namespace KistPack
                 MessageBox.Show("Fehler beim Verbinden zur KistPackDB: " + Environment.NewLine + ex.Message, "Error");
 
             }
-            return list;
+            return patList;
 
         }
 
