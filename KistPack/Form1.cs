@@ -32,7 +32,7 @@ namespace KistPack
         private static SoundPlayer sndplayrOK;
         private static SoundPlayer sndplayrER;
         KistPackDB kistPackDB;
-
+        private Boolean chargeWasSavedToDB;
 
         public Form1()
         {
@@ -95,23 +95,32 @@ namespace KistPack
 
         private void btnNewCharge_Click(object sender, EventArgs e)
         {
-            // TEST
-            
-             
-                // ToDo: Prüfen ob vorhandene Charge / oder ob gespeichert wurde
+            createNewCharge();
+        }
+
+        private void createNewCharge()
+        {
+
+            // ToDo: Prüfen ob vorhandene Charge / oder ob gespeichert wurde
+
+            chargeWasSavedToDB = false;
+
 
             cbMandant.Enabled = true;
             cbMandant.Focus();
             cbMandant.DroppedDown = true;
 
             tbFallScann.Enabled = false;
-
-
-
             tbFallScann.Text = "";
             tbKiste.Text = "";
 
+            tbFallScann.Text = "";
+            btnNextBox.Enabled = true;
+            btnDeleteEntry.Enabled = true;
+            btnFinishCharge.Text = "Charge abschließen";
 
+            btnNextBox.Enabled = true;
+            dt.Clear();
         }
 
         private void cbMandant_SelectedIndexChanged(object sender, EventArgs e)
@@ -139,6 +148,7 @@ namespace KistPack
             if (tbKiste.Text.Length == Properties.Settings.Default.LengthKiste)
             {
                 tbKiste.Enabled = false;
+
                 btnApplyNewBox.Enabled = true;
                 btnApplyNewBox.Focus();
             }
@@ -160,9 +170,10 @@ namespace KistPack
         {
 
             tbKiste.Enabled = false;
+            btnNextBox.Enabled = false;
             tbFallScann.Enabled = true;
             tbFallScann.Focus();
-
+            btnApplyNewBox.Enabled = false;
 
         }
 
@@ -170,32 +181,57 @@ namespace KistPack
         {
             if (tbFallScann.Text.Length == Properties.Settings.Default.LenghtFallnummer)
             {
-                // Test Textbox
-                //tbTest.Text = tbTest.Text + System.Environment.NewLine + tbCharge.Text + ";" + tbKiste.Text + ";" + tbFallScann.Text;
-                
-
-
-                //DataRow r = dt.NewRow();
-                //r[0]=tbCharge.Text;
-                //r[1] = tbKiste.Text;
-                //r[2] = tbFallScann.Text;
-                //dt.Rows.Add(r); 
-                //dt.AcceptChanges();
-                //dgvAkten.DataSource= dt;
-                //dgvAkten.Update();
-                
-                getVisitFromArchivDB(Int32.Parse(tbFallScann.Text));
-                
-
-                
+                insertNewVisit(Int32.Parse(tbFallScann.Text));
             }
         }
+
+
+
+        private void btnFinishCharge_Click(object sender, EventArgs e)
+        {
+            if (!chargeWasSavedToDB)
+            {
+                if (kistPackDB.saveDtToDB(dt))
+                {
+                    chargeWasSavedToDB = true;
+                    tbFallScann.Enabled = false;
+                    tbFallScann.Text = "Charge abgeschlossen.";
+                    btnNextBox.Enabled = false;
+                    btnDeleteEntry.Enabled = false;
+                    btnFinishCharge.Text = "PDF erneut drucken";
+                    btnNewCharge.Focus();
+                }else
+                {
+                    tbStatus.BackColor = System.Drawing.Color.Red;
+                    tbStatus.Text = "Es ist ein Fehler beim speichern in die Datenbank aufgetreten.";
+                }
+            }
+
+
+            // Print and save the PDF File
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "PDF files (*.pdf)|*.pdf";
+            saveFileDialog.Title = "Export to PDF";
+            saveFileDialog.ShowDialog();
+
+            if (saveFileDialog.FileName != "")
+            {
+                // if file save successfully 
+                if (ExportToPDF(dgvAkten, saveFileDialog.FileName))
+                {
+                    System.Diagnostics.Process.Start(saveFileDialog.FileName);
+                    createNewCharge();
+                }
+            }
+
+        }
+
 
 
         #region CheckAndInserttoDataTable
 
         //private async void testTask(object sender, EventArgs e)
-        private async void getVisitFromArchivDB(Int32 _Fall)
+        private async void insertNewVisit(Int32 _Fall)
         {
             PatientVisit pv=null;
             tbFallScann.Enabled = false;
@@ -206,23 +242,18 @@ namespace KistPack
             tbStatus.Text = "Suche Fallnummer: " + _Fall.ToString();
             try
             {
-
-
-                // Start a new task with parameters
-                //Task<int> myTask = Task.Run(() => MyMethodWithParameters(_Fall));
+             
+                // test if the visit exists in the Archvie Database
                 Task<PatientVisit> myTask = Task.Run(() => GetVisit(_Fall));
 
                 // Wait for the task to complete without blocking the UI
                 await myTask;
-
-
-                // Set the TextBox text with the result
-                //textBox3.Text = myTask.Result;
                 pv = myTask.Result;
 
                 if (pv != null)
                 {
-
+                    //insert new visit to datatable
+                    // ToDo: Test if the has alreasy been scanned to the kistpackDB
                     updateData(pv);                                        
 
                 }
@@ -245,7 +276,7 @@ namespace KistPack
             {
                 btnNewCharge.Enabled = true;
                 btnNextBox.Enabled = true;
-                btnApplyNewBox.Enabled = true;
+                
                 tbFallScann.Text = "";
                 tbFallScann.Enabled = true;
                 tbFallScann.Focus();
@@ -318,9 +349,12 @@ namespace KistPack
 
         private void btnDeleteEntry_Click(object sender, EventArgs e)
         {
-            if (!dgvAkten.SelectedRows[0].IsNewRow)            
-                dt.Rows.RemoveAt(dgvAkten.SelectedRows[0].Index);
-            dgvAkten.Update();
+            if (dgvAkten.SelectedRows.Count != 0)
+            {
+                if (!dgvAkten.SelectedRows[0].IsNewRow)
+                    dt.Rows.RemoveAt(dgvAkten.SelectedRows[0].Index);
+                dgvAkten.Update();
+            }           
 
         }
 
@@ -397,8 +431,9 @@ namespace KistPack
 
         }
 
-        private void ExportToPDF(DataGridView dataGridView, string pdfFilePath)
+        private Boolean ExportToPDF(DataGridView dataGridView, string pdfFilePath)
         {
+            Boolean result = false;
             // Dictionary to store box numbers and their corresponding data
             Dictionary<string, List<string[]>> boxData = new Dictionary<string, List<string[]>>();
 
@@ -518,39 +553,24 @@ namespace KistPack
 
                 pdfRenderer.RenderDocument();
                 pdfRenderer.PdfDocument.Save(pdfFilePath);
+                result = true;
 
                 tbStatus.BackColor = System.Drawing.Color.Green;
                 tbStatus.Text = "PDF erfolgreich erstellt";
+                
+                return result;
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error: " + ex.Message, "Export to PDF", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-            
-            //document.Close();
+
+            return result;
 
         }
 
-
-        private void btnFinishCharge_Click(object sender, EventArgs e)
-        {
-            {
-                SaveFileDialog saveFileDialog = new SaveFileDialog();
-                saveFileDialog.Filter = "PDF files (*.pdf)|*.pdf";
-                saveFileDialog.Title = "Export to PDF";
-                saveFileDialog.ShowDialog();
-
-                if (saveFileDialog.FileName != "")
-                {
-                    //ExportToPdf(dgvAkten, saveFileDialog.FileName);
-                    
-                    ExportToPDF(dgvAkten, saveFileDialog.FileName);
-                    System.Diagnostics.Process.Start(saveFileDialog.FileName);
-
-                }
-            }
-    }
+       
         #endregion
 
         private void button1_Click(object sender, EventArgs e)
@@ -558,7 +578,7 @@ namespace KistPack
             InitializeDataGridView();
             //kistPackDB.testInsertDb("1001", "1", "23001", "101", "hans", "mayer", "testpc", "hostname");
             //kistPackDB.testInsertDbTransaction("1001", "1", "23001", "101", "hans", "mayer", "testpc", "hostname");
-            kistPackDB.savetodb(dt);
+            kistPackDB.saveDtToDB(dt);
 
             //btnFinishCharge_Click(sender, e);
 

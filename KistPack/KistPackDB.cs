@@ -65,7 +65,7 @@ namespace KistPack
         }
 
 
-        public bool savetodb(DataTable _dt)
+        public bool saveDtToDB(DataTable _dt)
         {
 
             Boolean result = false;
