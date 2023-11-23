@@ -7,6 +7,7 @@ using System.Security.Policy;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace KistPack
 {
@@ -45,7 +46,7 @@ namespace KistPack
         private static string connString = Properties.Settings.Default.SQLDBArchive;
 
 
-        public static PatientVisit GetVisit(Int32 _Fallnummer)
+        public static PatientVisit GetVisit(String _Fallnummer)
         {
             try
             {
@@ -109,7 +110,8 @@ namespace KistPack
                 //display error message
                 Console.WriteLine("Exception: " + ex.Message);
                 //global::System.Windows.Forms.MessageBox.Show(ex.Message,"error");
-                throw new InvalidOperationException(ex.Message);
+                //throw new InvalidOperationException(ex.Message);
+                MessageBox.Show("Fehler beim abfragen der Archiv Datenbank: "+  ex.Message,"Error");
    
             }
 

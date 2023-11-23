@@ -181,7 +181,12 @@ namespace KistPack
         {
             if (tbFallScann.Text.Length == Properties.Settings.Default.LenghtFallnummer)
             {
-                insertNewVisit(Int32.Parse(tbFallScann.Text));
+                // test if visit is already in list
+                if (!testCurrentDataTable(tbFallScann.Text))
+                {
+                    insertNewVisit(tbFallScann.Text);
+                }
+                
             }
         }
 
@@ -231,7 +236,7 @@ namespace KistPack
         #region CheckAndInserttoDataTable
 
         //private async void testTask(object sender, EventArgs e)
-        private async void insertNewVisit(Int32 _Fall)
+        private async void insertNewVisit(String _Fall)
         {
             PatientVisit pv=null;
             tbFallScann.Enabled = false;
@@ -245,23 +250,44 @@ namespace KistPack
              
                 // test if the visit exists in the Archvie Database
                 Task<PatientVisit> myTask = Task.Run(() => GetVisit(_Fall));
-
                 // Wait for the task to complete without blocking the UI
                 await myTask;
                 pv = myTask.Result;
 
                 if (pv != null)
                 {
-                    //insert new visit to datatable
-                    // ToDo: Test if the has alreasy been scanned to the kistpackDB
+                    // Test if visit already exists in database / visit hast already been scanned
+                    List<PatientVisit> foundList = kistPackDB.searchPat(_Fall.ToString());
+                    if (foundList.Count > 0) { 
 
-                    List<PatientVisit> list = kistPackDB.searchPat(_Fall.ToString());
-                    if (list.Count > 0)
+                        String str = null;
+                        foreach (PatientVisit v in foundList)
+                        {
+                            str += v.Charge + " | " + v.Kiste + " | " + v.Scandatum + Environment.NewLine;
+                        }
+                        playSoundER();
+                        DialogResult question = MessageBox.Show("Die Fallnummer " + _Fall.ToString() + " wurde bereits versendet: " +  Environment.NewLine +
+                            "Charge         |      Kiste      |     Datum " + Environment.NewLine + 
+                            str + Environment.NewLine +
+                            "Fallnummer / Akte wirklich erneut versenden?"
+
+                            ,
+                               "Fall bereits gescannt...", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
+                        switch (question)
+                        {
+                            case DialogResult.Yes:
+                                    updateData(pv);
+                                    break;
+                            case DialogResult.No:
+                                break;
+                        }
+
+
+                    } else
                     {
-                        MessageBox.Show("Fallnummer wurde bereits in DB gefunden." + Environment.NewLine +
-                            "Anzahl: " + list.Count, "Warnung");
+                        updateData(pv);
                     }
-                    updateData(pv);                                        
+                                                           
 
                 }
                 else
@@ -292,33 +318,37 @@ namespace KistPack
 
         }
       
-
-        private void updateData(PatientVisit pv)
+        private bool testCurrentDataTable(String _fallnummer)
         {
-            Boolean dupCheck = false;
+            Boolean exists = false;
+
 
             foreach (DataRow row in dt.Rows)
             {
-                if (row["Visit"].ToString() == pv.Fallnummer.ToString())
+                if (row["Visit"].ToString() == _fallnummer)
                 {
-                    dupCheck = true;
-                    String Errmsg = "Fallnummer " + pv.Fallnummer.ToString() + " schon vorhanden! Bitte Akte prüfen.";
+                    exists = true;
+                    String Errmsg = "Fallnummer " + _fallnummer + " schon vorhanden! Bitte Akte prüfen.";
                     //MessageBox.Show(Errmsg, "error");
                     tbStatus.BackColor = System.Drawing.Color.Red;
                     tbStatus.Text = "Fehler: " + Errmsg;
                     playSoundER();
+                    tbFallScann.Text = "";
+                    tbFallScann.Focus();
                 }
             }
+            return exists;
+        }
 
-            if (!dupCheck)
-            {
+        private void updateData(PatientVisit pv)
+        {            
                 dt.Rows.Add(tbCharge.Text, tbKiste.Text, pv.Fallnummer, pv.Person, pv.Vorname, pv.Nachname);
                 dt.AcceptChanges();
                 dgvAkten.Update();
                 tbStatus.BackColor = System.Drawing.Color.Green;
                 tbStatus.Text = "Fall " + pv.Fallnummer + " zur Charge hinzugefügt.";
                 playSoundOK();
-            }
+            
         }
 
         #endregion
