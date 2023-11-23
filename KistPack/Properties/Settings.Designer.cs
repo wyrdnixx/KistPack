@@ -25,7 +25,7 @@ namespace KistPack.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Server = MSSQL; Database = TestDB; Trusted_Connection = True;")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Server = MSSQL; Database = CLA-PROD-DB; Trusted_Connection = True;")]
         public string SQLDBArchive {
             get {
                 return ((string)(this["SQLDBArchive"]));
@@ -49,7 +49,7 @@ namespace KistPack.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("8")]
+        [global::System.Configuration.DefaultSettingValueAttribute("9")]
         public int LenghtFallnummer {
             get {
                 return ((int)(this["LenghtFallnummer"]));

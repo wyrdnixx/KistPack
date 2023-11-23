@@ -55,8 +55,8 @@ namespace KistPack
                 {
 
                     //retrieve the SQL Server instance version
-                    string query = @"SELECT e.PAT, e.PER, e.surname, e.givenname
-                                     FROM pat e where e.PAT = "+_Fallnummer + ";";
+                    string query = @"SELECT FALLID, PATID, VORNAME, NAME
+                                     FROM IDX_FRI  where FALLID = "+_Fallnummer + ";";
                     //define the SqlCommand object
                     SqlCommand cmd = new SqlCommand(query, conn);
 

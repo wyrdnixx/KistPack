@@ -3,13 +3,13 @@
   <Profiles />
   <Settings>
     <Setting Name="SQLDBArchive" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Server = MSSQL; Database = TestDB; Trusted_Connection = True;</Value>
+      <Value Profile="(Default)">Server = MSSQL; Database = CLA-PROD-DB; Trusted_Connection = True;</Value>
     </Setting>
     <Setting Name="LengthKiste" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">4</Value>
     </Setting>
     <Setting Name="LenghtFallnummer" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">8</Value>
+      <Value Profile="(Default)">9</Value>
     </Setting>
     <Setting Name="LogoFile" Type="System.String" Scope="User">
       <Value Profile="(Default)">logo-mcb.png</Value>
