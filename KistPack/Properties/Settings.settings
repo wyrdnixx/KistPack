@@ -14,5 +14,8 @@
     <Setting Name="LogoFile" Type="System.String" Scope="User">
       <Value Profile="(Default)">logo-mcb.png</Value>
     </Setting>
+    <Setting Name="KistPackDB" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Server = MSSQL; Database = KistPackDB; Trusted_Connection = True;</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
