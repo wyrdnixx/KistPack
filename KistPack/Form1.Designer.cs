@@ -98,7 +98,7 @@
             this.btnTestData.TabIndex = 14;
             this.btnTestData.Text = "Testdaten erzeugen";
             this.btnTestData.UseVisualStyleBackColor = false;
-            this.btnTestData.Click += new System.EventHandler(this.button1_Click);
+            this.btnTestData.Click += new System.EventHandler(this.btnTestData_Click);
             // 
             // btnFinishCharge
             // 

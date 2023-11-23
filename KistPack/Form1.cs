@@ -491,6 +491,8 @@ namespace KistPack
                 headerTable.AddColumn(Unit.FromCentimeter(7));
                 Row headerRow = headerTable.AddRow();
                 headerRow.Cells[0].AddParagraph("MCB-Charge: " + tbCharge.Text); // Replace with your logo
+                headerRow.Cells[0].Format.Font.Bold = true;
+                headerRow.Cells[0].Format.Font.Size = 12;
                 //headerRow.Cells[1].AddParagraph($"Page {i + 1}");
                 //headerRow.Cells[1].AddParagraph($"Page ?");
                 Paragraph headerPageIndex = headerRow.Cells[1].AddParagraph();
@@ -610,11 +612,10 @@ namespace KistPack
        
         #endregion
 
-        private void button1_Click(object sender, EventArgs e)
+        private void btnTestData_Click(object sender, EventArgs e)
         {
             InitializeDataGridView();
-            //kistPackDB.testInsertDb("1001", "1", "23001", "101", "hans", "mayer", "testpc", "hostname");
-            //kistPackDB.testInsertDbTransaction("1001", "1", "23001", "101", "hans", "mayer", "testpc", "hostname");
+            
             kistPackDB.saveDtToDB(dt);
 
             //btnFinishCharge_Click(sender, e);
@@ -622,41 +623,6 @@ namespace KistPack
         }
     }
 
-    //class HeaderEventHandler : IEventHandler
-    //{
-    //    private  iText.Layout.Element.Image logo;
-
-    //    public HeaderEventHandler(iText.Layout.Element.Image logo)
-    //    {
-    //        this.logo = logo;
-    //    }
-
-    //    public void HandleEvent(Event currentEvent)
-    //    {
-    //        var documentEvent = (PdfDocumentEvent)currentEvent;
-    //        var pdf = documentEvent.GetDocument();
-    //        var page = documentEvent.GetPage();
-    //        var canvas = new PdfCanvas(page.NewContentStreamBefore(), page.GetResources(), pdf);
-
-    //        // Add logo at the top
-    //        //logo.SetFixedPosition(450, page.GetPageSize().GetTop() - 100);           
-    //        logo.GetAccessibilityProperties().SetAlternateDescription("Logo");
-    //        logo.SetHeight(150);
-    //        canvas.AddXObjectAt(logo.GetXObject(), 400, page.GetPageSize().GetTop() - 100);
-            
-
-
-
-    //        // Add page number at the top right
-    //        canvas.BeginText()
-    //            .SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 12)
-    //            .MoveText(page.GetPageSize().GetRight() - 72, page.GetPageSize().GetTop() - 36)
-    //            .ShowText("Page " + pdf.GetPageNumber(page))
-    //            .EndText();
-
-    //        canvas.Release();
-    //    }
-    //}
     
 
 
