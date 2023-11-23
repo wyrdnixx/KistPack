@@ -207,7 +207,7 @@ namespace KistPack
                     btnNewCharge.Focus();
                 }else
                 {
-                    tbStatus.BackColor = System.Drawing.Color.Red;
+                    tbStatus.BackColor = System.Drawing.Color.SeaShell;
                     tbStatus.Text = "Es ist ein Fehler beim speichern in die Datenbank aufgetreten.";
                 }
             }
@@ -247,14 +247,16 @@ namespace KistPack
             tbStatus.Text = "Suche Fallnummer: " + _Fall.ToString();
             try
             {
-             
+                btnCreateCharge.Enabled = false;
+                btnFinishCharge.Enabled = false;
                 // test if the visit exists in the Archvie Database
-                Task<PatientVisit> myTask = Task.Run(() => GetVisit(_Fall));
+                Task<PatientVisit> myTask = Task.Run(() => GetVisitFromArchive(_Fall));
                 // Wait for the task to complete without blocking the UI
                 await myTask;
                 pv = myTask.Result;
-
-                if (pv != null)
+                btnCreateCharge.Enabled = false;
+                btnFinishCharge.Enabled = false;
+                if (pv != null && pv.Fallstorno ==null)
                 {
                     // Test if visit already exists in database / visit hast already been scanned
                     List<PatientVisit> foundList = kistPackDB.searchPat(_Fall.ToString());
@@ -289,11 +291,16 @@ namespace KistPack
                     }
                                                            
 
+                }else if (pv != null && pv.Fallstorno != null)
+                {
+                    tbStatus.BackColor = System.Drawing.Color.SeaShell;
+                    tbStatus.Text = "Fallnummer ist ein Stornierter Fall: " + _Fall.ToString();
+                    playSoundER();
                 }
                 else
                 {
                     //MessageBox.Show("Fallnummer wurde nicht gefunden: " + _Fall.ToString(), "Fehler");
-                    tbStatus.BackColor = System.Drawing.Color.Red;
+                    tbStatus.BackColor = System.Drawing.Color.SeaShell;
                     tbStatus.Text = "Fallnummer wurde nicht gefunden: " + _Fall.ToString();
                     playSoundER();
                 }
@@ -301,7 +308,7 @@ namespace KistPack
             } catch (Exception ex)
             {
                 //MessageBox.Show(ex.Message, "error");
-                tbStatus.BackColor = System.Drawing.Color.Red;
+                tbStatus.BackColor = System.Drawing.Color.SeaShell;
                 tbStatus.Text = "Fehler: " + ex.Message;
                 playSoundER();
             }
@@ -330,7 +337,7 @@ namespace KistPack
                     exists = true;
                     String Errmsg = "Fallnummer " + _fallnummer + " schon vorhanden! Bitte Akte prüfen.";
                     //MessageBox.Show(Errmsg, "error");
-                    tbStatus.BackColor = System.Drawing.Color.Red;
+                    tbStatus.BackColor = System.Drawing.Color.SeaShell;
                     tbStatus.Text = "Fehler: " + Errmsg;
                     playSoundER();
                     tbFallScann.Text = "";
@@ -345,7 +352,7 @@ namespace KistPack
                 dt.Rows.Add(tbCharge.Text, tbKiste.Text, pv.Fallnummer, pv.Person, pv.Vorname, pv.Nachname);
                 dt.AcceptChanges();
                 dgvAkten.Update();
-                tbStatus.BackColor = System.Drawing.Color.Green;
+                tbStatus.BackColor = System.Drawing.Color.MediumSeaGreen;
                 tbStatus.Text = "Fall " + pv.Fallnummer + " zur Charge hinzugefügt.";
                 playSoundOK();
             

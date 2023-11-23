@@ -46,7 +46,7 @@ namespace KistPack
         private static string connString = Properties.Settings.Default.SQLDBArchive;
 
 
-        public static PatientVisit GetVisit(String _Fallnummer)
+        public static PatientVisit GetVisitFromArchive(String _Fallnummer)
         {
             try
             {
@@ -55,7 +55,7 @@ namespace KistPack
                 {
 
                     //retrieve the SQL Server instance version
-                    string query = @"SELECT FALLID, PATID, VORNAME, NAME
+                    string query = @"SELECT FALLID, PATID, VORNAME, NAME, F_STORNO
                                      FROM IDX_FRI  where FALLID = "+_Fallnummer + ";";
                     //define the SqlCommand object
                     SqlCommand cmd = new SqlCommand(query, conn);
@@ -80,9 +80,16 @@ namespace KistPack
                             string person = dr.GetString(1);
                             string nachname = dr.GetString(2);
                             string vorname = dr.GetString(3);
+                            string fallstorno = null; // initiate empty if in db null
+                            
+                            if (!dr.IsDBNull(4)) // if the F_STORNO field is not empty
+                            { 
+                                 fallstorno = dr.GetString(4);
+                            } 
+                                
 
 
-                            PatientVisit pv = new PatientVisit(fallnummer,person,vorname,nachname);
+                            PatientVisit pv = new PatientVisit(fallnummer,person,vorname,nachname,fallstorno);
 
 
                             

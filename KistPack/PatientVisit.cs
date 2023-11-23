@@ -18,16 +18,17 @@ namespace KistPack
         private string scanuser;
         private string scanclient;
         private string scanhostname;
+        private string fallstorno;
 
 
 
-        public PatientVisit(String _fallnummer, String _person, String _vorname , String _nachname)
+        public PatientVisit(String _fallnummer, String _person, String _vorname , String _nachname, String _fallstorno)
         {
             this.Fallnummer = _fallnummer;
             this.Person = _person;                
             this.Vorname = _vorname;
             this.Nachname = _nachname;
-
+            this.Fallstorno = _fallstorno;
 
         }
 
@@ -42,7 +43,7 @@ namespace KistPack
             this.Scandatum = _scandatum;
             this.Scanuser = _scanuser; 
             this.Scanhostname = _scanhostname;
-            this.Scanclient = _scanclient;            
+            this.Scanclient = _scanclient;
             
 
 
@@ -57,5 +58,6 @@ namespace KistPack
         public string Scanuser { get => scanuser; set => scanuser = value; }
         public string Scanclient { get => scanclient; set => scanclient = value; }
         public string Scanhostname { get => scanhostname; set => scanhostname = value; }
+        public string Fallstorno { get => fallstorno; set => fallstorno = value; }
     }
 }
