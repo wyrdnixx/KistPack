@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.btnTestData = new System.Windows.Forms.Button();
@@ -161,9 +162,9 @@
             // 
             this.btnApplyNewBox.Enabled = false;
             this.btnApplyNewBox.Font = new System.Drawing.Font("Verdana", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnApplyNewBox.Location = new System.Drawing.Point(511, 79);
+            this.btnApplyNewBox.Location = new System.Drawing.Point(521, 79);
             this.btnApplyNewBox.Name = "btnApplyNewBox";
-            this.btnApplyNewBox.Size = new System.Drawing.Size(173, 37);
+            this.btnApplyNewBox.Size = new System.Drawing.Size(163, 37);
             this.btnApplyNewBox.TabIndex = 7;
             this.btnApplyNewBox.Text = "Verwenden";
             this.btnApplyNewBox.UseVisualStyleBackColor = true;
@@ -272,7 +273,7 @@
             this.tbKiste.Location = new System.Drawing.Point(309, 79);
             this.tbKiste.MaxLength = 8;
             this.tbKiste.Name = "tbKiste";
-            this.tbKiste.Size = new System.Drawing.Size(196, 37);
+            this.tbKiste.Size = new System.Drawing.Size(206, 37);
             this.tbKiste.TabIndex = 6;
             this.tbKiste.TextChanged += new System.EventHandler(this.tbKiste_TextChanged);
             this.tbKiste.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbKiste_KeyPress);
@@ -293,6 +294,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1182, 865);
             this.Controls.Add(this.tabControl1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "Form1";
             this.Text = "KistPack";
             this.tabControl1.ResumeLayout(false);
