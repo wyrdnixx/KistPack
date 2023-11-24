@@ -161,6 +161,7 @@
     <None Include="Resources\exception.wav" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="README.md" />
     <Content Include="Resources\logo-mcb.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

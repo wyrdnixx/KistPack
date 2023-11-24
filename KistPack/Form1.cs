@@ -33,11 +33,13 @@ namespace KistPack
         private static SoundPlayer sndplayrER;
         KistPackDB kistPackDB;
         private Boolean chargeWasSavedToDB;
+        private String tempFilePath;
 
         public Form1()
         {
             InitializeComponent();
 
+            // Datenbankverbindung herstellen und testen.
             kistPackDB = new KistPackDB();
             string dbversion = kistPackDB.getKistPackDBVersion();
             string assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
@@ -51,28 +53,41 @@ namespace KistPack
             }
 
 
-
+            // Programmvariablen initialisieren
             archDB = new ArchDB();
-            //ds = new DataSet();
             dt = new DataTable();
-
             sndplayrOK = new SoundPlayer(Properties.Resources.ok);
             sndplayrER = new SoundPlayer(Properties.Resources.exception);
+            tempFilePath = Environment.GetEnvironmentVariable("TEMP") + "\\KistPack\\";
+            //MessageBox.Show("temp: "+tempFilePath, "teswt");
 
+            // Datentabelle konfigurieren
             dt.Columns.Add("Charge");
             dt.Columns.Add("Box");
             dt.Columns.Add("Visit");
             dt.Columns.Add("Person");
             dt.Columns.Add("Givenname");
-            dt.Columns.Add("Surname");
-            //ds.Tables.Add(dt);
-            //dgvAkten.DataSource = ds;
+            dt.Columns.Add("Surname");            
             dgvAkten.DataSource = dt;
 
-            dgvAkten.DefaultCellStyle.Font = new System.Drawing.Font("Arial", 12);
+            dgvAkten.DefaultCellStyle.Font = new System.Drawing.Font("Verdana", 12);
+
+
+            // Cleanup old files from temp folder
             
+            bool exists = System.IO.Directory.Exists(tempFilePath);
+            if (!exists)
+                System.IO.Directory.CreateDirectory(tempFilePath);
 
-
+            System.IO.DirectoryInfo di = new DirectoryInfo(tempFilePath);
+            foreach (FileInfo file in di.GetFiles())
+            {
+                file.Delete();
+            }
+            foreach (DirectoryInfo dir in di.GetDirectories())
+            {
+                dir.Delete(true);
+            }
 
         }
 
@@ -214,19 +229,30 @@ namespace KistPack
 
 
             // Print and save the PDF File
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "PDF files (*.pdf)|*.pdf";
-            saveFileDialog.Title = "Export to PDF";
-            saveFileDialog.ShowDialog();
+            //SaveFileDialog saveFileDialog = new SaveFileDialog();
+            //saveFileDialog.Filter = "PDF files (*.pdf)|*.pdf";
+            //saveFileDialog.Title = "Export to PDF";
+            //saveFileDialog.ShowDialog();
 
-            if (saveFileDialog.FileName != "")
+            //if (saveFileDialog.FileName != "")
+            //{
+            // if file save successfully 
+            //    if (ExportToPDF(dgvAkten, saveFileDialog.FileName))
+            //    {
+            //        System.Diagnostics.Process.Start(saveFileDialog.FileName);
+            //        createNewCharge();
+            //    }
+            //}
+            
+
+            //ToDo: Generate CSV File
+
+            String pdfFilePath = tempFilePath + tbCharge.Text + ".pdf";
+            if (ExportToPDF(dgvAkten, pdfFilePath))
             {
-                // if file save successfully 
-                if (ExportToPDF(dgvAkten, saveFileDialog.FileName))
-                {
-                    System.Diagnostics.Process.Start(saveFileDialog.FileName);
-                    createNewCharge();
-                }
+                System.Diagnostics.Process.Start(pdfFilePath);
+                kistPackDB.databaseFilePut(tbCharge.Text, pdfFilePath);
+                createNewCharge();
             }
 
         }
@@ -413,7 +439,7 @@ namespace KistPack
         #region PDF Print
 
 
-        private void InitializeDataGridView()
+        private void generateTestData()
         {
             // Assuming you have already populated your DataGridView with data
             // This is just an example; replace it with your actual data
@@ -629,12 +655,15 @@ namespace KistPack
 
         private void btnTestData_Click(object sender, EventArgs e)
         {
-            InitializeDataGridView();
+            //generateTestData();
             
-            kistPackDB.saveDtToDB(dt);
+            //kistPackDB.saveDtToDB(dt);
 
             //btnFinishCharge_Click(sender, e);
 
+            kistPackDB.databaseFileRead("FN202311242337",tempFilePath + "test.pdf");
+
+            //System.Diagnostics.Process.Start(tempFilePath + "test.pdf");
         }
     }
 
