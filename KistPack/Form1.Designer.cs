@@ -56,10 +56,11 @@
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Location = new System.Drawing.Point(-1, 2);
+            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1179, 861);
+            this.tabControl1.Size = new System.Drawing.Size(1182, 865);
             this.tabControl1.TabIndex = 0;
             // 
             // tabPage1
@@ -83,7 +84,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1171, 835);
+            this.tabPage1.Size = new System.Drawing.Size(1174, 839);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Kiste packen";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -92,7 +93,7 @@
             // 
             this.btnTestData.BackColor = System.Drawing.Color.PowderBlue;
             this.btnTestData.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnTestData.Location = new System.Drawing.Point(997, 218);
+            this.btnTestData.Location = new System.Drawing.Point(998, 754);
             this.btnTestData.Name = "btnTestData";
             this.btnTestData.Size = new System.Drawing.Size(168, 23);
             this.btnTestData.TabIndex = 14;
@@ -102,10 +103,10 @@
             // 
             // btnFinishCharge
             // 
-            this.btnFinishCharge.Font = new System.Drawing.Font("Arial", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnFinishCharge.Location = new System.Drawing.Point(34, 193);
+            this.btnFinishCharge.Font = new System.Drawing.Font("Verdana", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnFinishCharge.Location = new System.Drawing.Point(8, 783);
             this.btnFinishCharge.Name = "btnFinishCharge";
-            this.btnFinishCharge.Size = new System.Drawing.Size(361, 48);
+            this.btnFinishCharge.Size = new System.Drawing.Size(1158, 37);
             this.btnFinishCharge.TabIndex = 13;
             this.btnFinishCharge.Text = "Charge abschließen";
             this.btnFinishCharge.UseVisualStyleBackColor = true;
@@ -113,24 +114,25 @@
             // 
             // btnDeleteEntry
             // 
-            this.btnDeleteEntry.BackColor = System.Drawing.Color.Red;
-            this.btnDeleteEntry.Location = new System.Drawing.Point(3, 247);
+            this.btnDeleteEntry.BackColor = System.Drawing.Color.Wheat;
+            this.btnDeleteEntry.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDeleteEntry.Location = new System.Drawing.Point(3, 136);
             this.btnDeleteEntry.Name = "btnDeleteEntry";
-            this.btnDeleteEntry.Size = new System.Drawing.Size(27, 23);
+            this.btnDeleteEntry.Size = new System.Drawing.Size(90, 30);
             this.btnDeleteEntry.TabIndex = 12;
             this.btnDeleteEntry.TabStop = false;
-            this.btnDeleteEntry.Text = "X";
+            this.btnDeleteEntry.Text = "Löschen";
             this.btnDeleteEntry.UseVisualStyleBackColor = false;
             this.btnDeleteEntry.Click += new System.EventHandler(this.btnDeleteEntry_Click);
             // 
             // tbStatus
             // 
-            this.tbStatus.Font = new System.Drawing.Font("Arial", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbStatus.Location = new System.Drawing.Point(705, 127);
+            this.tbStatus.Font = new System.Drawing.Font("Verdana", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbStatus.Location = new System.Drawing.Point(708, 79);
             this.tbStatus.Multiline = true;
             this.tbStatus.Name = "tbStatus";
             this.tbStatus.ReadOnly = true;
-            this.tbStatus.Size = new System.Drawing.Size(460, 81);
+            this.tbStatus.Size = new System.Drawing.Size(460, 92);
             this.tbStatus.TabIndex = 11;
             this.tbStatus.TabStop = false;
             this.tbStatus.Text = "Status";
@@ -138,30 +140,30 @@
             // tbFallScann
             // 
             this.tbFallScann.Enabled = false;
-            this.tbFallScann.Font = new System.Drawing.Font("Arial", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbFallScann.Location = new System.Drawing.Point(401, 153);
+            this.tbFallScann.Font = new System.Drawing.Font("Verdana", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbFallScann.Location = new System.Drawing.Point(414, 134);
             this.tbFallScann.Name = "tbFallScann";
-            this.tbFallScann.Size = new System.Drawing.Size(261, 41);
+            this.tbFallScann.Size = new System.Drawing.Size(270, 37);
             this.tbFallScann.TabIndex = 10;
             this.tbFallScann.TextChanged += new System.EventHandler(this.tbFallScann_TextChanged);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Arial", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(9, 156);
+            this.label3.Font = new System.Drawing.Font("Verdana", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(114, 137);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(319, 34);
+            this.label3.Size = new System.Drawing.Size(305, 29);
             this.label3.TabIndex = 9;
             this.label3.Text = "Fallnummer Scannen:";
             // 
             // btnApplyNewBox
             // 
             this.btnApplyNewBox.Enabled = false;
-            this.btnApplyNewBox.Font = new System.Drawing.Font("Arial", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnApplyNewBox.Location = new System.Drawing.Point(705, 80);
+            this.btnApplyNewBox.Font = new System.Drawing.Font("Verdana", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnApplyNewBox.Location = new System.Drawing.Point(511, 79);
             this.btnApplyNewBox.Name = "btnApplyNewBox";
-            this.btnApplyNewBox.Size = new System.Drawing.Size(211, 41);
+            this.btnApplyNewBox.Size = new System.Drawing.Size(173, 37);
             this.btnApplyNewBox.TabIndex = 7;
             this.btnApplyNewBox.Text = "Verwenden";
             this.btnApplyNewBox.UseVisualStyleBackColor = true;
@@ -170,10 +172,10 @@
             // btnNextBox
             // 
             this.btnNextBox.Enabled = false;
-            this.btnNextBox.Font = new System.Drawing.Font("Arial", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnNextBox.Location = new System.Drawing.Point(3, 85);
+            this.btnNextBox.Font = new System.Drawing.Font("Verdana", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnNextBox.Location = new System.Drawing.Point(3, 79);
             this.btnNextBox.Name = "btnNextBox";
-            this.btnNextBox.Size = new System.Drawing.Size(211, 41);
+            this.btnNextBox.Size = new System.Drawing.Size(211, 37);
             this.btnNextBox.TabIndex = 5;
             this.btnNextBox.Text = "Neue Kiste";
             this.btnNextBox.UseVisualStyleBackColor = true;
@@ -182,10 +184,10 @@
             // btnCreateCharge
             // 
             this.btnCreateCharge.Enabled = false;
-            this.btnCreateCharge.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCreateCharge.Location = new System.Drawing.Point(401, 16);
+            this.btnCreateCharge.Font = new System.Drawing.Font("Verdana", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCreateCharge.Location = new System.Drawing.Point(423, 15);
             this.btnCreateCharge.Name = "btnCreateCharge";
-            this.btnCreateCharge.Size = new System.Drawing.Size(261, 41);
+            this.btnCreateCharge.Size = new System.Drawing.Size(261, 39);
             this.btnCreateCharge.TabIndex = 3;
             this.btnCreateCharge.Text = "Charge Erzeugen";
             this.btnCreateCharge.UseVisualStyleBackColor = true;
@@ -194,14 +196,14 @@
             // cbMandant
             // 
             this.cbMandant.Enabled = false;
-            this.cbMandant.Font = new System.Drawing.Font("Arial Narrow", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbMandant.Font = new System.Drawing.Font("Verdana", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbMandant.FormattingEnabled = true;
             this.cbMandant.Items.AddRange(new object[] {
             "FN",
             "TT"});
-            this.cbMandant.Location = new System.Drawing.Point(220, 18);
+            this.cbMandant.Location = new System.Drawing.Point(225, 17);
             this.cbMandant.Name = "cbMandant";
-            this.cbMandant.Size = new System.Drawing.Size(175, 39);
+            this.cbMandant.Size = new System.Drawing.Size(192, 37);
             this.cbMandant.TabIndex = 2;
             this.cbMandant.SelectedIndexChanged += new System.EventHandler(this.cbMandant_SelectedIndexChanged);
             // 
@@ -210,21 +212,21 @@
             this.dgvAkten.AllowUserToAddRows = false;
             this.dgvAkten.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvAkten.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvAkten.Location = new System.Drawing.Point(34, 247);
+            this.dgvAkten.Location = new System.Drawing.Point(8, 177);
             this.dgvAkten.MultiSelect = false;
             this.dgvAkten.Name = "dgvAkten";
             this.dgvAkten.ReadOnly = true;
             this.dgvAkten.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvAkten.ShowEditingIcon = false;
-            this.dgvAkten.Size = new System.Drawing.Size(1131, 582);
+            this.dgvAkten.Size = new System.Drawing.Size(1163, 587);
             this.dgvAkten.TabIndex = 5;
             // 
             // btnNewCharge
             // 
-            this.btnNewCharge.Font = new System.Drawing.Font("Arial", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnNewCharge.Font = new System.Drawing.Font("Verdana", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnNewCharge.Location = new System.Drawing.Point(3, 18);
             this.btnNewCharge.Name = "btnNewCharge";
-            this.btnNewCharge.Size = new System.Drawing.Size(211, 41);
+            this.btnNewCharge.Size = new System.Drawing.Size(211, 37);
             this.btnNewCharge.TabIndex = 1;
             this.btnNewCharge.Text = "Neue Charge";
             this.btnNewCharge.UseVisualStyleBackColor = true;
@@ -234,43 +236,43 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Enabled = false;
-            this.label2.Font = new System.Drawing.Font("Arial Narrow", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(668, 22);
+            this.label2.Font = new System.Drawing.Font("Verdana", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(703, 21);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(200, 33);
+            this.label2.Size = new System.Drawing.Size(109, 29);
             this.label2.TabIndex = 3;
-            this.label2.Text = "Chargennummer:";
+            this.label2.Text = "Charge:";
             // 
             // tbCharge
             // 
             this.tbCharge.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tbCharge.Enabled = false;
             this.tbCharge.Font = new System.Drawing.Font("Arial", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbCharge.Location = new System.Drawing.Point(874, 18);
+            this.tbCharge.Location = new System.Drawing.Point(818, 15);
             this.tbCharge.Name = "tbCharge";
-            this.tbCharge.Size = new System.Drawing.Size(252, 41);
+            this.tbCharge.Size = new System.Drawing.Size(348, 41);
             this.tbCharge.TabIndex = 8;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Enabled = false;
-            this.label1.Font = new System.Drawing.Font("Arial Narrow", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(220, 88);
+            this.label1.Font = new System.Drawing.Font("Verdana", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(220, 83);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(175, 33);
+            this.label1.Size = new System.Drawing.Size(83, 29);
             this.label1.TabIndex = 1;
-            this.label1.Text = "Kistennummer:";
+            this.label1.Text = "Kiste:";
             // 
             // tbKiste
             // 
             this.tbKiste.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tbKiste.Enabled = false;
-            this.tbKiste.Font = new System.Drawing.Font("Arial", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbKiste.Location = new System.Drawing.Point(401, 81);
+            this.tbKiste.Font = new System.Drawing.Font("Verdana", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbKiste.Location = new System.Drawing.Point(309, 79);
             this.tbKiste.MaxLength = 8;
             this.tbKiste.Name = "tbKiste";
-            this.tbKiste.Size = new System.Drawing.Size(261, 41);
+            this.tbKiste.Size = new System.Drawing.Size(196, 37);
             this.tbKiste.TabIndex = 6;
             this.tbKiste.TextChanged += new System.EventHandler(this.tbKiste_TextChanged);
             this.tbKiste.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbKiste_KeyPress);

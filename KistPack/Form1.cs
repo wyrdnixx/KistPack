@@ -255,7 +255,7 @@ namespace KistPack
                 await myTask;
                 pv = myTask.Result;
                 btnCreateCharge.Enabled = false;
-                btnFinishCharge.Enabled = false;
+                btnFinishCharge.Enabled = true;
                 if (pv != null && pv.Fallstorno ==null)
                 {
                     // Test if visit already exists in database / visit hast already been scanned
@@ -352,7 +352,7 @@ namespace KistPack
                 dt.Rows.Add(tbCharge.Text, tbKiste.Text, pv.Fallnummer, pv.Person, pv.Vorname, pv.Nachname);
                 dt.AcceptChanges();
                 dgvAkten.Update();
-                tbStatus.BackColor = System.Drawing.Color.MediumSeaGreen;
+                tbStatus.BackColor = System.Drawing.Color.LimeGreen;
                 tbStatus.Text = "Fall " + pv.Fallnummer + " zur Charge hinzugefügt.";
                 playSoundOK();
             
@@ -400,6 +400,13 @@ namespace KistPack
                 dgvAkten.Update();
             }           
 
+            if(dt.Rows.Count != 0)
+            {
+                btnFinishCharge.Enabled = true;
+            } else
+            {
+                btnFinishCharge.Enabled = false;
+            }
         }
 
 
@@ -410,7 +417,7 @@ namespace KistPack
         {
             // Assuming you have already populated your DataGridView with data
             // This is just an example; replace it with your actual data
-            tbCharge.Text = "testCharge_000001";
+            //tbCharge.Text = "testCharge_000001";
             dt.Rows.Add("TESTCharge", "101", "23001","1","Hans","Hansen");
             dt.Rows.Add("TESTCharge", "101", "23002", "2", "Peter", "Peterson");
             dt.Rows.Add("TESTCharge", "101", "23003", "3", "Susi", "Susen");
@@ -494,19 +501,20 @@ namespace KistPack
                 // Add a header to the section
                 Table headerTable = section.Headers.Primary.AddTable();
                 headerTable.AddColumn(Unit.FromCentimeter(5));
-                headerTable.AddColumn(Unit.FromCentimeter(8));
+                headerTable.AddColumn(Unit.FromCentimeter(10));
                 headerTable.AddColumn(Unit.FromCentimeter(7));
                 Row headerRow = headerTable.AddRow();
-                headerRow.Cells[0].AddParagraph("MCB-Charge: " + tbCharge.Text); // Replace with your logo
-                headerRow.Cells[0].Format.Font.Bold = true;
-                headerRow.Cells[0].Format.Font.Size = 12;
-                //headerRow.Cells[1].AddParagraph($"Page {i + 1}");
-                //headerRow.Cells[1].AddParagraph($"Page ?");
-                Paragraph headerPageIndex = headerRow.Cells[1].AddParagraph();
+
+                Paragraph headerPageIndex = headerRow.Cells[0].AddParagraph();
                 headerPageIndex.AddText("Seite: ");
                 headerPageIndex.AddPageField();
                 headerPageIndex.AddText(" / ");
-                headerPageIndex.AddNumPagesField();                
+                headerPageIndex.AddNumPagesField();
+
+                headerRow.Cells[1].AddParagraph("MCB-Charge: " + tbCharge.Text); // Replace with your logo
+                headerRow.Cells[1].Format.Font.Bold = true;
+                headerRow.Cells[1].Format.Font.Size = 12;
+                         
                 
                 Paragraph foot = section.Footers.Primary.AddParagraph();                               
                 foot.AddText("Seite ");
@@ -601,7 +609,7 @@ namespace KistPack
                 pdfRenderer.PdfDocument.Save(pdfFilePath);
                 result = true;
 
-                tbStatus.BackColor = System.Drawing.Color.Green;
+                tbStatus.BackColor = System.Drawing.Color.LimeGreen;
                 tbStatus.Text = "PDF erfolgreich erstellt";
                 
                 return result;
