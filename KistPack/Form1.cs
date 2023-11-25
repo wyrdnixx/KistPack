@@ -669,7 +669,7 @@ namespace KistPack
 
         private void tbSearchText_KeyPress(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter)
+            if (e.KeyCode == Keys.Enter && tbSearchText.Text.Length != 0)
             {
                 // Tu was
                 DataTable dtSearchResult  =  kistPackDB.searchWildcard(tbSearchText.Text);
