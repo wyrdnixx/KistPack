@@ -48,14 +48,14 @@
             this.label1 = new System.Windows.Forms.Label();
             this.tbKiste = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.label4 = new System.Windows.Forms.Label();
+            this.dgvSearchResults = new System.Windows.Forms.DataGridView();
             this.tbSearchText = new System.Windows.Forms.TextBox();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.label4 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAkten)).BeginInit();
             this.tabPage2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvSearchResults)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -67,7 +67,7 @@
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1182, 865);
+            this.tabControl1.Size = new System.Drawing.Size(1251, 865);
             this.tabControl1.TabIndex = 0;
             // 
             // tabPage1
@@ -92,7 +92,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 27);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1174, 834);
+            this.tabPage1.Size = new System.Drawing.Size(1243, 834);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Kiste packen";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -114,7 +114,7 @@
             this.btnFinishCharge.Font = new System.Drawing.Font("Verdana", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnFinishCharge.Location = new System.Drawing.Point(8, 783);
             this.btnFinishCharge.Name = "btnFinishCharge";
-            this.btnFinishCharge.Size = new System.Drawing.Size(1158, 37);
+            this.btnFinishCharge.Size = new System.Drawing.Size(1099, 37);
             this.btnFinishCharge.TabIndex = 13;
             this.btnFinishCharge.Text = "Charge abschließen";
             this.btnFinishCharge.UseVisualStyleBackColor = true;
@@ -226,7 +226,7 @@
             this.dgvAkten.ReadOnly = true;
             this.dgvAkten.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvAkten.ShowEditingIcon = false;
-            this.dgvAkten.Size = new System.Drawing.Size(1163, 587);
+            this.dgvAkten.Size = new System.Drawing.Size(1228, 587);
             this.dgvAkten.TabIndex = 5;
             // 
             // btnNewCharge
@@ -287,17 +287,42 @@
             // 
             // tabPage2
             // 
-            this.tabPage2.Controls.Add(this.dataGridView1);
+            this.tabPage2.Controls.Add(this.dgvSearchResults);
             this.tabPage2.Controls.Add(this.tbSearchText);
             this.tabPage2.Controls.Add(this.label4);
             this.tabPage2.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tabPage2.Location = new System.Drawing.Point(4, 27);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1174, 834);
+            this.tabPage2.Size = new System.Drawing.Size(1243, 834);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Suche";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // dgvSearchResults
+            // 
+            this.dgvSearchResults.AllowUserToAddRows = false;
+            this.dgvSearchResults.AllowUserToDeleteRows = false;
+            this.dgvSearchResults.AllowUserToResizeRows = false;
+            this.dgvSearchResults.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgvSearchResults.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.dgvSearchResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvSearchResults.Location = new System.Drawing.Point(9, 90);
+            this.dgvSearchResults.Name = "dgvSearchResults";
+            this.dgvSearchResults.ReadOnly = true;
+            this.dgvSearchResults.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
+            this.dgvSearchResults.Size = new System.Drawing.Size(1228, 741);
+            this.dgvSearchResults.TabIndex = 2;
+            // 
+            // tbSearchText
+            // 
+            this.tbSearchText.Location = new System.Drawing.Point(81, 22);
+            this.tbSearchText.Name = "tbSearchText";
+            this.tbSearchText.Size = new System.Drawing.Size(301, 27);
+            this.tbSearchText.TabIndex = 1;
+            this.tbSearchText.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbSearchText_KeyPress);
             // 
             // label4
             // 
@@ -308,26 +333,11 @@
             this.label4.TabIndex = 0;
             this.label4.Text = "Suche:";
             // 
-            // tbSearchText
-            // 
-            this.tbSearchText.Location = new System.Drawing.Point(81, 22);
-            this.tbSearchText.Name = "tbSearchText";
-            this.tbSearchText.Size = new System.Drawing.Size(301, 27);
-            this.tbSearchText.TabIndex = 1;
-            // 
-            // dataGridView1
-            // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(9, 90);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(1162, 741);
-            this.dataGridView1.TabIndex = 2;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1182, 865);
+            this.ClientSize = new System.Drawing.Size(1251, 865);
             this.Controls.Add(this.tabControl1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -340,7 +350,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvAkten)).EndInit();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvSearchResults)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -366,7 +376,7 @@
         private System.Windows.Forms.Button btnDeleteEntry;
         private System.Windows.Forms.Button btnFinishCharge;
         private System.Windows.Forms.Button btnTestData;
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView dgvSearchResults;
         private System.Windows.Forms.TextBox tbSearchText;
         private System.Windows.Forms.Label label4;
     }

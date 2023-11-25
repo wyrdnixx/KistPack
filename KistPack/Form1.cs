@@ -91,7 +91,18 @@ namespace KistPack
 
         }
 
+        private void btnTestData_Click(object sender, EventArgs e)
+        {
+            //generateTestData();
 
+            //kistPackDB.saveDtToDB(dt);
+
+            //btnFinishCharge_Click(sender, e);
+
+            kistPackDB.databaseFileRead("FN202311242337", tempFilePath + "test.pdf");
+
+            //System.Diagnostics.Process.Start(tempFilePath + "test.pdf");
+        }
 
         private void tbCharge_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -650,24 +661,53 @@ namespace KistPack
 
         }
 
-       
+
         #endregion
 
-        private void btnTestData_Click(object sender, EventArgs e)
+        #region SearchTab
+
+
+        private void tbSearchText_KeyPress(object sender, KeyEventArgs e)
         {
-            //generateTestData();
-            
-            //kistPackDB.saveDtToDB(dt);
+            if (e.KeyCode == Keys.Enter)
+            {
+                // Tu was
+                DataTable dtSearchResult  =  kistPackDB.searchWildcard(tbSearchText.Text);
+                dgvSearchResults.DataSource = dtSearchResult;
+                dgvSearchResults.DefaultCellStyle.Font = new System.Drawing.Font("Verdana", 12);
+                dgvSearchResults.ClearSelection();
 
-            //btnFinishCharge_Click(sender, e);
+                if (dtSearchResult != null )
+                {
+                    // Optional: Clear previous selections
+                    
 
-            kistPackDB.databaseFileRead("FN202311242337",tempFilePath + "test.pdf");
-
-            //System.Diagnostics.Process.Start(tempFilePath + "test.pdf");
+                    // Iterate through each row in the DataGridView
+                    foreach (DataGridViewRow row in dgvSearchResults.Rows)
+                    {
+                        // Iterate through each cell in the current row
+                        foreach (DataGridViewCell cell in row.Cells)
+                        {
+                            // Check if the cell value is "test"
+                            //if (cell.Value != null && cell.Value.ToString() == tbSearchText.Text)
+                            if (cell.Value != null && cell.Value.ToString().ToLower().Contains(tbSearchText.Text.ToLower()))
+                                {
+                                // Select the entire row
+                                //row.Selected = true;
+                                cell.Selected = true;
+                                //break; // Break out of the inner loop since we've found "test" in the row
+                            }
+                        }
+                    }
+                }
+            }
         }
+
+
+        #endregion
     }
 
-    
+
 
 
 

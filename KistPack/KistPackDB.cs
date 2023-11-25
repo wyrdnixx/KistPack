@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -101,6 +102,106 @@ namespace KistPack
             return patList;
 
         }
+
+        public DataTable searchWildcard(String _SearchText)
+        {
+            DataTable sDT = new DataTable();
+            List<String> chargeList = new List<String>();
+            // Datentabelle konfigurieren
+            sDT.Columns.Add("Charge");
+            sDT.Columns.Add("Kiste");
+            sDT.Columns.Add("Fallnummer");
+            sDT.Columns.Add("Person");
+            sDT.Columns.Add("Vorname");
+            sDT.Columns.Add("Nachname");
+            sDT.Columns.Add("Scanndatum");
+            sDT.Columns.Add("Scanuser");
+            sDT.Columns.Add("Scanclient");
+            sDT.Columns.Add("Scanhostname");
+
+
+            try
+            {
+                // Search for Charge containing the searchtext
+                using (SqlConnection conn = new SqlConnection(connString))
+                {                    
+                    string query = @"SELECT Charge
+                                     FROM Chargen
+                                     where Charge like '%" + _SearchText + "%'" +
+                                     "or Kiste like '%" + _SearchText + "%'" +
+                                     "or Fallnummer like '%" + _SearchText + "%'" +
+                                     "or Person like '%" + _SearchText + "%'" +
+                                     "or Vorname like '%" + _SearchText + "%'" +
+                                     "or Nachname like '%" + _SearchText + "%'" +
+                                     "group by Charge;";
+                    SqlCommand cmd = new SqlCommand(query, conn);
+                    conn.Open();                    
+                    SqlDataReader dr = cmd.ExecuteReader();
+                    while (dr.Read())
+                    {
+                        //PatientVisit tmp = new PatientVisit(dr.GetString(1), dr.GetString(2), dr.GetString(3), dr.GetString(4), dr.GetString(5), dr.GetString(6), dr.GetString(7), dr.GetString(8), dr.GetString(9), dr.GetString(10));
+                        //MessageBox.Show("Found Charge: "+ dr.GetString(0), "Found");
+                        chargeList.Add(dr.GetString(0));
+                    }
+                    dr.Close();
+                    conn.Close();
+                }
+
+                if (chargeList.Count > 0)
+                {
+
+
+                    // Search for Charge containing the searchtext
+                    using (SqlConnection conn = new SqlConnection(connString))
+                    {
+                        string chargeIn = null;
+                        int chargeCount = chargeList.Count;
+                        int counter = 0;
+                        foreach (String item in chargeList)
+                        {
+                            counter++;
+                            if (counter < chargeCount)
+                            {
+                                chargeIn += "'" + item + "',";
+                            }
+                            else
+                            {
+                                chargeIn += "'" + item + "'";
+                            }
+
+                        }
+                        // MessageBox.Show(chargeIn);
+                        string query = @"SELECT *
+                                     FROM Chargen
+                                     where Charge in (" + chargeIn + ");";
+
+                        SqlCommand cmd = new SqlCommand(query, conn);
+                        conn.Open();
+                        SqlDataReader dr = cmd.ExecuteReader();
+                        while (dr.Read())
+                        {
+                            //PatientVisit tmp = new PatientVisit(dr.GetString(1), dr.GetString(2), dr.GetString(3), dr.GetString(4), dr.GetString(5), dr.GetString(6), dr.GetString(7), dr.GetString(8), dr.GetString(9), dr.GetString(10));
+                            //MessageBox.Show("Found Charge: "+ dr.GetString(0), "Found");
+                            //chargeList.Add(dr.GetString(0));
+                            sDT.Rows.Add(dr.GetString(1), dr.GetString(2), dr.GetString(3), dr.GetString(4), dr.GetString(5), dr.GetString(6), dr.GetString(7), dr.GetString(8), dr.GetString(9), dr.GetString(10));
+                        }
+                        dr.Close();
+                        conn.Close();
+                    }
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Fehler beim Suchen:" + Environment.NewLine + ex.Message,"Error");
+            }
+
+
+            return sDT;
+        }
+
 
         public bool saveDtToDB(DataTable _dt)
         {
