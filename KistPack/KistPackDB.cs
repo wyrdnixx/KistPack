@@ -8,6 +8,7 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -421,7 +422,7 @@ namespace KistPack
             
         }
 
-        public  void databaseFileRead(string _charge, string varPathToNewLocation)
+        public Boolean databaseFileRead(string _charge, string varPathToNewLocation)
         {
             
 
@@ -447,11 +448,9 @@ namespace KistPack
                 }
             }catch (Exception ex) {
                 MessageBox.Show("Fehler beim Laden der PDF Datei aus der Datenbank." + Environment.NewLine + ex.Message);
+                return false;
             }
-            
+            return true;
         }
-
-
-
     }
 }

@@ -705,6 +705,34 @@ namespace KistPack
 
 
         #endregion
+
+        private void btnFetchPDFfromArchive_Click(object sender, EventArgs e)
+        {
+            if(dgvSearchResults.SelectedCells.Count>1)
+            {
+                MessageBox.Show("Bitte einzelnen Eintrag Auswählen dessen Charge Sie abrufen wollen.", "Bitte wählen");
+            } else
+            {                
+                string cellValue = dgvSearchResults.Rows[dgvSearchResults.SelectedCells[0].RowIndex].Cells[0].Value.ToString();
+                //MessageBox.Show(cellValue);
+                if(kistPackDB.databaseFileRead(cellValue, tempFilePath + cellValue + ".pdf"))
+                {
+                    System.Diagnostics.Process.Start(tempFilePath + cellValue + ".pdf");
+                }
+
+            }
+        }
+
+        private void dgvSearchResults_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (dgvSearchResults.SelectedCells.Count == 1)
+            {
+                btnFetchPDFfromArchive.Enabled = true;
+            }else
+            {
+                btnFetchPDFfromArchive.Enabled = true;
+            }
+        }
     }
 
 

@@ -51,6 +51,7 @@
             this.dgvSearchResults = new System.Windows.Forms.DataGridView();
             this.tbSearchText = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
+            this.btnFetchPDFfromArchive = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAkten)).BeginInit();
@@ -287,6 +288,7 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.btnFetchPDFfromArchive);
             this.tabPage2.Controls.Add(this.dgvSearchResults);
             this.tabPage2.Controls.Add(this.tbSearchText);
             this.tabPage2.Controls.Add(this.label4);
@@ -315,6 +317,7 @@
             this.dgvSearchResults.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.dgvSearchResults.Size = new System.Drawing.Size(1368, 741);
             this.dgvSearchResults.TabIndex = 2;
+            this.dgvSearchResults.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSearchResults_CellContentClick);
             // 
             // tbSearchText
             // 
@@ -332,6 +335,17 @@
             this.label4.Size = new System.Drawing.Size(67, 18);
             this.label4.TabIndex = 0;
             this.label4.Text = "Suche:";
+            // 
+            // btnFetchPDFfromArchive
+            // 
+            this.btnFetchPDFfromArchive.Enabled = false;
+            this.btnFetchPDFfromArchive.Location = new System.Drawing.Point(416, 6);
+            this.btnFetchPDFfromArchive.Name = "btnFetchPDFfromArchive";
+            this.btnFetchPDFfromArchive.Size = new System.Drawing.Size(124, 78);
+            this.btnFetchPDFfromArchive.TabIndex = 3;
+            this.btnFetchPDFfromArchive.Text = "Chargen PDF abrufen";
+            this.btnFetchPDFfromArchive.UseVisualStyleBackColor = true;
+            this.btnFetchPDFfromArchive.Click += new System.EventHandler(this.btnFetchPDFfromArchive_Click);
             // 
             // Form1
             // 
@@ -379,6 +393,7 @@
         private System.Windows.Forms.DataGridView dgvSearchResults;
         private System.Windows.Forms.TextBox tbSearchText;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button btnFetchPDFfromArchive;
     }
 }
 
