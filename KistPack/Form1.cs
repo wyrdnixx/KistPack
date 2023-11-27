@@ -234,7 +234,7 @@ namespace KistPack
                     btnFinishCharge.Text = "PDF erneut drucken";
 
 
-                    //ToDo: Generate CSV File
+                    //ToDo: save CSV File to DB
 
                     if(!CSVExport(dt, Properties.Settings.Default.CSVExportPath + tbCharge.Text + ".csv"))
                     {
