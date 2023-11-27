@@ -55,7 +55,7 @@ namespace KistPack
                 {
 
                     //retrieve the SQL Server instance version
-                    string query = @"SELECT FALLID, PATID, VORNAME, NAME, F_STORNO
+                    string query = @"SELECT FALLID, PATID, GEBDAT,VORNAME, NAME, F_STORNO
                                      FROM IDX_FRI  where FALLID = "+_Fallnummer + ";";
                     //define the SqlCommand object
                     SqlCommand cmd = new SqlCommand(query, conn);
@@ -78,18 +78,19 @@ namespace KistPack
                         {
                             string fallnummer = dr.GetString(0);
                             string person = dr.GetString(1);
-                            string nachname = dr.GetString(2);
-                            string vorname = dr.GetString(3);
+                            string gebdat = dr.GetDateTime(2).ToString("dd.MM.yyyy"); //  GetString(2);
+                            string nachname = dr.GetString(3);
+                            string vorname = dr.GetString(4);
                             string fallstorno = null; // initiate empty if in db null
                             
-                            if (!dr.IsDBNull(4)) // if the F_STORNO field is not empty
+                            if (!dr.IsDBNull(5)) // if the F_STORNO field is not empty
                             { 
-                                 fallstorno = dr.GetString(4);
+                                 fallstorno = dr.GetString(5);
                             } 
                                 
 
 
-                            PatientVisit pv = new PatientVisit(fallnummer,person,vorname,nachname,fallstorno);
+                            PatientVisit pv = new PatientVisit(fallnummer,person,gebdat, vorname,nachname,fallstorno);
 
 
                             

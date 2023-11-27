@@ -48,10 +48,10 @@
             this.label1 = new System.Windows.Forms.Label();
             this.tbKiste = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.btnFetchPDFfromArchive = new System.Windows.Forms.Button();
             this.dgvSearchResults = new System.Windows.Forms.DataGridView();
             this.tbSearchText = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.btnFetchPDFfromArchive = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAkten)).BeginInit();
@@ -301,6 +301,17 @@
             this.tabPage2.Text = "Suche";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // btnFetchPDFfromArchive
+            // 
+            this.btnFetchPDFfromArchive.Enabled = false;
+            this.btnFetchPDFfromArchive.Location = new System.Drawing.Point(416, 6);
+            this.btnFetchPDFfromArchive.Name = "btnFetchPDFfromArchive";
+            this.btnFetchPDFfromArchive.Size = new System.Drawing.Size(124, 78);
+            this.btnFetchPDFfromArchive.TabIndex = 3;
+            this.btnFetchPDFfromArchive.Text = "Chargen PDF abrufen";
+            this.btnFetchPDFfromArchive.UseVisualStyleBackColor = true;
+            this.btnFetchPDFfromArchive.Click += new System.EventHandler(this.btnFetchPDFfromArchive_Click);
+            // 
             // dgvSearchResults
             // 
             this.dgvSearchResults.AllowUserToAddRows = false;
@@ -335,17 +346,6 @@
             this.label4.Size = new System.Drawing.Size(67, 18);
             this.label4.TabIndex = 0;
             this.label4.Text = "Suche:";
-            // 
-            // btnFetchPDFfromArchive
-            // 
-            this.btnFetchPDFfromArchive.Enabled = false;
-            this.btnFetchPDFfromArchive.Location = new System.Drawing.Point(416, 6);
-            this.btnFetchPDFfromArchive.Name = "btnFetchPDFfromArchive";
-            this.btnFetchPDFfromArchive.Size = new System.Drawing.Size(124, 78);
-            this.btnFetchPDFfromArchive.TabIndex = 3;
-            this.btnFetchPDFfromArchive.Text = "Chargen PDF abrufen";
-            this.btnFetchPDFfromArchive.UseVisualStyleBackColor = true;
-            this.btnFetchPDFfromArchive.Click += new System.EventHandler(this.btnFetchPDFfromArchive_Click);
             // 
             // Form1
             // 

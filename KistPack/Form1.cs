@@ -66,6 +66,7 @@ namespace KistPack
             dt.Columns.Add("Box");
             dt.Columns.Add("Visit");
             dt.Columns.Add("Person");
+            dt.Columns.Add("Gebdat");
             dt.Columns.Add("Givenname");
             dt.Columns.Add("Surname");            
             dgvAkten.DataSource = dt;
@@ -222,6 +223,7 @@ namespace KistPack
         {
             if (!chargeWasSavedToDB)
             {
+                // First save to Database
                 if (kistPackDB.saveDtToDB(dt))
                 {
                     chargeWasSavedToDB = true;
@@ -230,41 +232,32 @@ namespace KistPack
                     btnNextBox.Enabled = false;
                     btnDeleteEntry.Enabled = false;
                     btnFinishCharge.Text = "PDF erneut drucken";
+
+
+                    //ToDo: Generate CSV File
+
+                    // generate PDF File
+                    String pdfFilePath = tempFilePath + tbCharge.Text + ".pdf";
+                    if (ExportToPDF(dgvAkten, pdfFilePath))
+                    {
+                        System.Diagnostics.Process.Start(pdfFilePath);
+
+                        // Save PDF File to Database
+                        kistPackDB.databaseFilePut(tbCharge.Text, pdfFilePath);
+                        createNewCharge();
+                    }
+
+
                     btnNewCharge.Focus();
                 }else
                 {
                     tbStatus.BackColor = System.Drawing.Color.SeaShell;
                     tbStatus.Text = "Es ist ein Fehler beim speichern in die Datenbank aufgetreten.";
                 }
-            }
-
-
-            // Print and save the PDF File
-            //SaveFileDialog saveFileDialog = new SaveFileDialog();
-            //saveFileDialog.Filter = "PDF files (*.pdf)|*.pdf";
-            //saveFileDialog.Title = "Export to PDF";
-            //saveFileDialog.ShowDialog();
-
-            //if (saveFileDialog.FileName != "")
-            //{
-            // if file save successfully 
-            //    if (ExportToPDF(dgvAkten, saveFileDialog.FileName))
-            //    {
-            //        System.Diagnostics.Process.Start(saveFileDialog.FileName);
-            //        createNewCharge();
-            //    }
-            //}
+            }                 
             
 
-            //ToDo: Generate CSV File
-
-            String pdfFilePath = tempFilePath + tbCharge.Text + ".pdf";
-            if (ExportToPDF(dgvAkten, pdfFilePath))
-            {
-                System.Diagnostics.Process.Start(pdfFilePath);
-                kistPackDB.databaseFilePut(tbCharge.Text, pdfFilePath);
-                createNewCharge();
-            }
+            
 
         }
 
@@ -386,7 +379,7 @@ namespace KistPack
 
         private void updateData(PatientVisit pv)
         {            
-                dt.Rows.Add(tbCharge.Text, tbKiste.Text, pv.Fallnummer, pv.Person, pv.Vorname, pv.Nachname);
+                dt.Rows.Add(tbCharge.Text, tbKiste.Text, pv.Fallnummer, pv.Person,pv.Gebdat, pv.Vorname, pv.Nachname);
                 dt.AcceptChanges();
                 dgvAkten.Update();
                 tbStatus.BackColor = System.Drawing.Color.LimeGreen;
@@ -574,6 +567,7 @@ namespace KistPack
                     string boxNumber = row.Cells["Box"].Value.ToString();
                     string visit = row.Cells["Visit"].Value.ToString();
                     string person = row.Cells["Person"].Value.ToString();
+                    string gebdat = row.Cells["Gebdat"].Value.ToString();
                     string givenname = row.Cells["Givenname"].Value.ToString();
                     string surname = row.Cells["Surname"].Value.ToString();
 
@@ -583,7 +577,7 @@ namespace KistPack
                     boxData[boxNumber] = new List<string[]>();
                 }
 
-                boxData[boxNumber].Add(new string[] { visit, person, givenname, surname });
+                boxData[boxNumber].Add(new string[] { visit, person, gebdat, givenname, surname });
             }
 
                 // Create a PDF document and add tables for each box
@@ -604,7 +598,7 @@ namespace KistPack
                     //dataTable.Rows.Height = Unit.FromCentimeter(1.5);
 
                     // Add columns to the table
-                    for (int j = 0; j < 4; j++)
+                    for (int j = 0; j < 5; j++)
                     {
                         dataTable.AddColumn(Unit.FromCentimeter(4));
                     }
@@ -613,8 +607,9 @@ namespace KistPack
                     //headerRowTable.Cells[0].AddParagraph("Box");
                     headerRowTable.Cells[0].AddParagraph("Fall");
                     headerRowTable.Cells[1].AddParagraph("Person");
-                    headerRowTable.Cells[2].AddParagraph("Vorname");
-                    headerRowTable.Cells[3].AddParagraph("Nachname");
+                    headerRowTable.Cells[2].AddParagraph("Gebdat");
+                    headerRowTable.Cells[3].AddParagraph("Vorname");
+                    headerRowTable.Cells[4].AddParagraph("Nachname");
 
 
                     // Add data rows to the table
@@ -625,7 +620,7 @@ namespace KistPack
                         //table.AddCell(rowData[2]); // givenname
                         //table.AddCell(rowData[3]); // surname
                         Row dataRow = dataTable.AddRow();
-                        for (int k = 0; k < 4; k++)
+                        for (int k = 0; k < 5; k++)
                         {
                             dataRow.Cells[k].AddParagraph($"{rowData[k]}");
                         }
@@ -660,9 +655,23 @@ namespace KistPack
             return result;
 
         }
+        #endregion
 
+
+        #region CSV-Export
+
+
+        private bool CSVExport()
+        {
+            // ToDo
+
+            return false;
+
+        }
 
         #endregion
+
+
 
         #region SearchTab
 

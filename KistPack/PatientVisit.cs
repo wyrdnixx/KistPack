@@ -12,6 +12,7 @@ namespace KistPack
         private string kiste;
         private string fallnummer;
         private string person;
+        private string gebdat;
         private string nachname;
         private string vorname;
         private string scandatum;
@@ -22,22 +23,24 @@ namespace KistPack
 
 
 
-        public PatientVisit(String _fallnummer, String _person, String _vorname , String _nachname, String _fallstorno)
+        public PatientVisit(String _fallnummer, String _person, String _gebdat, String _vorname , String _nachname, String _fallstorno)
         {
             this.Fallnummer = _fallnummer;
-            this.Person = _person;                
+            this.Person = _person;
+            this.Gebdat = _gebdat;
             this.Vorname = _vorname;
             this.Nachname = _nachname;
             this.Fallstorno = _fallstorno;
 
         }
 
-        public PatientVisit(String _charge, String _kiste, String _fallnummer, String _person, String _vorname, String _nachname, String _scandatum, String _scanuser, String _scanclient, String _scanhostname)
+        public PatientVisit(String _charge, String _kiste, String _fallnummer, String _person, String _gebdat, String _vorname, String _nachname, String _scandatum, String _scanuser, String _scanclient, String _scanhostname)
         {
             this.charge = _charge;
             this.kiste = _kiste;
             this.Fallnummer = _fallnummer;
             this.Person = _person;
+            this.Gebdat = _gebdat;
             this.Vorname = _vorname;
             this.Nachname = _nachname;            
             this.Scandatum = _scandatum;
@@ -59,5 +62,6 @@ namespace KistPack
         public string Scanclient { get => scanclient; set => scanclient = value; }
         public string Scanhostname { get => scanhostname; set => scanhostname = value; }
         public string Fallstorno { get => fallstorno; set => fallstorno = value; }
+        public string Gebdat { get => gebdat; set => gebdat = value; }
     }
 }

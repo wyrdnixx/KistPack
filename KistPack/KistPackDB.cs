@@ -86,7 +86,7 @@ namespace KistPack
 
                     while (dr.Read())
                     {
-                        PatientVisit tmp = new PatientVisit(dr.GetString(1), dr.GetString(2), dr.GetString(3), dr.GetString(4), dr.GetString(5), dr.GetString(6), dr.GetString(7), dr.GetString(8), dr.GetString(9), dr.GetString(10));
+                        PatientVisit tmp = new PatientVisit(dr.GetString(1), dr.GetString(2), dr.GetString(3), dr.GetString(4), dr.GetString(5), dr.GetString(6), dr.GetString(7), dr.GetString(8), dr.GetString(9), dr.GetString(10), dr.GetString(11));
                         patList.Add(tmp);
                     }
                     dr.Close();
@@ -113,6 +113,7 @@ namespace KistPack
             sDT.Columns.Add("Kiste");
             sDT.Columns.Add("Fallnummer");
             sDT.Columns.Add("Person");
+            sDT.Columns.Add("Gebdat");
             sDT.Columns.Add("Vorname");
             sDT.Columns.Add("Nachname");
             sDT.Columns.Add("Scanndatum");
@@ -132,6 +133,7 @@ namespace KistPack
                                      "or Kiste like '%" + _SearchText + "%'" +
                                      "or Fallnummer like '%" + _SearchText + "%'" +
                                      "or Person like '%" + _SearchText + "%'" +
+                                     "or Gebdat like '%" + _SearchText + "%'" +
                                      "or Vorname like '%" + _SearchText + "%'" +
                                      "or Nachname like '%" + _SearchText + "%'" +
                                      "group by Charge;";
@@ -184,7 +186,7 @@ namespace KistPack
                             //PatientVisit tmp = new PatientVisit(dr.GetString(1), dr.GetString(2), dr.GetString(3), dr.GetString(4), dr.GetString(5), dr.GetString(6), dr.GetString(7), dr.GetString(8), dr.GetString(9), dr.GetString(10));
                             //MessageBox.Show("Found Charge: "+ dr.GetString(0), "Found");
                             //chargeList.Add(dr.GetString(0));
-                            sDT.Rows.Add(dr.GetString(1), dr.GetString(2), dr.GetString(3), dr.GetString(4), dr.GetString(5), dr.GetString(6), dr.GetString(7), dr.GetString(8), dr.GetString(9), dr.GetString(10));
+                            sDT.Rows.Add(dr.GetString(1), dr.GetString(2), dr.GetString(3), dr.GetString(4), dr.GetString(5), dr.GetString(6), dr.GetString(7), dr.GetString(8), dr.GetString(9), dr.GetString(10), dr.GetString(11));
                         }
                         dr.Close();
                         conn.Close();
@@ -229,7 +231,7 @@ namespace KistPack
                         foreach (DataRow row in _dt.Rows)
                         {
                             cmd.CommandText = "INSERT INTO Chargen (" +
-                                "[Charge],[Kiste],[Fallnummer],[Person],[Vorname],[Nachname],[Scandatum],[Scanuser],[Scanclient],[Scanhostname]" +
+                                "[Charge],[Kiste],[Fallnummer],[Person],[Gebdat],[Vorname],[Nachname],[Scandatum],[Scanuser],[Scanclient],[Scanhostname]" +
                                 ") VALUES ('" +
                                 row[0].ToString() + "','" +
                                 row[1].ToString() + "','" +
@@ -237,6 +239,7 @@ namespace KistPack
                                 row[3].ToString()  + "','" +
                                 row[4].ToString() + "','" +
                                 row[5].ToString() + "','" +
+                                row[6].ToString() + "','" +
                                 datum + "','" +
                                 username + "','" +
                                 clientname+ "','" +
