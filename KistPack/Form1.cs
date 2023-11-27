@@ -598,10 +598,17 @@ namespace KistPack
                     //dataTable.Rows.Height = Unit.FromCentimeter(1.5);
 
                     // Add columns to the table
-                    for (int j = 0; j < 5; j++)
-                    {
-                        dataTable.AddColumn(Unit.FromCentimeter(4));
-                    }
+                    //for (int j = 0; j < 5; j++)
+                    //{
+                    //    dataTable.AddColumn(Unit.FromCentimeter(3));
+                    //}
+                    dataTable.AddColumn(Unit.FromCentimeter(2.5));
+                    dataTable.AddColumn(Unit.FromCentimeter(2.5));
+                    dataTable.AddColumn(Unit.FromCentimeter(2.5));
+                    dataTable.AddColumn(Unit.FromCentimeter(5));
+                    dataTable.AddColumn(Unit.FromCentimeter(5));
+
+
                     // Add a row for column headers
                     Row headerRowTable = dataTable.AddRow();
                     //headerRowTable.Cells[0].AddParagraph("Box");
