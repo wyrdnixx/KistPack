@@ -17,5 +17,8 @@
     <Setting Name="KistPackDB" Type="System.String" Scope="User">
       <Value Profile="(Default)">Server = MSSQL; Database = KistPackDB; Trusted_Connection = True;</Value>
     </Setting>
+    <Setting Name="CSVExportPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\VS_Workspace\KistPack\KistPack\bin\</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

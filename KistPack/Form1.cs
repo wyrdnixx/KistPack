@@ -236,16 +236,25 @@ namespace KistPack
 
                     //ToDo: Generate CSV File
 
-                    // generate PDF File
-                    String pdfFilePath = tempFilePath + tbCharge.Text + ".pdf";
-                    if (ExportToPDF(dgvAkten, pdfFilePath))
+                    if(!CSVExport(dt, Properties.Settings.Default.CSVExportPath + tbCharge.Text + ".csv"))
                     {
-                        System.Diagnostics.Process.Start(pdfFilePath);
+                        tbStatus.BackColor = System.Drawing.Color.SeaShell;
+                        tbStatus.Text = "Es ist ein Fehler beim speichern der Lieferschein CSV-Datei aufgetreten.";
+                    } else
+                    {
+                        // generate PDF File
+                        String pdfFilePath = tempFilePath + tbCharge.Text + ".pdf";
+                        if (ExportToPDF(dgvAkten, pdfFilePath))
+                        {
+                            System.Diagnostics.Process.Start(pdfFilePath);
 
-                        // Save PDF File to Database
-                        kistPackDB.databaseFilePut(tbCharge.Text, pdfFilePath);
-                        createNewCharge();
-                    }
+                            // Save PDF File to Database
+                            kistPackDB.databaseFilePut(tbCharge.Text, pdfFilePath);
+                            createNewCharge();
+                        }
+                    };
+
+                    
 
 
                     btnNewCharge.Focus();
@@ -668,10 +677,56 @@ namespace KistPack
         #region CSV-Export
 
 
-        private bool CSVExport()
+        private bool CSVExport(DataTable _dt, String strFilePath )
         {
             // ToDo
+            try
+            {
 
+
+                StreamWriter sw = new StreamWriter(strFilePath, false);
+                //headers
+                for (int i = 0; i < _dt.Columns.Count; i++)
+                {
+                    sw.Write(_dt.Columns[i]);
+                    if (i < _dt.Columns.Count - 1)
+                    {
+                        sw.Write(";");
+                    }
+                }
+                sw.Write(sw.NewLine);
+                foreach (DataRow dr in _dt.Rows)
+                {
+                    for (int i = 0; i < _dt.Columns.Count; i++)
+                    {
+                        if (!Convert.IsDBNull(dr[i]))
+                        {
+                            string value = dr[i].ToString();
+                            if (value.Contains(';'))
+                            {
+                                value = String.Format("\"{0}\"", value);
+                                sw.Write(value);
+                            }
+                            else
+                            {
+                                sw.Write(dr[i].ToString());
+                            }
+                        }
+                        if (i < _dt.Columns.Count - 1)
+                        {
+                            sw.Write(";");
+                        }
+                    }
+                    sw.Write(sw.NewLine);
+                }
+                sw.Close();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                playSoundER();
+                MessageBox.Show("Fehler beim Speichern der CSV-Datei: " + Environment.NewLine + ex.Message, "Error");
+            }
             return false;
 
         }

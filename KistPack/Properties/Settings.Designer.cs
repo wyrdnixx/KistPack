@@ -82,5 +82,17 @@ namespace KistPack.Properties {
                 this["KistPackDB"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\VS_Workspace\\KistPack\\KistPack\\bin\\")]
+        public string CSVExportPath {
+            get {
+                return ((string)(this["CSVExportPath"]));
+            }
+            set {
+                this["CSVExportPath"] = value;
+            }
+        }
     }
 }
