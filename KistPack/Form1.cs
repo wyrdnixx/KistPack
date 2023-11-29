@@ -63,12 +63,12 @@ namespace KistPack
 
             // Datentabelle konfigurieren
             dt.Columns.Add("Charge");
-            dt.Columns.Add("Box");
-            dt.Columns.Add("Visit");
+            dt.Columns.Add("Kiste");
+            dt.Columns.Add("Fallnummer");
             dt.Columns.Add("Person");
             dt.Columns.Add("Gebdat");
-            dt.Columns.Add("Givenname");
-            dt.Columns.Add("Surname");            
+            dt.Columns.Add("Vorname");
+            dt.Columns.Add("Nachname");            
             dgvAkten.DataSource = dt;
 
             dgvAkten.DefaultCellStyle.Font = new System.Drawing.Font("Verdana", 12);
@@ -249,7 +249,8 @@ namespace KistPack
                             System.Diagnostics.Process.Start(pdfFilePath);
 
                             // Save PDF File to Database
-                            kistPackDB.databaseFilePut(tbCharge.Text, pdfFilePath);
+                            // JoHe: Deaktiviert - doch nicht in DB speichern sondern neu generieren
+                            //kistPackDB.databaseFilePut(tbCharge.Text, pdfFilePath);
                             createNewCharge();
                         }
                     };
@@ -371,7 +372,7 @@ namespace KistPack
 
             foreach (DataRow row in dt.Rows)
             {
-                if (row["Visit"].ToString() == _fallnummer)
+                if (row["Fallnummer"].ToString() == _fallnummer)
                 {
                     exists = true;
                     String Errmsg = "Fallnummer " + _fallnummer + " schon vorhanden! Bitte Akte prüfen.";
@@ -573,12 +574,12 @@ namespace KistPack
                 foreach (DataGridViewRow row in dataGridView.Rows)
             {
                     string charge = row.Cells["Charge"].Value.ToString();
-                    string boxNumber = row.Cells["Box"].Value.ToString();
-                    string visit = row.Cells["Visit"].Value.ToString();
+                    string boxNumber = row.Cells["Kiste"].Value.ToString();
+                    string visit = row.Cells["Fallnummer"].Value.ToString();
                     string person = row.Cells["Person"].Value.ToString();
                     string gebdat = row.Cells["Gebdat"].Value.ToString();
-                    string givenname = row.Cells["Givenname"].Value.ToString();
-                    string surname = row.Cells["Surname"].Value.ToString();
+                    string givenname = row.Cells["Vorname"].Value.ToString();
+                    string surname = row.Cells["Nachname"].Value.ToString();
 
 
                     if (!boxData.ContainsKey(boxNumber))
@@ -777,33 +778,73 @@ namespace KistPack
 
         #endregion
 
-        private void btnFetchPDFfromArchive_Click(object sender, EventArgs e)
+        // get the file from DB : JoHe: deaktiviert - soll doch neu generiert werden.
+        //private void btnFetchPDFfromArchive_Click(object sender, EventArgs e)
+        //{
+        //    if(dgvSearchResults.SelectedCells.Count>1)
+        //    {
+        //        MessageBox.Show("Bitte einzelnen Eintrag Auswählen dessen Charge Sie abrufen wollen.", "Bitte wählen");
+        //    } else
+        //    {                
+        //        string cellValue = dgvSearchResults.Rows[dgvSearchResults.SelectedCells[0].RowIndex].Cells[0].Value.ToString();
+        //        //MessageBox.Show(cellValue);
+        //        if(kistPackDB.databaseFileRead(cellValue, tempFilePath + cellValue + ".pdf"))
+        //        {
+        //            System.Diagnostics.Process.Start(tempFilePath + cellValue + ".pdf");
+        //        }
+
+        //    }
+        //}
+        private void btnRegenPDF_Click(object sender, EventArgs e)
         {
-            if(dgvSearchResults.SelectedCells.Count>1)
+            if (dgvSearchResults.SelectedCells.Count > 1)
             {
                 MessageBox.Show("Bitte einzelnen Eintrag Auswählen dessen Charge Sie abrufen wollen.", "Bitte wählen");
-            } else
-            {                
+            }
+            else
+            {
                 string cellValue = dgvSearchResults.Rows[dgvSearchResults.SelectedCells[0].RowIndex].Cells[0].Value.ToString();
-                //MessageBox.Show(cellValue);
-                if(kistPackDB.databaseFileRead(cellValue, tempFilePath + cellValue + ".pdf"))
+                dgvSearchResults.DataSource = null;
+
+                DataTable tmpDT = kistPackDB.searchWildcard(cellValue);
+                dgvSearchResults.DataSource = tmpDT;
+                // generate PDF File
+                String pdfFilePath = tempFilePath + cellValue + ".pdf";
+                if (ExportToPDF(dgvSearchResults, pdfFilePath))
                 {
-                    System.Diagnostics.Process.Start(tempFilePath + cellValue + ".pdf");
+                    System.Diagnostics.Process.Start(pdfFilePath);
+                }
+                
+
+            }
+        }
+        private void btnRegenCSV_Click(object sender, EventArgs e)
+        {
+            if (dgvSearchResults.SelectedCells.Count > 1)
+            {
+                MessageBox.Show("Bitte einzelnen Eintrag Auswählen dessen Charge Sie abrufen wollen.", "Bitte wählen");
+            }
+            else
+            {
+                string cellValue = dgvSearchResults.Rows[dgvSearchResults.SelectedCells[0].RowIndex].Cells[0].Value.ToString();
+                dgvSearchResults.DataSource = null;
+
+                DataTable tmpDT = kistPackDB.searchWildcard(cellValue);
+                dgvSearchResults.DataSource = tmpDT;
+                // generate PDF File
+                String pdfFilePath = tempFilePath + cellValue + ".csv";
+                if (CSVExport(tmpDT, pdfFilePath))
+                {                    
+                    System.Diagnostics.Process.Start("notepad.exe", pdfFilePath);
                 }
 
+
             }
         }
 
-        private void dgvSearchResults_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (dgvSearchResults.SelectedCells.Count == 1)
-            {
-                btnFetchPDFfromArchive.Enabled = true;
-            }else
-            {
-                btnFetchPDFfromArchive.Enabled = true;
-            }
-        }
+           
+
+
     }
 
 

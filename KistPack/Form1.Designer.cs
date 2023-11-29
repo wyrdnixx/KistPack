@@ -48,7 +48,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.tbKiste = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.btnFetchPDFfromArchive = new System.Windows.Forms.Button();
+            this.btnRegenCSV = new System.Windows.Forms.Button();
+            this.btnRegenPDF = new System.Windows.Forms.Button();
             this.dgvSearchResults = new System.Windows.Forms.DataGridView();
             this.tbSearchText = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -68,7 +69,7 @@
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1391, 865);
+            this.tabControl1.Size = new System.Drawing.Size(1460, 865);
             this.tabControl1.TabIndex = 0;
             // 
             // tabPage1
@@ -93,7 +94,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 27);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1383, 834);
+            this.tabPage1.Size = new System.Drawing.Size(1452, 834);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Kiste packen";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -102,7 +103,7 @@
             // 
             this.btnTestData.BackColor = System.Drawing.Color.PowderBlue;
             this.btnTestData.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnTestData.Location = new System.Drawing.Point(998, 754);
+            this.btnTestData.Location = new System.Drawing.Point(1276, 754);
             this.btnTestData.Name = "btnTestData";
             this.btnTestData.Size = new System.Drawing.Size(168, 23);
             this.btnTestData.TabIndex = 14;
@@ -115,7 +116,7 @@
             this.btnFinishCharge.Font = new System.Drawing.Font("Verdana", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnFinishCharge.Location = new System.Drawing.Point(8, 783);
             this.btnFinishCharge.Name = "btnFinishCharge";
-            this.btnFinishCharge.Size = new System.Drawing.Size(1099, 37);
+            this.btnFinishCharge.Size = new System.Drawing.Size(1436, 37);
             this.btnFinishCharge.TabIndex = 13;
             this.btnFinishCharge.Text = "Charge abschließen";
             this.btnFinishCharge.UseVisualStyleBackColor = true;
@@ -137,11 +138,11 @@
             // tbStatus
             // 
             this.tbStatus.Font = new System.Drawing.Font("Verdana", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbStatus.Location = new System.Drawing.Point(708, 79);
+            this.tbStatus.Location = new System.Drawing.Point(974, 82);
             this.tbStatus.Multiline = true;
             this.tbStatus.Name = "tbStatus";
             this.tbStatus.ReadOnly = true;
-            this.tbStatus.Size = new System.Drawing.Size(460, 92);
+            this.tbStatus.Size = new System.Drawing.Size(470, 92);
             this.tbStatus.TabIndex = 11;
             this.tbStatus.TabStop = false;
             this.tbStatus.Text = "Status";
@@ -150,9 +151,9 @@
             // 
             this.tbFallScann.Enabled = false;
             this.tbFallScann.Font = new System.Drawing.Font("Verdana", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbFallScann.Location = new System.Drawing.Point(414, 134);
+            this.tbFallScann.Location = new System.Drawing.Point(425, 134);
             this.tbFallScann.Name = "tbFallScann";
-            this.tbFallScann.Size = new System.Drawing.Size(270, 37);
+            this.tbFallScann.Size = new System.Drawing.Size(428, 37);
             this.tbFallScann.TabIndex = 10;
             this.tbFallScann.TextChanged += new System.EventHandler(this.tbFallScann_TextChanged);
             // 
@@ -170,9 +171,9 @@
             // 
             this.btnApplyNewBox.Enabled = false;
             this.btnApplyNewBox.Font = new System.Drawing.Font("Verdana", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnApplyNewBox.Location = new System.Drawing.Point(521, 79);
+            this.btnApplyNewBox.Location = new System.Drawing.Point(592, 85);
             this.btnApplyNewBox.Name = "btnApplyNewBox";
-            this.btnApplyNewBox.Size = new System.Drawing.Size(163, 37);
+            this.btnApplyNewBox.Size = new System.Drawing.Size(261, 37);
             this.btnApplyNewBox.TabIndex = 7;
             this.btnApplyNewBox.Text = "Verwenden";
             this.btnApplyNewBox.UseVisualStyleBackColor = true;
@@ -194,7 +195,7 @@
             // 
             this.btnCreateCharge.Enabled = false;
             this.btnCreateCharge.Font = new System.Drawing.Font("Verdana", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCreateCharge.Location = new System.Drawing.Point(423, 15);
+            this.btnCreateCharge.Location = new System.Drawing.Point(592, 15);
             this.btnCreateCharge.Name = "btnCreateCharge";
             this.btnCreateCharge.Size = new System.Drawing.Size(261, 39);
             this.btnCreateCharge.TabIndex = 3;
@@ -212,7 +213,7 @@
             "TT"});
             this.cbMandant.Location = new System.Drawing.Point(225, 17);
             this.cbMandant.Name = "cbMandant";
-            this.cbMandant.Size = new System.Drawing.Size(192, 37);
+            this.cbMandant.Size = new System.Drawing.Size(361, 37);
             this.cbMandant.TabIndex = 2;
             this.cbMandant.SelectedIndexChanged += new System.EventHandler(this.cbMandant_SelectedIndexChanged);
             // 
@@ -227,7 +228,7 @@
             this.dgvAkten.ReadOnly = true;
             this.dgvAkten.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvAkten.ShowEditingIcon = false;
-            this.dgvAkten.Size = new System.Drawing.Size(1372, 587);
+            this.dgvAkten.Size = new System.Drawing.Size(1436, 587);
             this.dgvAkten.TabIndex = 5;
             // 
             // btnNewCharge
@@ -246,7 +247,7 @@
             this.label2.AutoSize = true;
             this.label2.Enabled = false;
             this.label2.Font = new System.Drawing.Font("Verdana", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(703, 21);
+            this.label2.Location = new System.Drawing.Point(859, 15);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(109, 29);
             this.label2.TabIndex = 3;
@@ -257,9 +258,9 @@
             this.tbCharge.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tbCharge.Enabled = false;
             this.tbCharge.Font = new System.Drawing.Font("Arial", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbCharge.Location = new System.Drawing.Point(818, 15);
+            this.tbCharge.Location = new System.Drawing.Point(974, 10);
             this.tbCharge.Name = "tbCharge";
-            this.tbCharge.Size = new System.Drawing.Size(348, 41);
+            this.tbCharge.Size = new System.Drawing.Size(470, 41);
             this.tbCharge.TabIndex = 8;
             // 
             // label1
@@ -281,14 +282,15 @@
             this.tbKiste.Location = new System.Drawing.Point(309, 79);
             this.tbKiste.MaxLength = 8;
             this.tbKiste.Name = "tbKiste";
-            this.tbKiste.Size = new System.Drawing.Size(206, 37);
+            this.tbKiste.Size = new System.Drawing.Size(277, 37);
             this.tbKiste.TabIndex = 6;
             this.tbKiste.TextChanged += new System.EventHandler(this.tbKiste_TextChanged);
             this.tbKiste.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbKiste_KeyPress);
             // 
             // tabPage2
             // 
-            this.tabPage2.Controls.Add(this.btnFetchPDFfromArchive);
+            this.tabPage2.Controls.Add(this.btnRegenCSV);
+            this.tabPage2.Controls.Add(this.btnRegenPDF);
             this.tabPage2.Controls.Add(this.dgvSearchResults);
             this.tabPage2.Controls.Add(this.tbSearchText);
             this.tabPage2.Controls.Add(this.label4);
@@ -296,21 +298,30 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 27);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1383, 834);
+            this.tabPage2.Size = new System.Drawing.Size(1452, 834);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Suche";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // btnFetchPDFfromArchive
+            // btnRegenCSV
             // 
-            this.btnFetchPDFfromArchive.Enabled = false;
-            this.btnFetchPDFfromArchive.Location = new System.Drawing.Point(416, 6);
-            this.btnFetchPDFfromArchive.Name = "btnFetchPDFfromArchive";
-            this.btnFetchPDFfromArchive.Size = new System.Drawing.Size(124, 78);
-            this.btnFetchPDFfromArchive.TabIndex = 3;
-            this.btnFetchPDFfromArchive.Text = "Chargen PDF abrufen";
-            this.btnFetchPDFfromArchive.UseVisualStyleBackColor = true;
-            this.btnFetchPDFfromArchive.Click += new System.EventHandler(this.btnFetchPDFfromArchive_Click);
+            this.btnRegenCSV.Location = new System.Drawing.Point(626, 6);
+            this.btnRegenCSV.Name = "btnRegenCSV";
+            this.btnRegenCSV.Size = new System.Drawing.Size(124, 78);
+            this.btnRegenCSV.TabIndex = 4;
+            this.btnRegenCSV.Text = "Chargen CSV neu erstellen";
+            this.btnRegenCSV.UseVisualStyleBackColor = true;
+            this.btnRegenCSV.Click += new System.EventHandler(this.btnRegenCSV_Click);
+            // 
+            // btnRegenPDF
+            // 
+            this.btnRegenPDF.Location = new System.Drawing.Point(496, 6);
+            this.btnRegenPDF.Name = "btnRegenPDF";
+            this.btnRegenPDF.Size = new System.Drawing.Size(124, 78);
+            this.btnRegenPDF.TabIndex = 3;
+            this.btnRegenPDF.Text = "Chargen PDF neu erstellen";
+            this.btnRegenPDF.UseVisualStyleBackColor = true;
+            this.btnRegenPDF.Click += new System.EventHandler(this.btnRegenPDF_Click);
             // 
             // dgvSearchResults
             // 
@@ -326,15 +337,14 @@
             this.dgvSearchResults.Name = "dgvSearchResults";
             this.dgvSearchResults.ReadOnly = true;
             this.dgvSearchResults.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dgvSearchResults.Size = new System.Drawing.Size(1368, 741);
+            this.dgvSearchResults.Size = new System.Drawing.Size(1437, 741);
             this.dgvSearchResults.TabIndex = 2;
-            this.dgvSearchResults.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSearchResults_CellContentClick);
             // 
             // tbSearchText
             // 
             this.tbSearchText.Location = new System.Drawing.Point(81, 22);
             this.tbSearchText.Name = "tbSearchText";
-            this.tbSearchText.Size = new System.Drawing.Size(301, 27);
+            this.tbSearchText.Size = new System.Drawing.Size(380, 27);
             this.tbSearchText.TabIndex = 1;
             this.tbSearchText.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbSearchText_KeyPress);
             // 
@@ -351,7 +361,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1391, 865);
+            this.ClientSize = new System.Drawing.Size(1460, 865);
             this.Controls.Add(this.tabControl1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -393,7 +403,8 @@
         private System.Windows.Forms.DataGridView dgvSearchResults;
         private System.Windows.Forms.TextBox tbSearchText;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Button btnFetchPDFfromArchive;
+        private System.Windows.Forms.Button btnRegenPDF;
+        private System.Windows.Forms.Button btnRegenCSV;
     }
 }
 
