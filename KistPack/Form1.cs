@@ -235,8 +235,14 @@ namespace KistPack
 
 
                     //ToDo: save CSV File to DB
+                    // if path in settings is set without trailing "\" append one
+                    String csvPath = Properties.Settings.Default.CSVExportPath;
+                    if (!csvPath.EndsWith("\\")){
+                        csvPath+= "\\";
+                    }
 
-                    if(!CSVExport(dt, Properties.Settings.Default.CSVExportPath + tbCharge.Text + ".csv"))
+                    // export csv and if success generate pdf 
+                    if(!CSVExport(dt, csvPath + tbCharge.Text + ".csv"))
                     {
                         tbStatus.BackColor = System.Drawing.Color.SeaShell;
                         tbStatus.Text = "Es ist ein Fehler beim speichern der Lieferschein CSV-Datei aufgetreten.";

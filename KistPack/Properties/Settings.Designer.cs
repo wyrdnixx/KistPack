@@ -85,7 +85,7 @@ namespace KistPack.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\VS_Workspace\\KistPack\\KistPack\\bin\\")]
+        [global::System.Configuration.DefaultSettingValueAttribute("\\\\TERM2022\\test\\")]
         public string CSVExportPath {
             get {
                 return ((string)(this["CSVExportPath"]));
