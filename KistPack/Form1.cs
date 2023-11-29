@@ -613,17 +613,17 @@ namespace KistPack
                     dataTable.Borders.Width = 0.75;
                     //dataTable.Rows.Height = Unit.FromCentimeter(1.5);
 
-                    // Add columns to the table
-                    //for (int j = 0; j < 5; j++)
-                    //{
-                    //    dataTable.AddColumn(Unit.FromCentimeter(3));
-                    //}
-                    dataTable.AddColumn(Unit.FromCentimeter(2.5));
-                    dataTable.AddColumn(Unit.FromCentimeter(2.5));
-                    dataTable.AddColumn(Unit.FromCentimeter(2.5));
-                    dataTable.AddColumn(Unit.FromCentimeter(5));
-                    dataTable.AddColumn(Unit.FromCentimeter(5));
+                    // Alle Felder (mit Name)
+                    //dataTable.AddColumn(Unit.FromCentimeter(2.5));
+                    //dataTable.AddColumn(Unit.FromCentimeter(2.5));
+                    //dataTable.AddColumn(Unit.FromCentimeter(2.5));
+                    //dataTable.AddColumn(Unit.FromCentimeter(5));
+                    //dataTable.AddColumn(Unit.FromCentimeter(5));
 
+
+                    dataTable.AddColumn(Unit.FromCentimeter(5));
+                    dataTable.AddColumn(Unit.FromCentimeter(5));
+                    dataTable.AddColumn(Unit.FromCentimeter(5));
 
                     // Add a row for column headers
                     Row headerRowTable = dataTable.AddRow();
@@ -631,19 +631,16 @@ namespace KistPack
                     headerRowTable.Cells[0].AddParagraph("Fall");
                     headerRowTable.Cells[1].AddParagraph("Person");
                     headerRowTable.Cells[2].AddParagraph("Gebdat");
-                    headerRowTable.Cells[3].AddParagraph("Vorname");
-                    headerRowTable.Cells[4].AddParagraph("Nachname");
+                    //headerRowTable.Cells[3].AddParagraph("Vorname");
+                    //headerRowTable.Cells[4].AddParagraph("Nachname");
 
 
                     // Add data rows to the table
                     foreach (var rowData in kvp.Value)
                     {
-                        //table.AddCell(rowData[0]); // Visit
-                        //table.AddCell(rowData[1]); // Person
-                        //table.AddCell(rowData[2]); // givenname
-                        //table.AddCell(rowData[3]); // surname
+                      
                         Row dataRow = dataTable.AddRow();
-                        for (int k = 0; k < 5; k++)
+                        for (int k = 0; k < 3; k++)
                         {
                             dataRow.Cells[k].AddParagraph($"{rowData[k]}");
                         }
