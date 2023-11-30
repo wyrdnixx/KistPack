@@ -31,7 +31,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.btnTestData = new System.Windows.Forms.Button();
             this.btnFinishCharge = new System.Windows.Forms.Button();
             this.btnDeleteEntry = new System.Windows.Forms.Button();
             this.tbStatus = new System.Windows.Forms.TextBox();
@@ -74,7 +73,6 @@
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.btnTestData);
             this.tabPage1.Controls.Add(this.btnFinishCharge);
             this.tabPage1.Controls.Add(this.btnDeleteEntry);
             this.tabPage1.Controls.Add(this.tbStatus);
@@ -98,18 +96,6 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Kiste packen";
             this.tabPage1.UseVisualStyleBackColor = true;
-            // 
-            // btnTestData
-            // 
-            this.btnTestData.BackColor = System.Drawing.Color.PowderBlue;
-            this.btnTestData.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnTestData.Location = new System.Drawing.Point(1276, 754);
-            this.btnTestData.Name = "btnTestData";
-            this.btnTestData.Size = new System.Drawing.Size(168, 23);
-            this.btnTestData.TabIndex = 14;
-            this.btnTestData.Text = "Testdaten erzeugen";
-            this.btnTestData.UseVisualStyleBackColor = false;
-            this.btnTestData.Click += new System.EventHandler(this.btnTestData_Click);
             // 
             // btnFinishCharge
             // 
@@ -399,7 +385,6 @@
         private System.Windows.Forms.TextBox tbStatus;
         private System.Windows.Forms.Button btnDeleteEntry;
         private System.Windows.Forms.Button btnFinishCharge;
-        private System.Windows.Forms.Button btnTestData;
         private System.Windows.Forms.DataGridView dgvSearchResults;
         private System.Windows.Forms.TextBox tbSearchText;
         private System.Windows.Forms.Label label4;

@@ -92,18 +92,19 @@ namespace KistPack
 
         }
 
-        private void btnTestData_Click(object sender, EventArgs e)
-        {
-            //generateTestData();
+        // Test Button (was removed)
+        //private void btnTestData_Click(object sender, EventArgs e)
+        //{
+        //    //generateTestData();
 
-            //kistPackDB.saveDtToDB(dt);
+        //    //kistPackDB.saveDtToDB(dt);
 
-            //btnFinishCharge_Click(sender, e);
+        //    //btnFinishCharge_Click(sender, e);
 
-            kistPackDB.databaseFileRead("FN202311242337", tempFilePath + "test.pdf");
+        //    kistPackDB.databaseFileRead("FN202311242337", tempFilePath + "test.pdf");
 
-            //System.Diagnostics.Process.Start(tempFilePath + "test.pdf");
-        }
+        //    //System.Diagnostics.Process.Start(tempFilePath + "test.pdf");
+        //}
 
         private void tbCharge_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -800,7 +801,7 @@ namespace KistPack
         //}
         private void btnRegenPDF_Click(object sender, EventArgs e)
         {
-            if (dgvSearchResults.SelectedCells.Count > 1)
+            if (dgvSearchResults.SelectedCells.Count > 1 || dgvSearchResults.SelectedCells.Count ==0)
             {
                 MessageBox.Show("Bitte einzelnen Eintrag Auswählen dessen Charge Sie abrufen wollen.", "Bitte wählen");
             }
@@ -823,7 +824,7 @@ namespace KistPack
         }
         private void btnRegenCSV_Click(object sender, EventArgs e)
         {
-            if (dgvSearchResults.SelectedCells.Count > 1)
+            if (dgvSearchResults.SelectedCells.Count > 1 || dgvSearchResults.SelectedCells.Count == 0)
             {
                 MessageBox.Show("Bitte einzelnen Eintrag Auswählen dessen Charge Sie abrufen wollen.", "Bitte wählen");
             }

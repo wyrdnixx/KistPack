@@ -136,6 +136,7 @@ namespace KistPack
                                      "or Gebdat like '%" + _SearchText + "%'" +
                                      "or Vorname like '%" + _SearchText + "%'" +
                                      "or Nachname like '%" + _SearchText + "%'" +
+                                     "or Scandatum like '%" + _SearchText + "%'" +
                                      "group by Charge;";
                     SqlCommand cmd = new SqlCommand(query, conn);
                     conn.Open();                    
