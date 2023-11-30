@@ -251,7 +251,7 @@ namespace KistPack
                     {
                         // generate PDF File
                         String pdfFilePath = tempFilePath + tbCharge.Text + ".pdf";
-                        if (ExportToPDF(dgvAkten, pdfFilePath))
+                        if (ExportToPDF(dgvAkten,tbCharge.Text, pdfFilePath))
                         {
                             System.Diagnostics.Process.Start(pdfFilePath);
 
@@ -529,7 +529,7 @@ namespace KistPack
 
         }
 
-        private Boolean ExportToPDF(DataGridView dataGridView, string pdfFilePath)
+        private Boolean ExportToPDF(DataGridView dataGridView, string _chargenNummer, string pdfFilePath)
         {
             Boolean result = false;
             // Dictionary to store box numbers and their corresponding data
@@ -558,7 +558,7 @@ namespace KistPack
                 headerPageIndex.AddText(" / ");
                 headerPageIndex.AddNumPagesField();
 
-                headerRow.Cells[1].AddParagraph("MCB-Charge: " + tbCharge.Text); // Replace with your logo
+                headerRow.Cells[1].AddParagraph("MCB-Charge: " + _chargenNummer); // ToDo: use charge from Searchfield
                 headerRow.Cells[1].Format.Font.Bold = true;
                 headerRow.Cells[1].Format.Font.Size = 12;
                          
@@ -807,14 +807,14 @@ namespace KistPack
             }
             else
             {
-                string cellValue = dgvSearchResults.Rows[dgvSearchResults.SelectedCells[0].RowIndex].Cells[0].Value.ToString();
+                string selectedChargeNumber = dgvSearchResults.Rows[dgvSearchResults.SelectedCells[0].RowIndex].Cells[0].Value.ToString();
                 dgvSearchResults.DataSource = null;
 
-                DataTable tmpDT = kistPackDB.searchWildcard(cellValue);
+                DataTable tmpDT = kistPackDB.searchWildcard(selectedChargeNumber);
                 dgvSearchResults.DataSource = tmpDT;
                 // generate PDF File
-                String pdfFilePath = tempFilePath + cellValue + ".pdf";
-                if (ExportToPDF(dgvSearchResults, pdfFilePath))
+                String pdfFilePath = tempFilePath + selectedChargeNumber + ".pdf";
+                if (ExportToPDF(dgvSearchResults, selectedChargeNumber, pdfFilePath))
                 {
                     System.Diagnostics.Process.Start(pdfFilePath);
                 }

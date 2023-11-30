@@ -157,7 +157,7 @@
             // 
             this.btnApplyNewBox.Enabled = false;
             this.btnApplyNewBox.Font = new System.Drawing.Font("Verdana", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnApplyNewBox.Location = new System.Drawing.Point(592, 85);
+            this.btnApplyNewBox.Location = new System.Drawing.Point(592, 79);
             this.btnApplyNewBox.Name = "btnApplyNewBox";
             this.btnApplyNewBox.Size = new System.Drawing.Size(261, 37);
             this.btnApplyNewBox.TabIndex = 7;
