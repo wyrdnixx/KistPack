@@ -151,6 +151,7 @@ namespace KistPack
 
         }
 
+        
         public DataTable searchWildcard(String _SearchText)
         {
             DataTable sDT = new DataTable();
@@ -175,7 +176,7 @@ namespace KistPack
                 // Search for Charge containing the searchtext
                 using (SqlConnection conn = new SqlConnection(connString))
                 {                    
-                    string query = @"SELECT Charge
+                    string query = @"SELECT TOP (100) Charge
                                      FROM Chargen
                                      where Charge like '%" + _SearchText + "%'" +
                                      "or Kiste like '%" + _SearchText + "%'" +

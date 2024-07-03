@@ -52,6 +52,7 @@
             this.dgvSearchResults = new System.Windows.Forms.DataGridView();
             this.tbSearchText = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAkten)).BeginInit();
@@ -273,6 +274,7 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.label5);
             this.tabPage2.Controls.Add(this.btnRegenCSV);
             this.tabPage2.Controls.Add(this.btnRegenPDF);
             this.tabPage2.Controls.Add(this.dgvSearchResults);
@@ -329,7 +331,7 @@
             this.tbSearchText.Location = new System.Drawing.Point(81, 22);
             this.tbSearchText.Name = "tbSearchText";
             this.tbSearchText.Size = new System.Drawing.Size(380, 27);
-            this.tbSearchText.TabIndex = 1;            
+            this.tbSearchText.TabIndex = 1;
             this.tbSearchText.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbSearchText_KeyPress);
             // 
             // label4
@@ -340,6 +342,15 @@
             this.label4.Size = new System.Drawing.Size(67, 18);
             this.label4.TabIndex = 0;
             this.label4.Text = "Suche:";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(78, 66);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(387, 18);
+            this.label5.TabIndex = 5;
+            this.label5.Text = "! Es werden maximal 100 Einträge gelistet !";
             // 
             // Form1
             // 
@@ -388,6 +399,7 @@
         private System.Windows.Forms.Button btnRegenPDF;
         private System.Windows.Forms.Button btnRegenCSV;
         private System.Windows.Forms.CheckedListBox cblMerkmale;
+        private System.Windows.Forms.Label label5;
     }
 }
 
