@@ -5,10 +5,10 @@ ToDo:
 
 [x] Main: PDF Pfad von Speicherndialog umstellen auf festen Pfad und Dateiname in %temp%
 [x] Main: Beim Programmstart alte Dateien im Temp-Pfad aufräumen
-[] Main: CSV-Datei erstellen (Pfad konfigurierbar evtl. über Datenbank - aleternativ über Programm-Config)
-[x] Main: PDF Datei in Datenbank speichern
-[] Main: csv Datei in Datenbank speichern
+[x] Main: CSV-Datei erstellen (Pfad konfigurierbar evtl. über Datenbank - aleternativ über Programm-Config)
+[x] Main: PDF Datei in Datenbank speichern - anders umgesetzt - Datei kann neu erstellt werden
+[x] Main: csv Datei in Datenbank speichern - anders umgesetzt - Datei kann neu erstellt werden
 
-[] Suchfunktion : Grundsätzlich
-[] Suchfunktion : PDF aus DB holen
-[] Suchfunktion : csv aus DB holen
+[x] Suchfunktion : Grundsätzlich
+[x] Suchfunktion : PDF neu erstellen
+[x] Suchfunktion : csv neu erstellen
