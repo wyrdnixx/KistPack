@@ -1,0 +1,24 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="KistPack.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="SQLDBArchive" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Server = MSSQL; Database = CLA-PROD-DB; Trusted_Connection = True;</Value>
+    </Setting>
+    <Setting Name="LengthKiste" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">4</Value>
+    </Setting>
+    <Setting Name="LenghtFallnummer" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">9</Value>
+    </Setting>
+    <Setting Name="LogoFile" Type="System.String" Scope="User">
+      <Value Profile="(Default)">logo-mcb.png</Value>
+    </Setting>
+    <Setting Name="KistPackDB" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Server = MSSQL; Database = KistPackDB; Trusted_Connection = True;</Value>
+    </Setting>
+    <Setting Name="CSVExportPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">\\TERM2022\test\</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
