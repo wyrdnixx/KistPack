@@ -63,6 +63,53 @@ namespace KistPack
 
         }
 
+        /// <summary>
+        /// hole verfügbare Merkmale aus der KistPackDB-Konfiguration
+        /// </summary>
+        /// <returns></returns>
+        public string getKistPackDBMerkmale()
+        {
+            string merkmale= null;
+
+            try
+            {
+                //sql connection object
+                using (SqlConnection conn = new SqlConnection(connString))
+                {
+                    //retrieve the SQL Server instance version
+                    string query = @"SELECT value
+                                     FROM Settings
+                                     where Setting = 'Merkmale';";
+                    //define the SqlCommand object
+                    SqlCommand cmd = new SqlCommand(query, conn);
+
+                    //open connection
+                    conn.Open();
+
+                    //execute the SQLCommand
+                    SqlDataReader dr = cmd.ExecuteReader();
+
+                    while (dr.Read())
+                    {
+                        merkmale = dr.GetString(0);
+                    }
+                    dr.Close();
+
+                    conn.Close();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Fehler beim Verbinden zur KistPackDB: " + Environment.NewLine + ex.Message, "Error");
+
+            }
+
+            return merkmale;
+
+        }
+
+
         public List<PatientVisit> searchPat(String _Fallnummer)
         {
             List<PatientVisit> patList = new List<PatientVisit>();
@@ -86,7 +133,7 @@ namespace KistPack
 
                     while (dr.Read())
                     {
-                        PatientVisit tmp = new PatientVisit(dr.GetString(1), dr.GetString(2), dr.GetString(3), dr.GetString(4), dr.GetString(5), dr.GetString(6), dr.GetString(7), dr.GetString(8), dr.GetString(9), dr.GetString(10), dr.GetString(11));
+                        PatientVisit tmp = new PatientVisit(dr.GetString(1), dr.GetString(2), dr.GetString(3), dr.GetString(4), dr.GetString(5), dr.GetString(6), dr.GetString(7), dr.GetString(8), dr.GetString(9), dr.GetString(10), dr.GetString(11), dr.GetString(12));
                         patList.Add(tmp);
                     }
                     dr.Close();
@@ -111,6 +158,7 @@ namespace KistPack
             // Datentabelle konfigurieren
             sDT.Columns.Add("Charge");
             sDT.Columns.Add("Kiste");
+            sDT.Columns.Add("Merkmal");
             sDT.Columns.Add("Fallnummer");
             sDT.Columns.Add("Person");
             sDT.Columns.Add("Gebdat");
@@ -187,7 +235,7 @@ namespace KistPack
                             //PatientVisit tmp = new PatientVisit(dr.GetString(1), dr.GetString(2), dr.GetString(3), dr.GetString(4), dr.GetString(5), dr.GetString(6), dr.GetString(7), dr.GetString(8), dr.GetString(9), dr.GetString(10));
                             //MessageBox.Show("Found Charge: "+ dr.GetString(0), "Found");
                             //chargeList.Add(dr.GetString(0));
-                            sDT.Rows.Add(dr.GetString(1), dr.GetString(2), dr.GetString(3), dr.GetString(4), dr.GetString(5), dr.GetString(6), dr.GetString(7), dr.GetString(8), dr.GetString(9), dr.GetString(10), dr.GetString(11));
+                            sDT.Rows.Add(dr.GetString(1), dr.GetString(2), dr.GetString(3), dr.GetString(4), dr.GetString(5), dr.GetString(6), dr.GetString(7), dr.GetString(8), dr.GetString(9), dr.GetString(10), dr.GetString(11), dr.GetString(12));
                         }
                         dr.Close();
                         conn.Close();
@@ -232,15 +280,16 @@ namespace KistPack
                         foreach (DataRow row in _dt.Rows)
                         {
                             cmd.CommandText = "INSERT INTO Chargen (" +
-                                "[Charge],[Kiste],[Fallnummer],[Person],[Gebdat],[Vorname],[Nachname],[Scandatum],[Scanuser],[Scanclient],[Scanhostname]" +
+                                "[Charge],[Kiste],[Merkmal],[Fallnummer],[Person],[Gebdat],[Vorname],[Nachname],[Scandatum],[Scanuser],[Scanclient],[Scanhostname]" +
                                 ") VALUES ('" +
                                 row[0].ToString() + "','" +
                                 row[1].ToString() + "','" +
                                 row[2].ToString() + "','" +
-                                row[3].ToString()  + "','" +
+                                row[3].ToString() + "','" +
                                 row[4].ToString() + "','" +
                                 row[5].ToString() + "','" +
                                 row[6].ToString() + "','" +
+                                row[7].ToString() + "','" +
                                 datum + "','" +
                                 username + "','" +
                                 clientname+ "','" +

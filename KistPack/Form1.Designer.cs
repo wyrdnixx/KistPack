@@ -31,6 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.cblMerkmale = new System.Windows.Forms.CheckedListBox();
             this.btnFinishCharge = new System.Windows.Forms.Button();
             this.btnDeleteEntry = new System.Windows.Forms.Button();
             this.tbStatus = new System.Windows.Forms.TextBox();
@@ -38,7 +39,6 @@
             this.label3 = new System.Windows.Forms.Label();
             this.btnApplyNewBox = new System.Windows.Forms.Button();
             this.btnNextBox = new System.Windows.Forms.Button();
-            this.btnCreateCharge = new System.Windows.Forms.Button();
             this.cbMandant = new System.Windows.Forms.ComboBox();
             this.dgvAkten = new System.Windows.Forms.DataGridView();
             this.btnNewCharge = new System.Windows.Forms.Button();
@@ -73,6 +73,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.cblMerkmale);
             this.tabPage1.Controls.Add(this.btnFinishCharge);
             this.tabPage1.Controls.Add(this.btnDeleteEntry);
             this.tabPage1.Controls.Add(this.tbStatus);
@@ -80,7 +81,6 @@
             this.tabPage1.Controls.Add(this.label3);
             this.tabPage1.Controls.Add(this.btnApplyNewBox);
             this.tabPage1.Controls.Add(this.btnNextBox);
-            this.tabPage1.Controls.Add(this.btnCreateCharge);
             this.tabPage1.Controls.Add(this.cbMandant);
             this.tabPage1.Controls.Add(this.dgvAkten);
             this.tabPage1.Controls.Add(this.btnNewCharge);
@@ -96,6 +96,16 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Kiste packen";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // cblMerkmale
+            // 
+            this.cblMerkmale.CheckOnClick = true;
+            this.cblMerkmale.FormattingEnabled = true;
+            this.cblMerkmale.Location = new System.Drawing.Point(859, 134);
+            this.cblMerkmale.Name = "cblMerkmale";
+            this.cblMerkmale.Size = new System.Drawing.Size(585, 92);
+            this.cblMerkmale.TabIndex = 14;
+            this.cblMerkmale.SelectedIndexChanged += new System.EventHandler(this.clbMerkmale_SelectedIndexChanged);
             // 
             // btnFinishCharge
             // 
@@ -124,11 +134,11 @@
             // tbStatus
             // 
             this.tbStatus.Font = new System.Drawing.Font("Verdana", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbStatus.Location = new System.Drawing.Point(974, 82);
+            this.tbStatus.Location = new System.Drawing.Point(859, 12);
             this.tbStatus.Multiline = true;
             this.tbStatus.Name = "tbStatus";
             this.tbStatus.ReadOnly = true;
-            this.tbStatus.Size = new System.Drawing.Size(470, 92);
+            this.tbStatus.Size = new System.Drawing.Size(585, 104);
             this.tbStatus.TabIndex = 11;
             this.tbStatus.TabStop = false;
             this.tbStatus.Text = "Status";
@@ -177,18 +187,6 @@
             this.btnNextBox.UseVisualStyleBackColor = true;
             this.btnNextBox.Click += new System.EventHandler(this.btnNextBox_Click);
             // 
-            // btnCreateCharge
-            // 
-            this.btnCreateCharge.Enabled = false;
-            this.btnCreateCharge.Font = new System.Drawing.Font("Verdana", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCreateCharge.Location = new System.Drawing.Point(592, 15);
-            this.btnCreateCharge.Name = "btnCreateCharge";
-            this.btnCreateCharge.Size = new System.Drawing.Size(261, 39);
-            this.btnCreateCharge.TabIndex = 3;
-            this.btnCreateCharge.Text = "Charge Erzeugen";
-            this.btnCreateCharge.UseVisualStyleBackColor = true;
-            this.btnCreateCharge.Click += new System.EventHandler(this.btnCreateCharge_Click);
-            // 
             // cbMandant
             // 
             this.cbMandant.Enabled = false;
@@ -199,7 +197,7 @@
             "TT"});
             this.cbMandant.Location = new System.Drawing.Point(225, 17);
             this.cbMandant.Name = "cbMandant";
-            this.cbMandant.Size = new System.Drawing.Size(361, 37);
+            this.cbMandant.Size = new System.Drawing.Size(123, 37);
             this.cbMandant.TabIndex = 2;
             this.cbMandant.SelectedIndexChanged += new System.EventHandler(this.cbMandant_SelectedIndexChanged);
             // 
@@ -208,13 +206,13 @@
             this.dgvAkten.AllowUserToAddRows = false;
             this.dgvAkten.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvAkten.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvAkten.Location = new System.Drawing.Point(8, 177);
+            this.dgvAkten.Location = new System.Drawing.Point(8, 232);
             this.dgvAkten.MultiSelect = false;
             this.dgvAkten.Name = "dgvAkten";
             this.dgvAkten.ReadOnly = true;
             this.dgvAkten.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvAkten.ShowEditingIcon = false;
-            this.dgvAkten.Size = new System.Drawing.Size(1436, 587);
+            this.dgvAkten.Size = new System.Drawing.Size(1436, 532);
             this.dgvAkten.TabIndex = 5;
             // 
             // btnNewCharge
@@ -233,7 +231,7 @@
             this.label2.AutoSize = true;
             this.label2.Enabled = false;
             this.label2.Font = new System.Drawing.Font("Verdana", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(859, 15);
+            this.label2.Location = new System.Drawing.Point(356, 18);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(109, 29);
             this.label2.TabIndex = 3;
@@ -244,9 +242,9 @@
             this.tbCharge.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tbCharge.Enabled = false;
             this.tbCharge.Font = new System.Drawing.Font("Arial", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbCharge.Location = new System.Drawing.Point(974, 10);
+            this.tbCharge.Location = new System.Drawing.Point(459, 12);
             this.tbCharge.Name = "tbCharge";
-            this.tbCharge.Size = new System.Drawing.Size(470, 41);
+            this.tbCharge.Size = new System.Drawing.Size(394, 41);
             this.tbCharge.TabIndex = 8;
             // 
             // label1
@@ -331,7 +329,7 @@
             this.tbSearchText.Location = new System.Drawing.Point(81, 22);
             this.tbSearchText.Name = "tbSearchText";
             this.tbSearchText.Size = new System.Drawing.Size(380, 27);
-            this.tbSearchText.TabIndex = 1;
+            this.tbSearchText.TabIndex = 1;            
             this.tbSearchText.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbSearchText_KeyPress);
             // 
             // label4
@@ -379,7 +377,6 @@
         private System.Windows.Forms.ComboBox cbMandant;
         private System.Windows.Forms.Button btnApplyNewBox;
         private System.Windows.Forms.Button btnNextBox;
-        private System.Windows.Forms.Button btnCreateCharge;
         private System.Windows.Forms.TextBox tbFallScann;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox tbStatus;
@@ -390,6 +387,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button btnRegenPDF;
         private System.Windows.Forms.Button btnRegenCSV;
+        private System.Windows.Forms.CheckedListBox cblMerkmale;
     }
 }
 
