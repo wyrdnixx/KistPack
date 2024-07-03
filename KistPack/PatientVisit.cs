@@ -10,6 +10,7 @@ namespace KistPack
     {
         private string charge;
         private string kiste;
+        private string merkmal;
         private string fallnummer;
         private string person;
         private string gebdat;
@@ -20,6 +21,7 @@ namespace KistPack
         private string scanclient;
         private string scanhostname;
         private string fallstorno;
+        
 
 
 
@@ -34,10 +36,11 @@ namespace KistPack
 
         }
 
-        public PatientVisit(String _charge, String _kiste, String _fallnummer, String _person, String _gebdat, String _vorname, String _nachname, String _scandatum, String _scanuser, String _scanclient, String _scanhostname)
+        public PatientVisit(String _charge, String _kiste, string  _merkmal, String _fallnummer, String _person, String _gebdat, String _vorname, String _nachname, String _scandatum, String _scanuser, String _scanclient, String _scanhostname)
         {
             this.charge = _charge;
             this.kiste = _kiste;
+            this.merkmal = _merkmal;
             this.Fallnummer = _fallnummer;
             this.Person = _person;
             this.Gebdat = _gebdat;
@@ -63,5 +66,6 @@ namespace KistPack
         public string Scanhostname { get => scanhostname; set => scanhostname = value; }
         public string Fallstorno { get => fallstorno; set => fallstorno = value; }
         public string Gebdat { get => gebdat; set => gebdat = value; }
+        public string Merkmal { get => merkmal; set => merkmal = value; }
     }
 }

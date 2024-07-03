@@ -53,6 +53,18 @@ namespace KistPack
             }
 
 
+            // vergübare Merkmale aus DB lesen und für clbMerkmale verwenden
+            string merkmaleDBString = kistPackDB.getKistPackDBMerkmale();
+            string[] merkmale = merkmaleDBString.Split(';');
+
+            foreach (var m in merkmale)
+            {
+                cblMerkmale.Items.Add(m);
+            }
+            //cblMerkmale.SetItemChecked(0, true);  // erstes item der Liste per Defaul aktivieren
+            clbMerkmale_SelectDefault();// erstes item der Liste per Defaul aktivieren
+
+
             // Programmvariablen initialisieren
             archDB = new ArchDB();
             dt = new DataTable();
@@ -64,7 +76,8 @@ namespace KistPack
             // Datentabelle konfigurieren
             dt.Columns.Add("Charge");
             dt.Columns.Add("Kiste");
-            dt.Columns.Add("Fallnummer");
+            dt.Columns.Add("Merkmal");
+            dt.Columns.Add("Fallnummer");            
             dt.Columns.Add("Person");
             dt.Columns.Add("Gebdat");
             dt.Columns.Add("Vorname");
@@ -92,21 +105,10 @@ namespace KistPack
 
         }
 
-        // Test Button (was removed)
-        //private void btnTestData_Click(object sender, EventArgs e)
-        //{
-        //    //generateTestData();
+      
+      
 
-        //    //kistPackDB.saveDtToDB(dt);
-
-        //    //btnFinishCharge_Click(sender, e);
-
-        //    kistPackDB.databaseFileRead("FN202311242337", tempFilePath + "test.pdf");
-
-        //    //System.Diagnostics.Process.Start(tempFilePath + "test.pdf");
-        //}
-
-        private void tbCharge_KeyPress(object sender, KeyPressEventArgs e)
+            private void tbCharge_KeyPress(object sender, KeyPressEventArgs e)
         {
             // allow only numeric input
             e.Handled = !char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar);
@@ -153,11 +155,23 @@ namespace KistPack
 
         private void cbMandant_SelectedIndexChanged(object sender, EventArgs e)
         {
-            btnCreateCharge.Enabled = true;
-            btnCreateCharge.Focus();
+            //btnCreateCharge.Enabled = true;
+            //btnCreateCharge.Focus();
+            createCharge();
         }
 
-        private void btnCreateCharge_Click(object sender, EventArgs e)
+        private void createCharge()
+        {
+            tbCharge.Text = cbMandant.Text + DateTime.Now.ToString("yyyyMMddHHmm"); ;
+            btnNextBox.Enabled = true;
+            tbKiste.Enabled = true;
+            tbKiste.Focus();
+
+            //btnCreateCharge.Enabled = false;
+            cbMandant.Enabled = false;
+        }
+
+         private void btnCreateCharge_Click(object sender, EventArgs e)
         {
             // bleibt deaktiviert
             //tbCharge.Enabled = false;           
@@ -167,7 +181,7 @@ namespace KistPack
             tbKiste.Enabled = true;
             tbKiste.Focus();
 
-            btnCreateCharge.Enabled = false;
+            //btnCreateCharge.Enabled = false;
             cbMandant.Enabled = false;
         }
 
@@ -213,6 +227,7 @@ namespace KistPack
                 if (!testCurrentDataTable(tbFallScann.Text))
                 {
                     insertNewVisit(tbFallScann.Text);
+                
                 }
                 
             }
@@ -294,20 +309,28 @@ namespace KistPack
             tbStatus.Text = "Suche Fallnummer: " + _Fall.ToString();
             try
             {
-                btnCreateCharge.Enabled = false;
+                //btnCreateCharge.Enabled = false;
                 btnFinishCharge.Enabled = false;
                 // test if the visit exists in the Archvie Database
                 Task<PatientVisit> myTask = Task.Run(() => GetVisitFromArchive(_Fall));
                 // Wait for the task to complete without blocking the UI
                 await myTask;
                 pv = myTask.Result;
-                btnCreateCharge.Enabled = false;
+                //btnCreateCharge.Enabled = false;
                 btnFinishCharge.Enabled = true;
+
+                // setze markiertes Merkmal für den Eintrag
+                foreach (var item in cblMerkmale.CheckedItems)
+                {
+                    pv.Merkmal += item.ToString();
+                }
+
+
                 if (pv != null && pv.Fallstorno ==null)
                 {
                     // Test if visit already exists in database / visit hast already been scanned
                     List<PatientVisit> foundList = kistPackDB.searchPat(_Fall.ToString());
-                    if (foundList.Count > 0) { 
+                    if (foundList.Count > 0 && pv.Merkmal != "Nachlaufender-Befund" && pv.Merkmal != "Neulieferung") { 
 
                         String str = null;
                         foreach (PatientVisit v in foundList)
@@ -318,14 +341,17 @@ namespace KistPack
                         DialogResult question = MessageBox.Show("Die Fallnummer " + _Fall.ToString() + " wurde bereits versendet: " +  Environment.NewLine +
                             "Charge         |      Kiste      |     Datum " + Environment.NewLine + 
                             str + Environment.NewLine +
-                            "Fallnummer / Akte wirklich erneut versenden?"
+                            "Fallnummer / Akte als Nachlaufenden Befund versenden?"
 
                             ,
                                "Fall bereits gescannt...", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
                         switch (question)
                         {
                             case DialogResult.Yes:
-                                    updateData(pv);
+
+                                pv.Merkmal = "Nachlaufender-Befund";
+
+                                updateData(pv);
                                     break;
                             case DialogResult.No:
                                 break;
@@ -334,6 +360,9 @@ namespace KistPack
 
                     } else
                     {
+
+
+                        // trage Daten in Tabelle ein
                         updateData(pv);
                     }
                                                            
@@ -367,6 +396,7 @@ namespace KistPack
                 tbFallScann.Text = "";
                 tbFallScann.Enabled = true;
                 tbFallScann.Focus();
+                clbMerkmale_SelectDefault();// erstes item der Liste per Defaul aktivieren
             }
            
 
@@ -394,9 +424,14 @@ namespace KistPack
             return exists;
         }
 
+
+        /// <summary>
+        /// Eintragen der Fallnummer in die Datentabelle zur Ansicht
+        /// </summary>
+        /// <param name="pv"></param>
         private void updateData(PatientVisit pv)
         {            
-                dt.Rows.Add(tbCharge.Text, tbKiste.Text, pv.Fallnummer, pv.Person,pv.Gebdat, pv.Vorname, pv.Nachname);
+                dt.Rows.Add(tbCharge.Text, tbKiste.Text, pv.Merkmal, pv.Fallnummer, pv.Person,pv.Gebdat, pv.Vorname, pv.Nachname);
                 dt.AcceptChanges();
                 dgvAkten.Update();
                 tbStatus.BackColor = System.Drawing.Color.LimeGreen;
@@ -582,11 +617,12 @@ namespace KistPack
             {
                     string charge = row.Cells["Charge"].Value.ToString();
                     string boxNumber = row.Cells["Kiste"].Value.ToString();
+                    string merkmal = row.Cells["Merkmal"].Value.ToString();
                     string visit = row.Cells["Fallnummer"].Value.ToString();
-                    string person = row.Cells["Person"].Value.ToString();
+                    //string person = row.Cells["Person"].Value.ToString();
                     string gebdat = row.Cells["Gebdat"].Value.ToString();
-                    string givenname = row.Cells["Vorname"].Value.ToString();
-                    string surname = row.Cells["Nachname"].Value.ToString();
+                    //string givenname = row.Cells["Vorname"].Value.ToString();
+                    //string surname = row.Cells["Nachname"].Value.ToString();
 
 
                     if (!boxData.ContainsKey(boxNumber))
@@ -594,8 +630,9 @@ namespace KistPack
                     boxData[boxNumber] = new List<string[]>();
                 }
 
-                boxData[boxNumber].Add(new string[] { visit, person, gebdat, givenname, surname });
-            }
+                    //boxData[boxNumber].Add(new string[] { visit, person, gebdat, givenname, surname });
+                    boxData[boxNumber].Add(new string[] { merkmal, visit,  gebdat });
+                }
 
                 // Create a PDF document and add tables for each box
 
@@ -625,12 +662,14 @@ namespace KistPack
                     dataTable.AddColumn(Unit.FromCentimeter(5));
                     dataTable.AddColumn(Unit.FromCentimeter(5));
                     dataTable.AddColumn(Unit.FromCentimeter(5));
+                    
 
                     // Add a row for column headers
                     Row headerRowTable = dataTable.AddRow();
                     //headerRowTable.Cells[0].AddParagraph("Box");
-                    headerRowTable.Cells[0].AddParagraph("Fall");
-                    headerRowTable.Cells[1].AddParagraph("Person");
+                    headerRowTable.Cells[0].AddParagraph("Merkmal");
+                    headerRowTable.Cells[1].AddParagraph("Fall");
+                    //headerRowTable.Cells[2].AddParagraph("Person");
                     headerRowTable.Cells[2].AddParagraph("Gebdat");
                     //headerRowTable.Cells[3].AddParagraph("Vorname");
                     //headerRowTable.Cells[4].AddParagraph("Nachname");
@@ -846,7 +885,42 @@ namespace KistPack
             }
         }
 
-           
+        private void clbMerkmale_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // deaktiviere alle items bis auf das im moment gewählte (nur ein Eintrag darf aktiv sein
+            int idx = cblMerkmale.SelectedIndex;
+            for (int i = 0; i < cblMerkmale.Items.Count; i++)
+            {
+                if (i != idx)
+                {
+                    cblMerkmale.SetItemChecked(i, false);
+                    
+
+                }
+            }
+
+            // Fokus zurück auf Fallnummernscan Feld
+            tbFallScann.Focus();
+        }
+
+        private void clbMerkmale_SelectDefault()
+        {
+            
+            for (int i = 0; i < cblMerkmale.Items.Count; i++)
+            {
+                if (i == 0)
+                {
+                    cblMerkmale.SetItemChecked(i, true);
+                    
+                }else
+                {
+                    cblMerkmale.SetItemChecked(i, false);
+                }
+            }
+
+            
+        }
+
 
 
     }
