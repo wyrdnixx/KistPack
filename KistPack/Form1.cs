@@ -21,6 +21,7 @@ using PdfSharp.Pdf.IO;
 using MigraDoc.DocumentObjectModel.Tables;
 using MigraDoc.DocumentObjectModel;
 using MigraDoc.Rendering;
+using System.Diagnostics;
 
 namespace KistPack
 {
@@ -34,6 +35,7 @@ namespace KistPack
         KistPackDB kistPackDB;
         private Boolean chargeWasSavedToDB;
         private String tempFilePath;
+        private String[] merkmale;
 
         public Form1()
         {
@@ -55,7 +57,7 @@ namespace KistPack
 
             // vergübare Merkmale aus DB lesen und für clbMerkmale verwenden
             string merkmaleDBString = kistPackDB.getKistPackDBMerkmale();
-            string[] merkmale = merkmaleDBString.Split(';');
+            merkmale = merkmaleDBString.Split(';'); // array merkmale ist private global da es auch für context menü verwendet wird (#region contextMenu)
 
             foreach (var m in merkmale)
             {
@@ -103,9 +105,15 @@ namespace KistPack
                 dir.Delete(true);
             }
 
+
+
+            // activate context menu for datagridview
+            InitializeContextMenu();
+            
+
         }
 
-      
+
       
 
             private void tbCharge_KeyPress(object sender, KeyPressEventArgs e)
@@ -922,6 +930,134 @@ namespace KistPack
         }
 
 
+        #region ContextMenu for datagridview
+
+        private void InitializeContextMenu()
+        {
+            ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
+
+
+            foreach (string merkmal in merkmale)
+            {
+                ToolStripMenuItem menuItem = new ToolStripMenuItem(merkmal);
+                menuItem.Click += MenuItem_Click;
+                contextMenuStrip.Items.Add(menuItem);
+            }
+                        
+            // Create and add menu items
+            //ToolStripMenuItem showTextMenuItem = new ToolStripMenuItem("Show Text");
+            //showTextMenuItem.Click += ShowTextMenuItem_Click;
+
+            // Add a separator
+            contextMenuStrip.Items.Add(new ToolStripSeparator());
+
+            // Create and add menu items
+            ToolStripMenuItem OpenInArchiveMenuItem = new ToolStripMenuItem("öffnen im Archiv");
+            OpenInArchiveMenuItem.Click += OpenInArchiveMenuItem_Click;
+            contextMenuStrip.Items.Add(OpenInArchiveMenuItem);
+
+            // Add a separator
+            contextMenuStrip.Items.Add(new ToolStripSeparator());
+
+
+            ToolStripMenuItem deleteRowMenuItem = new ToolStripMenuItem("Delete Row");
+            deleteRowMenuItem.Click += DeleteRowMenuItem_Click;
+
+            contextMenuStrip.Items.AddRange(new ToolStripItem[] { deleteRowMenuItem });
+
+            // Assign the context menu to the DataGridView
+            dgvAkten.ContextMenuStrip = contextMenuStrip;
+
+            // Subscribe to the MouseDown event of the DataGridView
+            dgvAkten.MouseDown += DataGridView1_MouseDown;
+
+        }
+        
+        /// <summary>
+        /// select the row if an right click was made
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DataGridView1_MouseDown(object sender, MouseEventArgs e)
+        {
+            // Check if the right mouse button was clicked
+            if (e.Button == MouseButtons.Right)
+            {
+                // Get the row index under the mouse cursor
+                DataGridView.HitTestInfo hit = dgvAkten.HitTest(e.X, e.Y);
+
+                // If a row was clicked
+                if (hit.RowIndex >= 0)
+                {
+                    // Select the row
+                    dgvAkten.ClearSelection();
+                    dgvAkten.Rows[hit.RowIndex].Selected = true;
+                }
+            }
+        }
+
+        /// <summary>
+        /// set the "merkmal" to the selected option from the contextmenu
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MenuItem_Click(object sender, EventArgs e)
+        {
+            if (dgvAkten.SelectedRows.Count > 0)
+            {
+                // Get the selected menu item
+                ToolStripMenuItem menuItem = sender as ToolStripMenuItem;
+
+                // Update the value of the third column in the selected row - Cell 2 is merkmal
+                dgvAkten.SelectedRows[0].Cells[2].Value = menuItem.Text;
+            }
+        }
+
+               
+        private void OpenInArchiveMenuItem_Click(object sender, EventArgs e)
+        {
+
+            string visitNo = dgvAkten.SelectedRows[0].Cells[3].Value.ToString();
+
+            string ExternalArchiveCall = kistPackDB.getKistPackDBExternalArchiveCall();
+
+            // Create a new process
+            Process process = new Process();
+
+            // Set the process start information - always use cmd to start the programm
+            process.StartInfo.FileName = "cmd.exe";
+            //string parameters = "/c echo  ping #FALLNUMMER && pause ";
+            string parameters = "/c " + ExternalArchiveCall; // use the entry from the database to call the external programm
+
+            parameters = parameters.Replace("#FALLNUMMER", visitNo);  // replace the variable from the settings string
+
+            //process.StartInfo.Arguments = "www.google.com";
+            process.StartInfo.Arguments = parameters;
+
+            // Optionally, you can configure the process to not create a window
+            process.StartInfo.CreateNoWindow = false;
+            process.StartInfo.UseShellExecute = false;
+
+            // Start the process asynchronously
+            process.Start();
+
+        }
+        private void DeleteRowMenuItem_Click(object sender, EventArgs e)
+        {
+            if (dgvAkten.SelectedRows.Count > 0)
+            {
+                // Get the selected row index
+                int rowIndex = dgvAkten.SelectedRows[0].Index;
+
+                // Remove the row from the DataTable
+                dt.Rows.RemoveAt(rowIndex);
+
+                // Refresh the DataGridView
+                dgvAkten.DataSource = null;
+                dgvAkten.DataSource = dt;
+            }
+        }
+        #endregion
     }
 
 

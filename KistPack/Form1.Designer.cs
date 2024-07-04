@@ -1,4 +1,6 @@
-﻿namespace KistPack
+﻿using System.Windows.Forms;
+
+namespace KistPack
 {
     partial class Form1
     {
@@ -47,12 +49,12 @@
             this.label1 = new System.Windows.Forms.Label();
             this.tbKiste = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.label5 = new System.Windows.Forms.Label();
             this.btnRegenCSV = new System.Windows.Forms.Button();
             this.btnRegenPDF = new System.Windows.Forms.Button();
             this.dgvSearchResults = new System.Windows.Forms.DataGridView();
             this.tbSearchText = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAkten)).BeginInit();
@@ -214,7 +216,10 @@
             this.dgvAkten.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvAkten.ShowEditingIcon = false;
             this.dgvAkten.Size = new System.Drawing.Size(1436, 532);
-            this.dgvAkten.TabIndex = 5;
+            this.dgvAkten.TabIndex = 5;            
+            //this.dgvAkten.CellMouseClick += new DataGridViewCellMouseEventHandler(dgvAkten_CellMouseClick); // toDo : alte methode - test mir "AddContextMenu"
+            
+
             // 
             // btnNewCharge
             // 
@@ -289,6 +294,15 @@
             this.tabPage2.Text = "Suche";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(78, 66);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(387, 18);
+            this.label5.TabIndex = 5;
+            this.label5.Text = "! Es werden maximal 100 Einträge gelistet !";
+            // 
             // btnRegenCSV
             // 
             this.btnRegenCSV.Location = new System.Drawing.Point(626, 6);
@@ -342,15 +356,6 @@
             this.label4.Size = new System.Drawing.Size(67, 18);
             this.label4.TabIndex = 0;
             this.label4.Text = "Suche:";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(78, 66);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(387, 18);
-            this.label5.TabIndex = 5;
-            this.label5.Text = "! Es werden maximal 100 Einträge gelistet !";
             // 
             // Form1
             // 

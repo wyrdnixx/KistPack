@@ -109,6 +109,47 @@ namespace KistPack
 
         }
 
+        public string getKistPackDBExternalArchiveCall()
+        {
+            string ExternalArchiveCall = null;
+
+            try
+            {
+                //sql connection object
+                using (SqlConnection conn = new SqlConnection(connString))
+                {
+                    //retrieve the SQL Server instance version
+                    string query = @"SELECT value
+                                     FROM Settings
+                                     where Setting = 'ExternalArchiveCall';";
+                    //define the SqlCommand object
+                    SqlCommand cmd = new SqlCommand(query, conn);
+
+                    //open connection
+                    conn.Open();
+
+                    //execute the SQLCommand
+                    SqlDataReader dr = cmd.ExecuteReader();
+
+                    while (dr.Read())
+                    {
+                        ExternalArchiveCall = dr.GetString(0);
+                    }
+                    dr.Close();
+
+                    conn.Close();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Fehler beim Verbinden zur KistPackDB: " + Environment.NewLine + ex.Message, "Error");
+
+            }
+
+            return ExternalArchiveCall;
+
+        }
 
         public List<PatientVisit> searchPat(String _Fallnummer)
         {
