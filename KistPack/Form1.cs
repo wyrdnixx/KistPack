@@ -269,7 +269,7 @@ namespace KistPack
                     if(!CSVExport(dt, csvPath + tbCharge.Text + ".csv"))
                     {
                         tbStatus.BackColor = System.Drawing.Color.SeaShell;
-                        tbStatus.Text = "Es ist ein Fehler beim speichern der Lieferschein CSV-Datei aufgetreten.";
+                        tbStatus.Text = "Es ist ein Fehler beim speichern der Lieferschein CSV-Datei aufgetreten. ";
                     } else
                     {
                         // generate PDF File
@@ -302,11 +302,12 @@ namespace KistPack
         }
 
 
+      
 
-        #region CheckAndInserttoDataTable
+            #region CheckAndInserttoDataTable
 
-        //private async void testTask(object sender, EventArgs e)
-        private async void insertNewVisit(String _Fall)
+            //private async void testTask(object sender, EventArgs e)
+            private async void insertNewVisit(String _Fall)
         {
             PatientVisit pv=null;
             tbFallScann.Enabled = false;
@@ -877,19 +878,41 @@ namespace KistPack
             }
             else
             {
-                string cellValue = dgvSearchResults.Rows[dgvSearchResults.SelectedCells[0].RowIndex].Cells[0].Value.ToString();
+                string selectedChargeNumber = dgvSearchResults.Rows[dgvSearchResults.SelectedCells[0].RowIndex].Cells[0].Value.ToString();
                 dgvSearchResults.DataSource = null;
 
-                DataTable tmpDT = kistPackDB.searchWildcard(cellValue);
+                DataTable tmpDT = kistPackDB.searchWildcard(selectedChargeNumber);
                 dgvSearchResults.DataSource = tmpDT;
-                // generate PDF File
-                String pdfFilePath = tempFilePath + cellValue + ".csv";
-                if (CSVExport(tmpDT, pdfFilePath))
-                {                    
-                    System.Diagnostics.Process.Start("notepad.exe", pdfFilePath);
+
+
+                if (cb_SubmitCsv.Checked)  // wenn erneuete Übermittlung der CSV ausgewählt wurde
+                {
+                    String csvPath = Properties.Settings.Default.CSVExportPath;
+                    if (!csvPath.EndsWith("\\"))
+                    {
+                        csvPath += "\\";
+                    }
+                    
+                    if (!CSVExport(dt, csvPath + selectedChargeNumber + ".csv"))
+                    {                        
+                        MessageBox.Show("Es ist ein Fehler beim speichern der Lieferschein CSV - Datei aufgetreten. " + csvPath + selectedChargeNumber + ".csv", "Fehler");                        
+                    } else
+                    {
+                        MessageBox.Show("Die CSV Lieferscheindatei wurde erfolgreich neu erstellt:  "+ csvPath + selectedChargeNumber + ".csv", "OK");
+                    }
+                } else  // wenn keine erneute Übermittlung ausgewählt wurde csv Datei nur anzeigen.
+                {
+
+                    String csvFilePath = tempFilePath + selectedChargeNumber + ".csv";
+                    if (CSVExport(tmpDT, csvFilePath))
+                    {
+                        System.Diagnostics.Process.Start("notepad.exe", csvFilePath);
+                    }
                 }
+                
 
-
+                // checkbox zum übermitteln wieder auf false setzen
+                cb_SubmitCsv.Checked = false;
             }
         }
 

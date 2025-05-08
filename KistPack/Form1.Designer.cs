@@ -55,6 +55,7 @@ namespace KistPack
             this.dgvSearchResults = new System.Windows.Forms.DataGridView();
             this.tbSearchText = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
+            this.cb_SubmitCsv = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAkten)).BeginInit();
@@ -216,10 +217,7 @@ namespace KistPack
             this.dgvAkten.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvAkten.ShowEditingIcon = false;
             this.dgvAkten.Size = new System.Drawing.Size(1436, 532);
-            this.dgvAkten.TabIndex = 5;            
-            //this.dgvAkten.CellMouseClick += new DataGridViewCellMouseEventHandler(dgvAkten_CellMouseClick); // toDo : alte methode - test mir "AddContextMenu"
-            
-
+            this.dgvAkten.TabIndex = 5;
             // 
             // btnNewCharge
             // 
@@ -279,6 +277,7 @@ namespace KistPack
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.cb_SubmitCsv);
             this.tabPage2.Controls.Add(this.label5);
             this.tabPage2.Controls.Add(this.btnRegenCSV);
             this.tabPage2.Controls.Add(this.btnRegenPDF);
@@ -357,6 +356,16 @@ namespace KistPack
             this.label4.TabIndex = 0;
             this.label4.Text = "Suche:";
             // 
+            // cb_SubmitCsv
+            // 
+            this.cb_SubmitCsv.AutoSize = true;
+            this.cb_SubmitCsv.Location = new System.Drawing.Point(756, 6);
+            this.cb_SubmitCsv.Name = "cb_SubmitCsv";
+            this.cb_SubmitCsv.Size = new System.Drawing.Size(305, 22);
+            this.cb_SubmitCsv.TabIndex = 6;
+            this.cb_SubmitCsv.Text = "! CSV Datei erneut übermitteln !";
+            this.cb_SubmitCsv.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -405,6 +414,7 @@ namespace KistPack
         private System.Windows.Forms.Button btnRegenCSV;
         private System.Windows.Forms.CheckedListBox cblMerkmale;
         private System.Windows.Forms.Label label5;
+        private CheckBox cb_SubmitCsv;
     }
 }
 
