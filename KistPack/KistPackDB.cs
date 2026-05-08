@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
@@ -336,62 +335,5 @@ namespace KistPack
             return result;
         }
 
-        public Boolean databaseFilePut(string _charge, string _varFilePath)
-        {
-            byte[] file;
-            Boolean saved = false;
-
-            try
-            {
-                using (var stream = new FileStream(_varFilePath, FileMode.Open, FileAccess.Read))
-                using (var reader = new BinaryReader(stream))
-                {
-                    file = reader.ReadBytes((int)stream.Length);
-                }
-                using (SqlConnection conn = new SqlConnection(connString))
-                using (var sqlWrite = new SqlCommand("INSERT INTO ChargenPDF (Charge,Data) Values(@Charge,@File)", conn))
-                {
-                    sqlWrite.Parameters.Add("@Charge", SqlDbType.VarChar).Value = _charge;
-                    sqlWrite.Parameters.Add("@File", SqlDbType.VarBinary, file.Length).Value = file;
-                    conn.Open();
-                    sqlWrite.ExecuteNonQuery();
-                    saved = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Fehler beim Speichern der PDF Datei in die Datenbank." + Environment.NewLine + ex.Message);
-            }
-            return saved;
-        }
-
-        public Boolean databaseFileRead(string _charge, string varPathToNewLocation)
-        {
-            try
-            {
-                using (SqlConnection conn = new SqlConnection(connString))
-                using (var sqlQuery = new SqlCommand(@"SELECT [Data] FROM [dbo].[ChargenPDF] WHERE [Charge] = @Charge", conn))
-                {
-                    sqlQuery.Parameters.AddWithValue("@Charge", _charge);
-                    conn.Open();
-                    using (var sqlQueryResult = sqlQuery.ExecuteReader())
-                    {
-                        if (sqlQueryResult != null && sqlQueryResult.Read())
-                        {
-                            var blob = new byte[sqlQueryResult.GetBytes(0, 0, null, 0, int.MaxValue)];
-                            sqlQueryResult.GetBytes(0, 0, blob, 0, blob.Length);
-                            using (var fs = new FileStream(varPathToNewLocation, FileMode.Create, FileAccess.Write))
-                                fs.Write(blob, 0, blob.Length);
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Fehler beim Laden der PDF Datei aus der Datenbank." + Environment.NewLine + ex.Message);
-                return false;
-            }
-            return true;
-        }
     }
 }

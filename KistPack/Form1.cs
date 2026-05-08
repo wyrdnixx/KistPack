@@ -278,9 +278,6 @@ namespace KistPack
                         {
                             System.Diagnostics.Process.Start(pdfFilePath);
 
-                            // Save PDF File to Database
-                            // JoHe: Deaktiviert - doch nicht in DB speichern sondern neu generieren
-                            //kistPackDB.databaseFilePut(tbCharge.Text, pdfFilePath);
                             createNewCharge();
                         }
                     };
@@ -822,23 +819,6 @@ namespace KistPack
 
         #endregion
 
-        // get the file from DB : JoHe: deaktiviert - soll doch neu generiert werden.
-        //private void btnFetchPDFfromArchive_Click(object sender, EventArgs e)
-        //{
-        //    if(dgvSearchResults.SelectedCells.Count>1)
-        //    {
-        //        MessageBox.Show("Bitte einzelnen Eintrag Auswählen dessen Charge Sie abrufen wollen.", "Bitte wählen");
-        //    } else
-        //    {                
-        //        string cellValue = dgvSearchResults.Rows[dgvSearchResults.SelectedCells[0].RowIndex].Cells[0].Value.ToString();
-        //        //MessageBox.Show(cellValue);
-        //        if(kistPackDB.databaseFileRead(cellValue, tempFilePath + cellValue + ".pdf"))
-        //        {
-        //            System.Diagnostics.Process.Start(tempFilePath + cellValue + ".pdf");
-        //        }
-
-        //    }
-        //}
         private async void btnRegenPDF_Click(object sender, EventArgs e)
         {
             if (dgvSearchResults.SelectedCells.Count > 1 || dgvSearchResults.SelectedCells.Count == 0)
