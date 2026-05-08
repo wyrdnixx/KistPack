@@ -1,30 +1,67 @@
+# KistPack
 
+Anwendung zur Verwaltung und Dokumentation von Patienten-Chargen (Scannen, Suchen, PDF/CSV-Export).
 
+---
 
-ToDo:
+## Versionshistorie
 
-[x] Main: PDF Pfad von Speicherndialog umstellen auf festen Pfad und Dateiname in %temp%
-[x] Main: Beim Programmstart alte Dateien im Temp-Pfad aufr�umen
-[x] Main: CSV-Datei erstellen (Pfad konfigurierbar evtl. �ber Datenbank - aleternativ �ber Programm-Config)
-[x] Main: PDF Datei in Datenbank speichern - anders umgesetzt - Datei kann neu erstellt werden
-[x] Main: csv Datei in Datenbank speichern - anders umgesetzt - Datei kann neu erstellt werden
+### Version 1.0.4.0
+**Sicherheit**
+- SQL-Injection-Schutz: Alle SQL-Queries in `ArchDB.cs` und `KistPackDB.cs` auf parametrisierte Befehle (`@Parameter`) umgestellt — betrifft `GetVisitFromArchive`, `searchPat`, `searchWildcard`, `saveDtToDB`, `testInsertDbTransaction`, `testInsertDb`
+- Null-Koaleszenz für Umgebungsvariablen (`USERNAME`, `CLIENTNAME`, `COMPUTERNAME`) um Fehler bei fehlenden Werten zu verhindern
 
-[x] Suchfunktion : Grunds�tzlich
-[x] Suchfunktion : PDF neu erstellen
-[x] Suchfunktion : csv neu erstellen
+**Bugfixes**
+- `NullReferenceException` in `insertNewVisit()` behoben: Das Setzen von `pv.Merkmal` (foreach über CheckedItems) wurde hinter den `null`-Check auf `pv` verschoben
+- `String str = null`-Bug in der Duplikat-Prüfung behoben: Erste Iteration erzeugte `"nullCharge | ..."` — geändert zu `str = ""`
+- `SqlDataReader`-Ressource-Leck in `ArchDB.GetVisitFromArchive` behoben: `dr.Close()` wurde im `HasRows == true`-Zweig nie erreicht — jetzt `using`-Block
+- `SqlDataReader`-Lecks in `getKistPackDBVersion`, `getKistPackDBMerkmale`, `getKistPackDBExternalArchiveCall`, `searchPat`, `searchWildcard` behoben — alle Reader jetzt in `using`-Blöcken
+- `databaseFileRead`: `sqlQueryResult.Read()` wird jetzt auf Rückgabewert geprüft bevor auf Spalten zugegriffen wird
 
-# Merkmale zu einer Akte setzen
-[x] Suchmaske - ok
-[x] pdf file - ok
-[x] csv file - ok
-[x] merkmal f�r neuen sacn zur�ck setzen - ok
-[x] pr�fen ob bereits gescannte akte f�r Nachlaufenden Befund gew�hlt werden soll - ok, aber "Nachlaufender-Befund" und "Neulieferung" hart codiert :-(
-[x] nach merkmal zur�ck setzen 
-[] blaue markierung wieder auf erstes / Default item setzen
- 
+**Performance**
+- `searchWildcard`: Zwei separate Datenbankabfragen (N+1-Problem) zu einer einzigen Abfrage mit Subquery zusammengeführt
+- `searchWildcard`: Äußeres `TOP(100)` entfernt — es konnte Chargen in der Mitte abschneiden und unvollständige Ergebnisse liefern; das innere `DISTINCT TOP(100)` begrenzt weiterhin auf maximal 100 verschiedene Chargen
+- `searchPat`: `TOP(50)` als Sicherheitsnetz gegen unkontrolliert große Ergebnismengen hinzugefügt
+- Suche (`tbSearchText_KeyPress`), PDF-Regenerierung (`btnRegenPDF_Click`) und CSV-Regenerierung (`btnRegenCSV_Click`) auf `async/await` umgestellt — Datenbankabfragen laufen jetzt auf dem Thread-Pool, UI bleibt während der Suche vollständig bedienbar
 
-[x] Merkmal �nderung bei bereits gescannten Akten  -> Context Menu
-[x] Merkmal "Nachlaufender Befund" automatisch setzen wenn Akte bereits versendet wurde
-[] Sicherung aktuelle Charge in %temp% falls Programm abst�rzt und pr�fen / laden beim starten
+**UX**
+- Während einer Suche: Suchfeld deaktiviert, Wartezeiger angezeigt; nach Abschluss Fokus automatisch zurück ins Suchfeld
+- Zell-Highlighting in Suchergebnissen reaktiviert: Zellen, die den Suchtext enthalten, werden blau hinterlegt (`Color.LightSkyBlue`)
 
-[x] externer Programmaufruf Archiv - Contextmenu - start-Paramter in Settings-DB : "ExternalArchiveCall" - "echo cmd.exe /c ping #FALLNUMMER && pause"
+---
+
+### Version 1.0.3.0
+- Erneuter Upload der CSV-Datei wählbar
+
+### Version 1.0.2.0
+- Context-Menü zum Löschen von Einträgen, Ändern von Merkmalen und Aufruf des externen Archivs
+
+### Version 1.0.1.0
+- Suchergebnisse auf 100 Einträge begrenzt
+
+---
+
+## Offene Punkte (ToDo)
+
+- [ ] Blaue Markierung nach Scan zurück auf erstes/Default-Item setzen
+- [ ] Sicherung der aktuellen Charge in `%temp%` falls Programm abstürzt — beim Start prüfen und laden
+- [ ] "Nachlaufender-Befund" und "Neulieferung" sind noch hart codiert (nicht konfigurierbar)
+
+---
+
+## Erledigte Punkte
+
+- [x] Main: PDF-Pfad von Speicherdialog auf festen Pfad in `%temp%` umgestellt
+- [x] Main: Beim Programmstart alte Dateien im Temp-Pfad aufräumen
+- [x] Main: CSV-Datei erstellen (Pfad konfigurierbar über Programm-Config)
+- [x] Main: PDF-Datei neu generierbar (statt in DB speichern)
+- [x] Main: CSV-Datei neu generierbar (statt in DB speichern)
+- [x] Suchfunktion: Grundsätzlich
+- [x] Suchfunktion: PDF neu erstellen
+- [x] Suchfunktion: CSV neu erstellen
+- [x] Merkmale zu einer Akte setzen — Suchmaske, PDF, CSV
+- [x] Merkmal für neuen Scan zurücksetzen
+- [x] Prüfen ob bereits gescannte Akte für "Nachlaufenden Befund" gewählt werden soll
+- [x] Merkmal-Änderung bei bereits gescannten Akten → Context-Menü
+- [x] Merkmal "Nachlaufender Befund" automatisch setzen wenn Akte bereits versendet wurde
+- [x] Externer Programmaufruf Archiv — Context-Menü — Start-Parameter in Settings-DB: `ExternalArchiveCall`
