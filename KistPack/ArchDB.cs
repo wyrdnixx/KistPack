@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -13,118 +13,43 @@ namespace KistPack
 {
     internal class ArchDB
     {
-
-
-
-
-        //#region Test Async
-
-        ////test Async
-        //public delegate void doWorkCallback(int result, string error);
-
-        //public static void doWork(int n, doWorkCallback callback)
-        //{
-        //    int result = 0;
-
-        //    for (int i = 0; i < n; i++)
-        //    {
-        //        //Do some work....
-        //        Thread.Sleep(1000);
-        //        result += 10;
-        //    }
-
-        //    //Call the callback delegate which points to the displayWorkDone() method and pass it the result to be returned from the thread.
-        //    callback(result,null);
-        //}
-
-        //#endregion
-
-
-
-
-        //private static string connString = @"Server = MSSQL; Database = TestDB; Trusted_Connection = True;";
         private static string connString = Properties.Settings.Default.SQLDBArchive;
 
-
-        public static PatientVisit GetVisitFromArchive(String _Fallnummer)
+        public static PatientVisit GetVisitFromArchive(string _Fallnummer)
         {
             try
             {
-                //sql connection object
                 using (SqlConnection conn = new SqlConnection(connString))
                 {
-
-                    //retrieve the SQL Server instance version
-                    string query = @"SELECT FALLID, PATID, GEBDAT,VORNAME, NAME, F_STORNO
-                                     FROM IDX_FRI  where FALLID = "+_Fallnummer + ";";
-                    //define the SqlCommand object
+                    string query = @"SELECT FALLID, PATID, GEBDAT, VORNAME, NAME, F_STORNO
+                                     FROM IDX_FRI
+                                     WHERE FALLID = @Fallnummer";
                     SqlCommand cmd = new SqlCommand(query, conn);
-
-                    //open connection
+                    cmd.Parameters.AddWithValue("@Fallnummer", _Fallnummer);
                     conn.Open();
 
-                    //execute the SQLCommand
-                    SqlDataReader dr = cmd.ExecuteReader();
-
-                    Console.WriteLine(Environment.NewLine + "Retrieving data from database..." + Environment.NewLine);
-                    Console.WriteLine("Retrieved records:");
-
-                    //check if there are records
-                    if (dr.HasRows)
+                    using (SqlDataReader dr = cmd.ExecuteReader())
                     {
-                        
-
-                        while (dr.Read())
+                        if (dr.HasRows && dr.Read())
                         {
                             string fallnummer = dr.GetString(0);
-                            string person = dr.GetString(1);
-                            string gebdat = dr.GetDateTime(2).ToString("dd.MM.yyyy"); //  GetString(2);
-                            string nachname = dr.GetString(3);
-                            string vorname = dr.GetString(4);
-                            string fallstorno = null; // initiate empty if in db null
-                            
-                            if (!dr.IsDBNull(5)) // if the F_STORNO field is not empty
-                            { 
-                                 fallstorno = dr.GetString(5);
-                            } 
-                                
+                            string person     = dr.GetString(1);
+                            string gebdat     = dr.GetDateTime(2).ToString("dd.MM.yyyy");
+                            string nachname   = dr.GetString(3);
+                            string vorname    = dr.GetString(4);
+                            string fallstorno = dr.IsDBNull(5) ? null : dr.GetString(5);
 
-
-                            PatientVisit pv = new PatientVisit(fallnummer,person,gebdat, vorname,nachname,fallstorno);
-
-
-                            
-                            //return pv;
-                            return pv;
+                            return new PatientVisit(fallnummer, person, gebdat, vorname, nachname, fallstorno);
                         }
                     }
-                    else
-                    {
-                        Console.WriteLine("No data found.");
-                        //global::System.Windows.Forms.MessageBox.Show("test","no data found");
-                        //return null;
-                        return null;
-                    }
-
-                    //close data reader
-                    dr.Close();
-
-                    //close connection
-                    conn.Close();
                 }
             }
             catch (Exception ex)
             {
-                //display error message
-                Console.WriteLine("Exception: " + ex.Message);
-                //global::System.Windows.Forms.MessageBox.Show(ex.Message,"error");
-                //throw new InvalidOperationException(ex.Message);
-                MessageBox.Show("Fehler beim abfragen der Archiv Datenbank: "+  ex.Message,"Error");
-   
+                MessageBox.Show("Fehler beim abfragen der Archiv Datenbank: " + ex.Message, "Error");
             }
 
             return null;
-            
         }
     }
 }

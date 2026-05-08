@@ -328,20 +328,19 @@ namespace KistPack
                 //btnCreateCharge.Enabled = false;
                 btnFinishCharge.Enabled = true;
 
-                // setze markiertes Merkmal für den Eintrag
-                foreach (var item in cblMerkmale.CheckedItems)
-                {
-                    pv.Merkmal += item.ToString();
-                }
-
-
                 if (pv != null && pv.Fallstorno ==null)
                 {
+                    // setze markiertes Merkmal für den Eintrag
+                    foreach (var item in cblMerkmale.CheckedItems)
+                    {
+                        pv.Merkmal += item.ToString();
+                    }
+
                     // Test if visit already exists in database / visit hast already been scanned
                     List<PatientVisit> foundList = kistPackDB.searchPat(_Fall.ToString());
-                    if (foundList.Count > 0 && pv.Merkmal != "Nachlaufender-Befund" && pv.Merkmal != "Neulieferung") { 
+                    if (foundList.Count > 0 && pv.Merkmal != "Nachlaufender-Befund" && pv.Merkmal != "Neulieferung") {
 
-                        String str = null;
+                        String str = "";
                         foreach (PatientVisit v in foundList)
                         {
                             str += v.Charge + " | " + v.Kiste + " | " + v.Scandatum + Environment.NewLine;
@@ -791,38 +790,25 @@ namespace KistPack
         #region SearchTab
 
 
-        private void tbSearchText_KeyPress(object sender, KeyEventArgs e)
+        private async void tbSearchText_KeyPress(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter && tbSearchText.Text.Length != 0)
             {
-                // Tu was
-                DataTable dtSearchResult  =  kistPackDB.searchWildcard(tbSearchText.Text);
-                dgvSearchResults.DataSource = dtSearchResult;
-                dgvSearchResults.DefaultCellStyle.Font = new System.Drawing.Font("Verdana", 12);
-                dgvSearchResults.ClearSelection();
-
-                if (dtSearchResult != null )
+                string searchText = tbSearchText.Text;
+                tbSearchText.Enabled = false;
+                Cursor = Cursors.WaitCursor;
+                try
                 {
-                    // Optional: Clear previous selections
-                    
-
-                    // Iterate through each row in the DataGridView
-                    foreach (DataGridViewRow row in dgvSearchResults.Rows)
-                    {
-                        // Iterate through each cell in the current row
-                        foreach (DataGridViewCell cell in row.Cells)
-                        {
-                            // Check if the cell value is "test"
-                            //if (cell.Value != null && cell.Value.ToString() == tbSearchText.Text)
-                            if (cell.Value != null && cell.Value.ToString().ToLower().Contains(tbSearchText.Text.ToLower()))
-                                {
-                                // Select the entire row
-                                //row.Selected = true;
-                                cell.Selected = true;
-                                //break; // Break out of the inner loop since we've found "test" in the row
-                            }
-                        }
-                    }
+                    DataTable dtSearchResult = await Task.Run(() => kistPackDB.searchWildcard(searchText));
+                    dgvSearchResults.DataSource = dtSearchResult;
+                    dgvSearchResults.DefaultCellStyle.Font = new System.Drawing.Font("Verdana", 12);
+                    dgvSearchResults.ClearSelection();
+                }
+                finally
+                {
+                    tbSearchText.Enabled = true;
+                    tbSearchText.Focus();
+                    Cursor = Cursors.Default;
                 }
             }
         }
@@ -847,30 +833,7 @@ namespace KistPack
 
         //    }
         //}
-        private void btnRegenPDF_Click(object sender, EventArgs e)
-        {
-            if (dgvSearchResults.SelectedCells.Count > 1 || dgvSearchResults.SelectedCells.Count ==0)
-            {
-                MessageBox.Show("Bitte einzelnen Eintrag Auswählen dessen Charge Sie abrufen wollen.", "Bitte wählen");
-            }
-            else
-            {
-                string selectedChargeNumber = dgvSearchResults.Rows[dgvSearchResults.SelectedCells[0].RowIndex].Cells[0].Value.ToString();
-                dgvSearchResults.DataSource = null;
-
-                DataTable tmpDT = kistPackDB.searchWildcard(selectedChargeNumber);
-                dgvSearchResults.DataSource = tmpDT;
-                // generate PDF File
-                String pdfFilePath = tempFilePath + selectedChargeNumber + ".pdf";
-                if (ExportToPDF(dgvSearchResults, selectedChargeNumber, pdfFilePath))
-                {
-                    System.Diagnostics.Process.Start(pdfFilePath);
-                }
-                
-
-            }
-        }
-        private void btnRegenCSV_Click(object sender, EventArgs e)
+        private async void btnRegenPDF_Click(object sender, EventArgs e)
         {
             if (dgvSearchResults.SelectedCells.Count > 1 || dgvSearchResults.SelectedCells.Count == 0)
             {
@@ -880,39 +843,68 @@ namespace KistPack
             {
                 string selectedChargeNumber = dgvSearchResults.Rows[dgvSearchResults.SelectedCells[0].RowIndex].Cells[0].Value.ToString();
                 dgvSearchResults.DataSource = null;
-
-                DataTable tmpDT = kistPackDB.searchWildcard(selectedChargeNumber);
-                dgvSearchResults.DataSource = tmpDT;
-
-
-                if (cb_SubmitCsv.Checked)  // wenn erneuete Übermittlung der CSV ausgewählt wurde
+                Cursor = Cursors.WaitCursor;
+                try
                 {
-                    String csvPath = Properties.Settings.Default.CSVExportPath;
-                    if (!csvPath.EndsWith("\\"))
+                    DataTable tmpDT = await Task.Run(() => kistPackDB.searchWildcard(selectedChargeNumber));
+                    dgvSearchResults.DataSource = tmpDT;
+                    String pdfFilePath = tempFilePath + selectedChargeNumber + ".pdf";
+                    if (ExportToPDF(dgvSearchResults, selectedChargeNumber, pdfFilePath))
                     {
-                        csvPath += "\\";
-                    }
-                    
-                    if (!CSVExport(dt, csvPath + selectedChargeNumber + ".csv"))
-                    {                        
-                        MessageBox.Show("Es ist ein Fehler beim speichern der Lieferschein CSV - Datei aufgetreten. " + csvPath + selectedChargeNumber + ".csv", "Fehler");                        
-                    } else
-                    {
-                        MessageBox.Show("Die CSV Lieferscheindatei wurde erfolgreich neu erstellt:  "+ csvPath + selectedChargeNumber + ".csv", "OK");
-                    }
-                } else  // wenn keine erneute Übermittlung ausgewählt wurde csv Datei nur anzeigen.
-                {
-
-                    String csvFilePath = tempFilePath + selectedChargeNumber + ".csv";
-                    if (CSVExport(tmpDT, csvFilePath))
-                    {
-                        System.Diagnostics.Process.Start("notepad.exe", csvFilePath);
+                        System.Diagnostics.Process.Start(pdfFilePath);
                     }
                 }
-                
+                finally
+                {
+                    Cursor = Cursors.Default;
+                }
+            }
+        }
+        private async void btnRegenCSV_Click(object sender, EventArgs e)
+        {
+            if (dgvSearchResults.SelectedCells.Count > 1 || dgvSearchResults.SelectedCells.Count == 0)
+            {
+                MessageBox.Show("Bitte einzelnen Eintrag Auswählen dessen Charge Sie abrufen wollen.", "Bitte wählen");
+            }
+            else
+            {
+                string selectedChargeNumber = dgvSearchResults.Rows[dgvSearchResults.SelectedCells[0].RowIndex].Cells[0].Value.ToString();
+                dgvSearchResults.DataSource = null;
+                Cursor = Cursors.WaitCursor;
+                try
+                {
+                    DataTable tmpDT = await Task.Run(() => kistPackDB.searchWildcard(selectedChargeNumber));
+                    dgvSearchResults.DataSource = tmpDT;
 
-                // checkbox zum übermitteln wieder auf false setzen
-                cb_SubmitCsv.Checked = false;
+                    if (cb_SubmitCsv.Checked)  // wenn erneute Übermittlung der CSV ausgewählt wurde
+                    {
+                        String csvPath = Properties.Settings.Default.CSVExportPath;
+                        if (!csvPath.EndsWith("\\"))
+                            csvPath += "\\";
+
+                        if (!CSVExport(dt, csvPath + selectedChargeNumber + ".csv"))
+                        {
+                            MessageBox.Show("Es ist ein Fehler beim speichern der Lieferschein CSV - Datei aufgetreten. " + csvPath + selectedChargeNumber + ".csv", "Fehler");
+                        }
+                        else
+                        {
+                            MessageBox.Show("Die CSV Lieferscheindatei wurde erfolgreich neu erstellt:  " + csvPath + selectedChargeNumber + ".csv", "OK");
+                        }
+                    }
+                    else  // wenn keine erneute Übermittlung ausgewählt wurde: CSV nur anzeigen
+                    {
+                        String csvFilePath = tempFilePath + selectedChargeNumber + ".csv";
+                        if (CSVExport(tmpDT, csvFilePath))
+                        {
+                            System.Diagnostics.Process.Start("notepad.exe", csvFilePath);
+                        }
+                    }
+                }
+                finally
+                {
+                    cb_SubmitCsv.Checked = false;
+                    Cursor = Cursors.Default;
+                }
             }
         }
 
