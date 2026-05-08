@@ -803,6 +803,12 @@ namespace KistPack
                     dgvSearchResults.DataSource = dtSearchResult;
                     dgvSearchResults.DefaultCellStyle.Font = new System.Drawing.Font("Verdana", 12);
                     dgvSearchResults.ClearSelection();
+
+                    string searchLower = searchText.ToLower();
+                    foreach (DataGridViewRow row in dgvSearchResults.Rows)
+                        foreach (DataGridViewCell cell in row.Cells)
+                            if (cell.Value != null && cell.Value.ToString().ToLower().Contains(searchLower))
+                                cell.Style.BackColor = System.Drawing.Color.LightSkyBlue;
                 }
                 finally
                 {
