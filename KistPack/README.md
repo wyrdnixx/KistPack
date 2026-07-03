@@ -2,9 +2,29 @@
 
 Anwendung zur Verwaltung und Dokumentation von Patienten-Chargen (Scannen, Suchen, PDF/CSV-Export).
 
+ToDo:
+
+- Kistpack Bug -> wurde bei manchen scanns nicht übernommen? konnte jetzt aber nicht nochmal reproduziert werden.
+
+- Mehrteilige Akte
+- Anzahl Elemente in Übersicht anzeigen (am besten pro Akten Typ (Nachlaufend...)
+- Neulieferung nochmal prüfen - funktioniert das richtig.
+
+
+
+
+
 ---
 
 ## Versionshistorie
+
+### Version 1.0.5.0
+- Weiteren Typ angelegt: QS-Akte 
+--> Eintrag in Settings in der DB
+
+- Fallnummer prüfen nach Mandant -> nur richtige Fn / TT
+--> Mandantenprüfung. Hart codiert (FN=0 / TT= 2) Aufwand über Settings-DB wäre höher
+
 
 ### Version 1.0.4.0
 **Sicherheit**
@@ -145,11 +165,11 @@ GO
 /****** Initiale Konfigurationsdaten in Settings ******/
 -- Werte nur einfuegen wenn der Eintrag noch nicht existiert
 IF NOT EXISTS (SELECT 1 FROM [dbo].[Settings] WHERE [Setting] = 'DBVersion')
-    INSERT INTO [dbo].[Settings] ([Setting], [Value]) VALUES ('DBVersion', '1.0.4.0')
+    INSERT INTO [dbo].[Settings] ([Setting], [Value]) VALUES ('DBVersion', '1.0.5.0')
 
 IF NOT EXISTS (SELECT 1 FROM [dbo].[Settings] WHERE [Setting] = 'Merkmale')
     INSERT INTO [dbo].[Settings] ([Setting], [Value])
-    VALUES ('Merkmale', 'Normal-Akte;Express-Akte;Nachlaufender-Befund;Neulieferung')
+    VALUES ('Merkmale', 'Normal-Akte;Express-Akte;Nachlaufender-Befund;Neulieferung;QS-Akte')
 
 -- Platzhalter: echten Aufruf entsprechend der Archiv-Software eintragen
 -- Beispiel: echo cmd.exe /c ping #FALLNUMMER && pause

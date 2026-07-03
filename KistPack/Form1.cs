@@ -231,16 +231,63 @@ namespace KistPack
         {
             if (tbFallScann.Text.Length == Properties.Settings.Default.LenghtFallnummer)
             {
-                // test if visit is already in list
-                if (!testCurrentDataTable(tbFallScann.Text))
+                
+                if (validMandant(cbMandant.Text, tbFallScann.Text))
                 {
-                    insertNewVisit(tbFallScann.Text);
-                
+                    // test if visit is already in list
+                    if (!testCurrentDataTable(tbFallScann.Text))
+                    {
+                        insertNewVisit(tbFallScann.Text);
+
+                    }
+                } else
+                {
+                    // Fehler: Mandant stimmt nicht mit Fallnummer überein  
+
+                    tbStatus.BackColor = System.Drawing.Color.SeaShell;
+                    tbStatus.Text = tbFallScann.Text.ToString() + " : Fehler ! Mandant stimmt nicht mit Fallnummer überein.";
+                    tbFallScann.Text = "";
+                    playSoundER();
+
+
                 }
-                
+
+
+
+
             }
         }
 
+
+         
+        /// <summary>
+        /// Prüfe ob Mandant aus Fallnummer (3te Stelle = index 2) mit Mandant übereinstimmt 
+        /// </summary>
+        /// <param name="_mandant"></param>
+        /// <param name="_fallnummer"></param>
+        /// <returns></returns>
+        private bool validMandant(String _mandant, String _fallnummer)
+        {
+            Boolean valid = false;
+            switch (_mandant)
+            {
+                case "FN":
+                    if (_fallnummer[2] == '0')
+                    {
+                        valid = true;
+                    }
+                    break;
+                case "TT":
+                    if (_fallnummer[2] == '2')
+                    {
+                        valid = true;
+                    }
+                    break;
+                default:
+                    break;
+            }
+            return valid;
+        }
 
 
         private void btnFinishCharge_Click(object sender, EventArgs e)
