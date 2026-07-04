@@ -3,7 +3,10 @@
     "allow": [
       "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\ulewu\\\\source\\\\repos\\\\wyrdnixx\\\\KistPack\" -Recurse -Directory)",
       "Bash(Select-Object -ExpandProperty FullName)",
-      "Bash(Sort-Object)"
+      "Bash(Sort-Object)",
+      "Bash(Get-ChildItem -Recurse -Force)",
+      "Bash(Select-Object FullName)",
+      "PowerShell(head *)"
     ]
   }
 }

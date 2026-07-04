@@ -18,6 +18,10 @@ ToDo:
 
 ## Versionshistorie
 
+
+### Version 1.0.5.01
+Bugfix: `NullReferenceException` in `searchWildcard()` behoben: `sqlQueryResult.Read()` wird jetzt auf Rückgabewert geprüft bevor auf Spalten zugegriffen wird
+
 ### Version 1.0.5.0
 - Weiteren Typ angelegt: QS-Akte 
 --> Eintrag in Settings in der DB

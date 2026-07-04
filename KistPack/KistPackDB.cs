@@ -26,12 +26,14 @@ namespace KistPack
                 using (SqlConnection conn = new SqlConnection(connString))
                 {
                     string query = @"SELECT value FROM Settings WHERE Setting = 'DBVersion'";
-                    SqlCommand cmd = new SqlCommand(query, conn);
-                    conn.Open();
-                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
-                        if (dr.Read())
-                            dbVersion = dr.GetString(0);
+                        conn.Open();
+                        using (SqlDataReader dr = cmd.ExecuteReader())
+                        {
+                            if (dr.Read())
+                                dbVersion = dr.GetString(0);
+                        }
                     }
                 }
             }
@@ -53,12 +55,14 @@ namespace KistPack
                 using (SqlConnection conn = new SqlConnection(connString))
                 {
                     string query = @"SELECT value FROM Settings WHERE Setting = 'Merkmale'";
-                    SqlCommand cmd = new SqlCommand(query, conn);
-                    conn.Open();
-                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
-                        if (dr.Read())
-                            merkmale = dr.GetString(0);
+                        conn.Open();
+                        using (SqlDataReader dr = cmd.ExecuteReader())
+                        {
+                            if (dr.Read())
+                                merkmale = dr.GetString(0);
+                        }
                     }
                 }
             }
@@ -77,12 +81,14 @@ namespace KistPack
                 using (SqlConnection conn = new SqlConnection(connString))
                 {
                     string query = @"SELECT value FROM Settings WHERE Setting = 'ExternalArchiveCall'";
-                    SqlCommand cmd = new SqlCommand(query, conn);
-                    conn.Open();
-                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
-                        if (dr.Read())
-                            externalArchiveCall = dr.GetString(0);
+                        conn.Open();
+                        using (SqlDataReader dr = cmd.ExecuteReader())
+                        {
+                            if (dr.Read())
+                                externalArchiveCall = dr.GetString(0);
+                        }
                     }
                 }
             }
@@ -100,20 +106,22 @@ namespace KistPack
             {
                 using (SqlConnection conn = new SqlConnection(connString))
                 {
-                    string query = @"SELECT TOP (50) * FROM Chargen WHERE Fallnummer = @Fallnummer";
-                    SqlCommand cmd = new SqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@Fallnummer", _Fallnummer);
-                    conn.Open();
-                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    string query = @"SELECT TOP (50) [Charge],[Kiste],[Merkmal],[Fallnummer],[Person],[Gebdat],[Vorname],[Nachname],[Scandatum],[Scanuser],[Scanclient],[Scanhostname] FROM Chargen WHERE Fallnummer = @Fallnummer";
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
-                        while (dr.Read())
+                        cmd.Parameters.AddWithValue("@Fallnummer", _Fallnummer);
+                        conn.Open();
+                        using (SqlDataReader dr = cmd.ExecuteReader())
                         {
-                            PatientVisit tmp = new PatientVisit(
-                                dr.GetString(1), dr.GetString(2),  dr.GetString(3),
-                                dr.GetString(4), dr.GetString(5),  dr.GetString(6),
-                                dr.GetString(7), dr.GetString(8),  dr.GetString(9),
-                                dr.GetString(10), dr.GetString(11), dr.GetString(12));
-                            patList.Add(tmp);
+                            while (dr.Read())
+                            {
+                                PatientVisit tmp = new PatientVisit(
+                                    dr.GetString(0), dr.GetString(1), dr.GetString(2),
+                                    dr.GetString(3), dr.GetString(4), dr.GetString(5),
+                                    dr.GetString(6), dr.GetString(7), dr.GetString(8),
+                                    dr.GetString(9), dr.GetString(10), dr.GetString(11));
+                                patList.Add(tmp);
+                            }
                         }
                     }
                 }
@@ -136,7 +144,7 @@ namespace KistPack
             sDT.Columns.Add("Gebdat");
             sDT.Columns.Add("Vorname");
             sDT.Columns.Add("Nachname");
-            sDT.Columns.Add("Scanndatum");
+            sDT.Columns.Add("Scandatum");
             sDT.Columns.Add("Scanuser");
             sDT.Columns.Add("Scanclient");
             sDT.Columns.Add("Scanhostname");
@@ -165,18 +173,20 @@ namespace KistPack
                                             OR Nachname   LIKE @Search
                                             OR Scandatum  LIKE @Search
                                      )";
-                    SqlCommand cmd = new SqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@Search", "%" + _SearchText + "%");
-                    conn.Open();
-                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
-                        while (dr.Read())
+                        cmd.Parameters.AddWithValue("@Search", "%" + _SearchText + "%");
+                        conn.Open();
+                        using (SqlDataReader dr = cmd.ExecuteReader())
                         {
-                            sDT.Rows.Add(
-                                dr.GetString(0), dr.GetString(1),  dr.GetString(2),
-                                dr.GetString(3), dr.GetString(4),  dr.GetString(5),
-                                dr.GetString(6), dr.GetString(7),  dr.GetString(8),
-                                dr.GetString(9), dr.GetString(10), dr.GetString(11));
+                            while (dr.Read())
+                            {
+                                sDT.Rows.Add(
+                                    dr.GetString(0), dr.GetString(1),  dr.GetString(2),
+                                    dr.GetString(3), dr.GetString(4),  dr.GetString(5),
+                                    dr.GetString(6), dr.GetString(7),  dr.GetString(8),
+                                    dr.GetString(9), dr.GetString(10), dr.GetString(11));
+                            }
                         }
                     }
                 }
@@ -198,139 +208,67 @@ namespace KistPack
             string clientname  = Environment.GetEnvironmentVariable("CLIENTNAME")  ?? "";
             string computername = Environment.GetEnvironmentVariable("COMPUTERNAME") ?? "";
 
-            using (SqlConnection conn = new SqlConnection(connString))
-            {
-                conn.Open();
-                using (SqlTransaction transaction = conn.BeginTransaction())
-                {
-                    SqlCommand cmd = new SqlCommand();
-                    cmd.Connection  = conn;
-                    cmd.Transaction = transaction;
-                    cmd.CommandText =
-                        "INSERT INTO Chargen " +
-                        "([Charge],[Kiste],[Merkmal],[Fallnummer],[Person],[Gebdat],[Vorname],[Nachname],[Scandatum],[Scanuser],[Scanclient],[Scanhostname]) " +
-                        "VALUES (@Charge,@Kiste,@Merkmal,@Fallnummer,@Person,@Gebdat,@Vorname,@Nachname,@Scandatum,@Scanuser,@Scanclient,@Scanhostname)";
-                    cmd.Parameters.Add("@Charge",      SqlDbType.NVarChar);
-                    cmd.Parameters.Add("@Kiste",       SqlDbType.NVarChar);
-                    cmd.Parameters.Add("@Merkmal",     SqlDbType.NVarChar);
-                    cmd.Parameters.Add("@Fallnummer",  SqlDbType.NVarChar);
-                    cmd.Parameters.Add("@Person",      SqlDbType.NVarChar);
-                    cmd.Parameters.Add("@Gebdat",      SqlDbType.NVarChar);
-                    cmd.Parameters.Add("@Vorname",     SqlDbType.NVarChar);
-                    cmd.Parameters.Add("@Nachname",    SqlDbType.NVarChar);
-                    cmd.Parameters.Add("@Scandatum",   SqlDbType.NVarChar);
-                    cmd.Parameters.Add("@Scanuser",    SqlDbType.NVarChar);
-                    cmd.Parameters.Add("@Scanclient",  SqlDbType.NVarChar);
-                    cmd.Parameters.Add("@Scanhostname", SqlDbType.NVarChar);
-
-                    try
-                    {
-                        foreach (DataRow row in _dt.Rows)
-                        {
-                            cmd.Parameters["@Charge"].Value      = row[0].ToString();
-                            cmd.Parameters["@Kiste"].Value       = row[1].ToString();
-                            cmd.Parameters["@Merkmal"].Value     = row[2].ToString();
-                            cmd.Parameters["@Fallnummer"].Value  = row[3].ToString();
-                            cmd.Parameters["@Person"].Value      = row[4].ToString();
-                            cmd.Parameters["@Gebdat"].Value      = row[5].ToString();
-                            cmd.Parameters["@Vorname"].Value     = row[6].ToString();
-                            cmd.Parameters["@Nachname"].Value    = row[7].ToString();
-                            cmd.Parameters["@Scandatum"].Value   = datum;
-                            cmd.Parameters["@Scanuser"].Value    = username;
-                            cmd.Parameters["@Scanclient"].Value  = clientname;
-                            cmd.Parameters["@Scanhostname"].Value = computername;
-                            cmd.ExecuteNonQuery();
-                        }
-                        transaction.Commit();
-                        result = true;
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Fehler beim Speichern in Datenbank: " + Environment.NewLine + ex.Message, "Error");
-                    }
-                }
-            }
-            return result;
-        }
-
-        public bool testInsertDbTransaction(string _charge, string _kiste, string _fallnummer, string _person, string _vorname, string _nachname, string _clientname, string _hostname)
-        {
-            bool result = false;
-
-            using (SqlConnection conn = new SqlConnection(connString))
-            {
-                conn.Open();
-                using (SqlTransaction transaction = conn.BeginTransaction())
-                {
-                    try
-                    {
-                        SqlCommand cmd = new SqlCommand();
-                        cmd.Connection  = conn;
-                        cmd.Transaction = transaction;
-                        cmd.CommandText =
-                            "INSERT INTO Chargen " +
-                            "([Charge],[Kiste],[Fallnummer],[Person],[Vorname],[Nachname],[Scandatum],[Scanuser],[Scanclient],[Scanhostname]) " +
-                            "VALUES (@Charge,@Kiste,@Fallnummer,@Person,@Vorname,@Nachname,@Scandatum,@Scanuser,@Scanclient,@Scanhostname)";
-                        cmd.Parameters.AddWithValue("@Charge",      _charge);
-                        cmd.Parameters.AddWithValue("@Kiste",       _kiste);
-                        cmd.Parameters.AddWithValue("@Fallnummer",  _fallnummer);
-                        cmd.Parameters.AddWithValue("@Person",      _person);
-                        cmd.Parameters.AddWithValue("@Vorname",     _vorname);
-                        cmd.Parameters.AddWithValue("@Nachname",    _nachname);
-                        cmd.Parameters.AddWithValue("@Scandatum",   DateTime.Now.ToString());
-                        cmd.Parameters.AddWithValue("@Scanuser",    Environment.GetEnvironmentVariable("USERNAME")    ?? "");
-                        cmd.Parameters.AddWithValue("@Scanclient",  Environment.GetEnvironmentVariable("CLIENTNAME")  ?? "");
-                        cmd.Parameters.AddWithValue("@Scanhostname", Environment.GetEnvironmentVariable("COMPUTERNAME") ?? "");
-
-                        cmd.ExecuteNonQuery();
-                        cmd.ExecuteNonQuery();
-
-                        transaction.Commit();
-                        result = true;
-                    }
-                    catch (Exception ex)
-                    {
-                        transaction.Rollback();
-                        MessageBox.Show("error: " + ex.Message, "Error");
-                        return false;
-                    }
-                }
-            }
-            return result;
-        }
-
-        public bool testInsertDb(string _charge, string _kiste, string _fallnummer, string _person, string _vorname, string _nachname, string _clientname, string _hostname)
-        {
-            bool result = false;
             try
             {
                 using (SqlConnection conn = new SqlConnection(connString))
                 {
-                    SqlCommand cmd = new SqlCommand();
-                    cmd.Connection   = conn;
-                    cmd.CommandType  = CommandType.Text;
-                    cmd.CommandText  =
-                        "INSERT INTO Chargen " +
-                        "([Charge],[Kiste],[Fallnummer],[Person],[Vorname],[Nachname],[Scandatum],[Scanuser],[Scanclient],[Scanhostname]) " +
-                        "VALUES (@Charge,@Kiste,@Fallnummer,@Person,@Vorname,@Nachname,@Scandatum,@Scanuser,@Scanclient,@Scanhostname)";
-                    cmd.Parameters.AddWithValue("@Charge",      _charge);
-                    cmd.Parameters.AddWithValue("@Kiste",       _kiste);
-                    cmd.Parameters.AddWithValue("@Fallnummer",  _fallnummer);
-                    cmd.Parameters.AddWithValue("@Person",      _person);
-                    cmd.Parameters.AddWithValue("@Vorname",     _vorname);
-                    cmd.Parameters.AddWithValue("@Nachname",    _nachname);
-                    cmd.Parameters.AddWithValue("@Scandatum",   DateTime.Now.ToString());
-                    cmd.Parameters.AddWithValue("@Scanuser",    Environment.GetEnvironmentVariable("USERNAME")    ?? "");
-                    cmd.Parameters.AddWithValue("@Scanclient",  Environment.GetEnvironmentVariable("CLIENTNAME")  ?? "");
-                    cmd.Parameters.AddWithValue("@Scanhostname", Environment.GetEnvironmentVariable("COMPUTERNAME") ?? "");
                     conn.Open();
-                    cmd.ExecuteNonQuery();
-                    result = true;
+                    using (SqlTransaction transaction = conn.BeginTransaction())
+                    {
+                        using (SqlCommand cmd = new SqlCommand())
+                        {
+                            cmd.Connection  = conn;
+                            cmd.Transaction = transaction;
+                            cmd.CommandText =
+                                "INSERT INTO Chargen " +
+                                "([Charge],[Kiste],[Merkmal],[Fallnummer],[Person],[Gebdat],[Vorname],[Nachname],[Scandatum],[Scanuser],[Scanclient],[Scanhostname]) " +
+                                "VALUES (@Charge,@Kiste,@Merkmal,@Fallnummer,@Person,@Gebdat,@Vorname,@Nachname,@Scandatum,@Scanuser,@Scanclient,@Scanhostname)";
+                            cmd.Parameters.Add("@Charge",      SqlDbType.NVarChar);
+                            cmd.Parameters.Add("@Kiste",       SqlDbType.NVarChar);
+                            cmd.Parameters.Add("@Merkmal",     SqlDbType.NVarChar);
+                            cmd.Parameters.Add("@Fallnummer",  SqlDbType.NVarChar);
+                            cmd.Parameters.Add("@Person",      SqlDbType.NVarChar);
+                            cmd.Parameters.Add("@Gebdat",      SqlDbType.NVarChar);
+                            cmd.Parameters.Add("@Vorname",     SqlDbType.NVarChar);
+                            cmd.Parameters.Add("@Nachname",    SqlDbType.NVarChar);
+                            cmd.Parameters.Add("@Scandatum",   SqlDbType.NVarChar);
+                            cmd.Parameters.Add("@Scanuser",    SqlDbType.NVarChar);
+                            cmd.Parameters.Add("@Scanclient",  SqlDbType.NVarChar);
+                            cmd.Parameters.Add("@Scanhostname", SqlDbType.NVarChar);
+
+                            try
+                            {
+                                foreach (DataRow row in _dt.Rows)
+                                {
+                                    cmd.Parameters["@Charge"].Value      = row[0].ToString();
+                                    cmd.Parameters["@Kiste"].Value       = row[1].ToString();
+                                    cmd.Parameters["@Merkmal"].Value     = row[2].ToString();
+                                    cmd.Parameters["@Fallnummer"].Value  = row[3].ToString();
+                                    cmd.Parameters["@Person"].Value      = row[4].ToString();
+                                    cmd.Parameters["@Gebdat"].Value      = row[5].ToString();
+                                    cmd.Parameters["@Vorname"].Value     = row[6].ToString();
+                                    cmd.Parameters["@Nachname"].Value    = row[7].ToString();
+                                    cmd.Parameters["@Scandatum"].Value   = datum;
+                                    cmd.Parameters["@Scanuser"].Value    = username;
+                                    cmd.Parameters["@Scanclient"].Value  = clientname;
+                                    cmd.Parameters["@Scanhostname"].Value = computername;
+                                    cmd.ExecuteNonQuery();
+                                }
+                                transaction.Commit();
+                                result = true;
+                            }
+                            catch (Exception ex)
+                            {
+                                transaction.Rollback();
+                                MessageBox.Show("Fehler beim Speichern in Datenbank: " + Environment.NewLine + ex.Message, "Error");
+                            }
+                        }
+                    }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Fehler beim Speichern in KistPackDB: " + Environment.NewLine + ex.Message, "Error");
+                MessageBox.Show("Fehler beim Verbinden zur Datenbank: " + Environment.NewLine + ex.Message, "Error");
             }
             return result;
         }

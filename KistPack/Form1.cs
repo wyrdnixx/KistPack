@@ -36,6 +36,7 @@ namespace KistPack
         private Boolean chargeWasSavedToDB;
         private String tempFilePath;
         private String[] merkmale;
+        private String externalArchiveCall;
 
         public Form1()
         {
@@ -46,7 +47,12 @@ namespace KistPack
             string dbversion = kistPackDB.getKistPackDBVersion();
             string assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             
-            if (dbversion != assemblyVersion )
+            if (dbversion == null)
+            {
+                // Fehlermeldung wurde bereits von getKistPackDBVersion() angezeigt
+                Environment.Exit(-1);
+            }
+            if (dbversion != assemblyVersion)
             {
                 MessageBox.Show("Sorry..." + Environment.NewLine +
                     "Programmversion " + assemblyVersion + " stimmt nicht mit Datenbank Version " + dbversion + " überein." + Environment.NewLine +
@@ -57,6 +63,11 @@ namespace KistPack
 
             // vergübare Merkmale aus DB lesen und für clbMerkmale verwenden
             string merkmaleDBString = kistPackDB.getKistPackDBMerkmale();
+            if (merkmaleDBString == null)
+            {
+                MessageBox.Show("Merkmale konnten nicht aus der Datenbank geladen werden.", "Error");
+                Environment.Exit(-1);
+            }
             merkmale = merkmaleDBString.Split(';'); // array merkmale ist private global da es auch für context menü verwendet wird (#region contextMenu)
 
             foreach (var m in merkmale)
@@ -109,7 +120,7 @@ namespace KistPack
 
             // activate context menu for datagridview
             InitializeContextMenu();
-            
+            externalArchiveCall = kistPackDB.getKistPackDBExternalArchiveCall();
 
         }
 
@@ -151,11 +162,10 @@ namespace KistPack
             tbFallScann.Enabled = false;
             tbFallScann.Text = "";
             tbKiste.Text = "";
-
-            tbFallScann.Text = "";
             btnNextBox.Enabled = true;
             btnDeleteEntry.Enabled = true;
             btnFinishCharge.Text = "Charge abschließen";
+            btnFinishCharge.Enabled = false;
 
             btnNextBox.Enabled = true;
             dt.Clear();
@@ -170,21 +180,7 @@ namespace KistPack
 
         private void createCharge()
         {
-            tbCharge.Text = cbMandant.Text + DateTime.Now.ToString("yyyyMMddHHmm"); ;
-            btnNextBox.Enabled = true;
-            tbKiste.Enabled = true;
-            tbKiste.Focus();
-
-            //btnCreateCharge.Enabled = false;
-            cbMandant.Enabled = false;
-        }
-
-         private void btnCreateCharge_Click(object sender, EventArgs e)
-        {
-            // bleibt deaktiviert
-            //tbCharge.Enabled = false;           
-
-            tbCharge.Text = cbMandant.Text + DateTime.Now.ToString("yyyyMMddHHmm"); ;
+            tbCharge.Text = cbMandant.Text + DateTime.Now.ToString("yyyyMMddHHmmss");
             btnNextBox.Enabled = true;
             tbKiste.Enabled = true;
             tbKiste.Focus();
@@ -338,15 +334,22 @@ namespace KistPack
                     tbStatus.BackColor = System.Drawing.Color.SeaShell;
                     tbStatus.Text = "Es ist ein Fehler beim speichern in die Datenbank aufgetreten.";
                 }
-            }                 
-            
-
-            
+            }
+            else
+            {
+                // Charge bereits gespeichert → PDF erneut erzeugen und öffnen
+                String pdfFilePath = tempFilePath + tbCharge.Text + ".pdf";
+                if (ExportToPDF(dgvAkten, tbCharge.Text, pdfFilePath))
+                {
+                    System.Diagnostics.Process.Start(pdfFilePath);
+                    createNewCharge();
+                }
+            }
 
         }
 
 
-      
+
 
             #region CheckAndInserttoDataTable
 
@@ -444,7 +447,8 @@ namespace KistPack
             {
                 btnNewCharge.Enabled = true;
                 btnNextBox.Enabled = true;
-                
+                btnFinishCharge.Enabled = dt.Rows.Count > 0;
+
                 tbFallScann.Text = "";
                 tbFallScann.Enabled = true;
                 tbFallScann.Focus();
@@ -778,44 +782,34 @@ namespace KistPack
             // ToDo
             try
             {
-
-
-                StreamWriter sw = new StreamWriter(strFilePath, false);
-                //headers
-                for (int i = 0; i < _dt.Columns.Count; i++)
+                using (StreamWriter sw = new StreamWriter(strFilePath, false))
                 {
-                    sw.Write(_dt.Columns[i]);
-                    if (i < _dt.Columns.Count - 1)
-                    {
-                        sw.Write(";");
-                    }
-                }
-                sw.Write(sw.NewLine);
-                foreach (DataRow dr in _dt.Rows)
-                {
+                    //headers
                     for (int i = 0; i < _dt.Columns.Count; i++)
                     {
-                        if (!Convert.IsDBNull(dr[i]))
-                        {
-                            string value = dr[i].ToString();
-                            if (value.Contains(';'))
-                            {
-                                value = String.Format("\"{0}\"", value);
-                                sw.Write(value);
-                            }
-                            else
-                            {
-                                sw.Write(dr[i].ToString());
-                            }
-                        }
+                        sw.Write(_dt.Columns[i]);
                         if (i < _dt.Columns.Count - 1)
-                        {
                             sw.Write(";");
-                        }
                     }
                     sw.Write(sw.NewLine);
+                    foreach (DataRow dr in _dt.Rows)
+                    {
+                        for (int i = 0; i < _dt.Columns.Count; i++)
+                        {
+                            if (!Convert.IsDBNull(dr[i]))
+                            {
+                                string value = dr[i].ToString();
+                                if (value.Contains(';'))
+                                    sw.Write(String.Format("\"{0}\"", value));
+                                else
+                                    sw.Write(dr[i].ToString());
+                            }
+                            if (i < _dt.Columns.Count - 1)
+                                sw.Write(";");
+                        }
+                        sw.Write(sw.NewLine);
+                    }
                 }
-                sw.Close();
                 return true;
             }
             catch (Exception ex)
@@ -915,7 +909,7 @@ namespace KistPack
                         if (!csvPath.EndsWith("\\"))
                             csvPath += "\\";
 
-                        if (!CSVExport(dt, csvPath + selectedChargeNumber + ".csv"))
+                        if (!CSVExport(tmpDT, csvPath + selectedChargeNumber + ".csv"))
                         {
                             MessageBox.Show("Es ist ein Fehler beim speichern der Lieferschein CSV - Datei aufgetreten. " + csvPath + selectedChargeNumber + ".csv", "Fehler");
                         }
@@ -1067,7 +1061,7 @@ namespace KistPack
 
             string visitNo = dgvAkten.SelectedRows[0].Cells[3].Value.ToString();
 
-            string ExternalArchiveCall = kistPackDB.getKistPackDBExternalArchiveCall();
+            string ExternalArchiveCall = externalArchiveCall;
 
             // Create a new process
             Process process = new Process();
