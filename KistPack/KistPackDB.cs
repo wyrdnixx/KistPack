@@ -113,13 +113,12 @@ namespace KistPack
                         conn.Open();
                         using (SqlDataReader dr = cmd.ExecuteReader())
                         {
+                            string S(int i) => dr.IsDBNull(i) ? "" : dr.GetString(i);
                             while (dr.Read())
                             {
                                 PatientVisit tmp = new PatientVisit(
-                                    dr.GetString(0), dr.GetString(1), dr.GetString(2),
-                                    dr.GetString(3), dr.GetString(4), dr.GetString(5),
-                                    dr.GetString(6), dr.GetString(7), dr.GetString(8),
-                                    dr.GetString(9), dr.GetString(10), dr.GetString(11));
+                                    S(0), S(1),  S(2),  S(3),  S(4),  S(5),
+                                    S(6), S(7),  S(8),  S(9),  S(10), S(11));
                                 patList.Add(tmp);
                             }
                         }
@@ -179,13 +178,12 @@ namespace KistPack
                         conn.Open();
                         using (SqlDataReader dr = cmd.ExecuteReader())
                         {
+                            string S(int i) => dr.IsDBNull(i) ? "" : dr.GetString(i);
                             while (dr.Read())
                             {
                                 sDT.Rows.Add(
-                                    dr.GetString(0), dr.GetString(1),  dr.GetString(2),
-                                    dr.GetString(3), dr.GetString(4),  dr.GetString(5),
-                                    dr.GetString(6), dr.GetString(7),  dr.GetString(8),
-                                    dr.GetString(9), dr.GetString(10), dr.GetString(11));
+                                    S(0), S(1),  S(2),  S(3),  S(4),  S(5),
+                                    S(6), S(7),  S(8),  S(9),  S(10), S(11));
                             }
                         }
                     }

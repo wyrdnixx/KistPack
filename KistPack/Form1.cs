@@ -27,9 +27,7 @@ namespace KistPack
 {
     public partial class Form1 : Form
     {
-        public static DataSet ds;
         public static DataTable dt;
-        private static ArchDB archDB;
         private static SoundPlayer sndplayrOK;
         private static SoundPlayer sndplayrER;
         KistPackDB kistPackDB;
@@ -79,7 +77,6 @@ namespace KistPack
 
 
             // Programmvariablen initialisieren
-            archDB = new ArchDB();
             dt = new DataTable();
             sndplayrOK = new SoundPlayer(Properties.Resources.ok);
             sndplayrER = new SoundPlayer(Properties.Resources.exception);
@@ -167,7 +164,6 @@ namespace KistPack
             btnFinishCharge.Text = "Charge abschließen";
             btnFinishCharge.Enabled = false;
 
-            btnNextBox.Enabled = true;
             dt.Clear();
             updateItemCounter();
         }
@@ -284,64 +280,57 @@ namespace KistPack
 
         private void btnFinishCharge_Click(object sender, EventArgs e)
         {
-            if (!chargeWasSavedToDB)
+            if (chargeWasSavedToDB)
             {
-                // First save to Database
-                if (kistPackDB.saveDtToDB(dt))
-                {
-                    chargeWasSavedToDB = true;
-                    tbFallScann.Enabled = false;
-                    tbFallScann.Text = "Charge abgeschlossen.";
-                    btnNextBox.Enabled = false;
-                    btnDeleteEntry.Enabled = false;
-                    btnFinishCharge.Text = "PDF erneut drucken";
-
-
-                    //ToDo: save CSV File to DB
-                    // if path in settings is set without trailing "\" append one
-                    String csvPath = Properties.Settings.Default.CSVExportPath;
-                    if (!csvPath.EndsWith("\\")){
-                        csvPath+= "\\";
-                    }
-
-                    // export csv and if success generate pdf 
-                    if(!CSVExport(dt, csvPath + tbCharge.Text + ".csv"))
-                    {
-                        tbStatus.BackColor = System.Drawing.Color.SeaShell;
-                        tbStatus.Text = "Es ist ein Fehler beim speichern der Lieferschein CSV-Datei aufgetreten. ";
-                    } else
-                    {
-                        // generate PDF File
-                        String pdfFilePath = tempFilePath + tbCharge.Text + ".pdf";
-                        if (ExportToPDF(dgvAkten,tbCharge.Text, pdfFilePath))
-                        {
-                            System.Diagnostics.Process.Start(pdfFilePath);
-
-                            createNewCharge();
-                        }
-                    };
-
-                    
-
-
-                    btnNewCharge.Focus();
-                }else
-                {
-                    tbStatus.BackColor = System.Drawing.Color.SeaShell;
-                    tbStatus.Text = "Es ist ein Fehler beim speichern in die Datenbank aufgetreten.";
-                }
-            }
-            else
-            {
-                // Charge bereits gespeichert → PDF erneut erzeugen und öffnen
                 String pdfFilePath = tempFilePath + tbCharge.Text + ".pdf";
                 if (ExportToPDF(dgvAkten, tbCharge.Text, pdfFilePath))
                 {
                     System.Diagnostics.Process.Start(pdfFilePath);
                     createNewCharge();
                 }
+                return;
             }
 
+            tbStatus.BackColor = System.Drawing.Color.Gray;
+            tbStatus.Text = "Speichere Charge...";
+
+            String csvPath = Properties.Settings.Default.CSVExportPath;
+            if (!csvPath.EndsWith("\\"))
+                csvPath += "\\";
+            String csvFilePath = csvPath + tbCharge.Text + ".csv";
+
+            // Schritt 1: CSV schreiben
+            if (!CSVExport(dt, csvFilePath))
+            {
+                tbStatus.BackColor = System.Drawing.Color.SeaShell;
+                tbStatus.Text = "Fehler beim Speichern der CSV-Datei. Charge wurde nicht in die Datenbank eingetragen. " + csvFilePath;
+                return;
+            }
+
+            // Schritt 2: DB-Eintrag
+            if (!kistPackDB.saveDtToDB(dt))
+            {
+                try { File.Delete(csvFilePath); } catch { }
+                tbStatus.BackColor = System.Drawing.Color.SeaShell;
+                tbStatus.Text = "Fehler beim Speichern in die Datenbank. Die CSV-Datei wurde wieder gelöscht.";
+                return;
+            }
+
+            chargeWasSavedToDB = true;
+            tbFallScann.Enabled = false;
+            tbFallScann.Text = "Charge abgeschlossen.";
+            btnNextBox.Enabled = false;
+            btnDeleteEntry.Enabled = false;
+            btnFinishCharge.Text = "PDF erneut drucken";
+            btnNewCharge.Focus();
+
+            // Schritt 3: PDF erzeugen und öffnen
+            String pdfFilePath2 = tempFilePath + tbCharge.Text + ".pdf";
+            if (ExportToPDF(dgvAkten, tbCharge.Text, pdfFilePath2))
+            {
+                System.Diagnostics.Process.Start(pdfFilePath2);
+                //createNewCharge();
+            }
         }
 
 
@@ -368,9 +357,6 @@ namespace KistPack
                 // Wait for the task to complete without blocking the UI
                 await myTask;
                 pv = myTask.Result;
-                //btnCreateCharge.Enabled = false;
-                btnFinishCharge.Enabled = true;
-
                 if (pv != null && pv.Fallstorno ==null)
                 {
                     // setze markiertes Merkmal für den Eintrag
@@ -604,12 +590,12 @@ namespace KistPack
                 // Iterate through DataGridView rows and group data by box number
                 foreach (DataGridViewRow row in dataGridView.Rows)
             {
-                    string charge = row.Cells["Charge"].Value.ToString();
-                    string boxNumber = row.Cells["Kiste"].Value.ToString();
-                    string merkmal = row.Cells["Merkmal"].Value.ToString();
-                    string visit = row.Cells["Fallnummer"].Value.ToString();
+                    string charge    = row.Cells["Charge"].Value?.ToString()     ?? "";
+                    string boxNumber = row.Cells["Kiste"].Value?.ToString()      ?? "";
+                    string merkmal   = row.Cells["Merkmal"].Value?.ToString()    ?? "";
+                    string visit     = row.Cells["Fallnummer"].Value?.ToString() ?? "";
                     //string person = row.Cells["Person"].Value.ToString();
-                    string gebdat = row.Cells["Gebdat"].Value.ToString();
+                    string gebdat    = row.Cells["Gebdat"].Value?.ToString()     ?? "";
                     //string givenname = row.Cells["Vorname"].Value.ToString();
                     //string surname = row.Cells["Nachname"].Value.ToString();
 
@@ -1024,15 +1010,9 @@ namespace KistPack
         {
             if (dgvAkten.SelectedRows.Count > 0)
             {
-                // Get the selected row index
                 int rowIndex = dgvAkten.SelectedRows[0].Index;
-
-                // Remove the row from the DataTable
                 dt.Rows.RemoveAt(rowIndex);
-
-                // Refresh the DataGridView
-                dgvAkten.DataSource = null;
-                dgvAkten.DataSource = dt;
+                btnFinishCharge.Enabled = dt.Rows.Count > 0;
                 updateItemCounter();
             }
         }

@@ -12,6 +12,34 @@ ToDo:
 
 ## Versionshistorie
 
+## Version 1.0.7.2
+refactoring: btnFinishCharge_Click: sauberer ablauf. neue Charge wird nicht automatisch angelegt, sondern erst wenn der Benutzer auf "Neue Charge" klickt damit Mandant gewählt werden kann.
+
+## Version 1.0.7.1
+Bugfixes:
+┌────────┬───────────────────────┬───────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│  Fix   │         Datei         │                                             Was geändert                                              │
+├────────┼───────────────────────┼───────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ BUG 1  │ Form1.cs:1023         │ DeleteRowMenuItem_Click: btnFinishCharge.Enabled = dt.Rows.Count > 0 hinzugefügt                      │
+├────────┼───────────────────────┼───────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ BUG 2  │ Form1.cs:327          │ btnNewCharge.Focus() nach createNewCharge() entfernt — Dropdown öffnet jetzt korrekt                  │
+├────────┼───────────────────────┼───────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ PROG 1 │ Form1.cs:607          │ ExportToPDF: .Value.ToString() → ?.ToString() ?? "" für alle 5 Zellzugriffe                           │
+├────────┼───────────────────────┼───────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ PROG 3 │ KistPackDB.cs:116,183 │ searchPat + searchWildcard: lokale Hilfsfunktion S(int i) nutzt dr.IsDBNull(i) ? "" : dr.GetString(i) │
+├────────┼───────────────────────┼───────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ PROG 4 │ Form1.cs:372          │ Redundante Zeile btnFinishCharge.Enabled = true + toter Kommentar entfernt                            │
+├────────┼───────────────────────┼───────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ M1     │ Form1.cs:30           │ public static DataSet ds entfernt                                                                     │
+├────────┼───────────────────────┼───────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ M2     │ Form1.cs:170          │ Doppeltes btnNextBox.Enabled = true in createNewCharge() entfernt                                     │
+├────────┼───────────────────────┼───────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ M3     │ Form1.cs:32,82        │ private static ArchDB archDB + archDB = new ArchDB() entfernt                                         │
+├────────┼───────────────────────┼───────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ M4     │ Form1.cs:1034         │ Unnötiger DataSource = null / DataSource = dt Reset in DeleteRowMenuItem_Click entfernt               │
+└────────┴───────────────────────┴───────────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+
 ### Version 1.0.7.0
 - Mehrteilige Akte
 

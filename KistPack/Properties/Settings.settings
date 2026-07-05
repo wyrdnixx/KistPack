@@ -5,9 +5,6 @@
     <Setting Name="SQLDBArchive" Type="System.String" Scope="User">
       <Value Profile="(Default)">Server = MSSQL; Database = CLA-PROD-DB; Trusted_Connection = True;</Value>
     </Setting>
-    <Setting Name="LengthKiste" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">4</Value>
-    </Setting>
     <Setting Name="LenghtFallnummer" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">9</Value>
     </Setting>
@@ -18,7 +15,10 @@
       <Value Profile="(Default)">Server = MSSQL; Database = KistPackDB; Trusted_Connection = True;</Value>
     </Setting>
     <Setting Name="CSVExportPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">\\TERM2022\test\</Value>
+      <Value Profile="(Default)">\\TERM2025\KistPackTest</Value>
+    </Setting>
+    <Setting Name="LengthKiste" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">8</Value>
     </Setting>
   </Settings>
 </SettingsFile>
