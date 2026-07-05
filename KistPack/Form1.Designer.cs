@@ -49,13 +49,14 @@ namespace KistPack
             this.label1 = new System.Windows.Forms.Label();
             this.tbKiste = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.cb_SubmitCsv = new System.Windows.Forms.CheckBox();
             this.label5 = new System.Windows.Forms.Label();
             this.btnRegenCSV = new System.Windows.Forms.Button();
             this.btnRegenPDF = new System.Windows.Forms.Button();
             this.dgvSearchResults = new System.Windows.Forms.DataGridView();
             this.tbSearchText = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.cb_SubmitCsv = new System.Windows.Forms.CheckBox();
+            this.lblItemCounter = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAkten)).BeginInit();
@@ -77,6 +78,7 @@ namespace KistPack
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.lblItemCounter);
             this.tabPage1.Controls.Add(this.cblMerkmale);
             this.tabPage1.Controls.Add(this.btnFinishCharge);
             this.tabPage1.Controls.Add(this.btnDeleteEntry);
@@ -105,9 +107,9 @@ namespace KistPack
             // 
             this.cblMerkmale.CheckOnClick = true;
             this.cblMerkmale.FormattingEnabled = true;
-            this.cblMerkmale.Location = new System.Drawing.Point(859, 134);
+            this.cblMerkmale.Location = new System.Drawing.Point(859, 112);
             this.cblMerkmale.Name = "cblMerkmale";
-            this.cblMerkmale.Size = new System.Drawing.Size(585, 92);
+            this.cblMerkmale.Size = new System.Drawing.Size(585, 114);
             this.cblMerkmale.TabIndex = 14;
             this.cblMerkmale.SelectedIndexChanged += new System.EventHandler(this.clbMerkmale_SelectedIndexChanged);
             // 
@@ -216,7 +218,7 @@ namespace KistPack
             this.dgvAkten.ReadOnly = true;
             this.dgvAkten.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvAkten.ShowEditingIcon = false;
-            this.dgvAkten.Size = new System.Drawing.Size(1436, 532);
+            this.dgvAkten.Size = new System.Drawing.Size(1436, 517);
             this.dgvAkten.TabIndex = 5;
             // 
             // btnNewCharge
@@ -293,6 +295,16 @@ namespace KistPack
             this.tabPage2.Text = "Suche";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // cb_SubmitCsv
+            // 
+            this.cb_SubmitCsv.AutoSize = true;
+            this.cb_SubmitCsv.Location = new System.Drawing.Point(756, 6);
+            this.cb_SubmitCsv.Name = "cb_SubmitCsv";
+            this.cb_SubmitCsv.Size = new System.Drawing.Size(305, 22);
+            this.cb_SubmitCsv.TabIndex = 6;
+            this.cb_SubmitCsv.Text = "! CSV Datei erneut übermitteln !";
+            this.cb_SubmitCsv.UseVisualStyleBackColor = true;
+            // 
             // label5
             // 
             this.label5.AutoSize = true;
@@ -356,15 +368,13 @@ namespace KistPack
             this.label4.TabIndex = 0;
             this.label4.Text = "Suche:";
             // 
-            // cb_SubmitCsv
+            // lblItemCounter
             // 
-            this.cb_SubmitCsv.AutoSize = true;
-            this.cb_SubmitCsv.Location = new System.Drawing.Point(756, 6);
-            this.cb_SubmitCsv.Name = "cb_SubmitCsv";
-            this.cb_SubmitCsv.Size = new System.Drawing.Size(305, 22);
-            this.cb_SubmitCsv.TabIndex = 6;
-            this.cb_SubmitCsv.Text = "! CSV Datei erneut übermitteln !";
-            this.cb_SubmitCsv.UseVisualStyleBackColor = true;
+            this.lblItemCounter.Location = new System.Drawing.Point(8, 755);
+            this.lblItemCounter.Name = "lblItemCounter";
+            this.lblItemCounter.Size = new System.Drawing.Size(1436, 25);
+            this.lblItemCounter.TabIndex = 15;
+            this.lblItemCounter.Text = "Anzahl";
             // 
             // Form1
             // 
@@ -415,6 +425,7 @@ namespace KistPack
         private System.Windows.Forms.CheckedListBox cblMerkmale;
         private System.Windows.Forms.Label label5;
         private CheckBox cb_SubmitCsv;
+        private Label lblItemCounter;
     }
 }
 

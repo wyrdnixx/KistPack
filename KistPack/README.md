@@ -5,9 +5,7 @@ Anwendung zur Verwaltung und Dokumentation von Patienten-Chargen (Scannen, Suche
 ToDo:
 
 - Kistpack Bug -> wurde bei manchen scanns nicht übernommen? konnte jetzt aber nicht nochmal reproduziert werden.
-
 - Mehrteilige Akte
-- Anzahl Elemente in Übersicht anzeigen (am besten pro Akten Typ (Nachlaufend...)
 - Neulieferung nochmal prüfen - funktioniert das richtig.
 
 
@@ -18,8 +16,11 @@ ToDo:
 
 ## Versionshistorie
 
+### Version 1.0.6.0
 
-### Version 1.0.5.01
+- Anzahl Elemente in Übersicht anzeigen (am besten pro Akten Typ (Nachlaufend...)
+
+### Version 1.0.5.1
 Bugfix: `NullReferenceException` in `searchWildcard()` behoben: `sqlQueryResult.Read()` wird jetzt auf Rückgabewert geprüft bevor auf Spalten zugegriffen wird
 
 ### Version 1.0.5.0

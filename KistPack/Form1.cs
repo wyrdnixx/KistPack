@@ -169,6 +169,7 @@ namespace KistPack
 
             btnNextBox.Enabled = true;
             dt.Clear();
+            updateItemCounter();
         }
 
         private void cbMandant_SelectedIndexChanged(object sender, EventArgs e)
@@ -486,14 +487,31 @@ namespace KistPack
         /// </summary>
         /// <param name="pv"></param>
         private void updateData(PatientVisit pv)
-        {            
+        {
                 dt.Rows.Add(tbCharge.Text, tbKiste.Text, pv.Merkmal, pv.Fallnummer, pv.Person,pv.Gebdat, pv.Vorname, pv.Nachname);
                 dt.AcceptChanges();
                 dgvAkten.Update();
                 tbStatus.BackColor = System.Drawing.Color.LimeGreen;
                 tbStatus.Text = "Fall " + pv.Fallnummer + " zur Charge hinzugefügt.";
                 playSoundOK();
-            
+                updateItemCounter();
+
+        }
+
+        private void updateItemCounter()
+        {
+            if (dt.Rows.Count == 0)
+            {
+                lblItemCounter.Text = "Gesamt: 0";
+                return;
+            }
+
+            var counts = dt.AsEnumerable()
+                .GroupBy(r => r["Merkmal"].ToString())
+                .Select(g => g.Key + ": " + g.Count())
+                .ToList();
+
+            lblItemCounter.Text = string.Join("  |  ", counts) + "  |  Gesamt: " + dt.Rows.Count;
         }
 
         #endregion
@@ -538,13 +556,8 @@ namespace KistPack
                 dgvAkten.Update();
             }           
 
-            if(dt.Rows.Count != 0)
-            {
-                btnFinishCharge.Enabled = true;
-            } else
-            {
-                btnFinishCharge.Enabled = false;
-            }
+            btnFinishCharge.Enabled = dt.Rows.Count > 0;
+            updateItemCounter();
         }
 
 
@@ -949,6 +962,8 @@ namespace KistPack
                 }
             }
 
+            updateItemCounter();
+
             // Fokus zurück auf Fallnummernscan Feld
             tbFallScann.Focus();
         }
@@ -1052,6 +1067,7 @@ namespace KistPack
 
                 // Update the value of the third column in the selected row - Cell 2 is merkmal
                 dgvAkten.SelectedRows[0].Cells[2].Value = menuItem.Text;
+                updateItemCounter();
             }
         }
 
