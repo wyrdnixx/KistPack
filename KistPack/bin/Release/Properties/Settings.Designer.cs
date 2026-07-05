@@ -12,7 +12,7 @@ namespace KistPack.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.7.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.14.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -32,18 +32,6 @@ namespace KistPack.Properties {
             }
             set {
                 this["SQLDBArchive"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("4")]
-        public int LengthKiste {
-            get {
-                return ((int)(this["LengthKiste"]));
-            }
-            set {
-                this["LengthKiste"] = value;
             }
         }
         
@@ -85,13 +73,25 @@ namespace KistPack.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("\\\\TERM2022\\test\\")]
+        [global::System.Configuration.DefaultSettingValueAttribute("\\\\TERM2025\\KistPackTest")]
         public string CSVExportPath {
             get {
                 return ((string)(this["CSVExportPath"]));
             }
             set {
                 this["CSVExportPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("8")]
+        public int LengthKiste {
+            get {
+                return ((int)(this["LengthKiste"]));
+            }
+            set {
+                this["LengthKiste"] = value;
             }
         }
     }
