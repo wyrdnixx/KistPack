@@ -231,12 +231,7 @@ namespace KistPack
                 
                 if (validMandant(cbMandant.Text, tbFallScann.Text))
                 {
-                    // test if visit is already in list
-                    if (!testCurrentDataTable(tbFallScann.Text))
-                    {
-                        insertNewVisit(tbFallScann.Text);
-
-                    }
+                    insertNewVisit(tbFallScann.Text);
                 } else
                 {
                     // Fehler: Mandant stimmt nicht mit Fallnummer überein  
@@ -416,10 +411,9 @@ namespace KistPack
 
                     } else
                     {
-
-
                         // trage Daten in Tabelle ein
                         updateData(pv);
+                        applyMehrteiligIfDuplicate(_Fall);
                     }
                                                            
 
@@ -459,28 +453,6 @@ namespace KistPack
 
         }
       
-        private bool testCurrentDataTable(String _fallnummer)
-        {
-            Boolean exists = false;
-
-
-            foreach (DataRow row in dt.Rows)
-            {
-                if (row["Fallnummer"].ToString() == _fallnummer)
-                {
-                    exists = true;
-                    String Errmsg = "Fallnummer " + _fallnummer + " schon vorhanden! Bitte Akte prüfen.";
-                    //MessageBox.Show(Errmsg, "error");
-                    tbStatus.BackColor = System.Drawing.Color.SeaShell;
-                    tbStatus.Text = "Fehler: " + Errmsg;
-                    playSoundER();
-                    tbFallScann.Text = "";
-                    tbFallScann.Focus();
-                }
-            }
-            return exists;
-        }
-
 
         /// <summary>
         /// Eintragen der Fallnummer in die Datentabelle zur Ansicht
@@ -512,6 +484,22 @@ namespace KistPack
                 .ToList();
 
             lblItemCounter.Text = string.Join("  |  ", counts) + "  |  Gesamt: " + dt.Rows.Count;
+        }
+
+        private void applyMehrteiligIfDuplicate(string fallnummer)
+        {
+            var matching = dt.AsEnumerable()
+                .Where(r => r["Fallnummer"].ToString() == fallnummer)
+                .ToList();
+
+            if (matching.Count > 1)
+            {
+                foreach (DataRow row in matching)
+                    row["Merkmal"] = "Mehrteilig";
+                dt.AcceptChanges();
+                dgvAkten.Refresh();
+                updateItemCounter();
+            }
         }
 
         #endregion
@@ -564,74 +552,6 @@ namespace KistPack
         #region PDF Print
 
 
-        private void generateTestData()
-        {
-            // Assuming you have already populated your DataGridView with data
-            // This is just an example; replace it with your actual data
-            //tbCharge.Text = "testCharge_000001";
-            dt.Rows.Add("TESTCharge", "101", "23001","1","Hans","Hansen");
-            dt.Rows.Add("TESTCharge", "101", "23002", "2", "Peter", "Peterson");
-            dt.Rows.Add("TESTCharge", "101", "23003", "3", "Susi", "Susen");
-            dt.Rows.Add("TESTCharge", "101", "23004", "4", "Maja", "Majar");
-            dt.Rows.Add("TESTCharge", "102", "23005", "5", "Ede", "Edwind");
-            dt.Rows.Add("TESTCharge", "102", "23006", "6", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "102", "23007", "7", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "104", "23008", "8", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "104", "23009", "9", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "104", "23010", "10", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "104", "23011", "11", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "104", "23012", "12", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "104", "23013", "13", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "105", "23014", "14", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "105", "23015", "15", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "105", "23016", "16", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "105", "23017", "17", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "105", "23018", "18", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "105", "23019", "19", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "105", "23020", "20", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "105", "23021", "21", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "105", "23022", "22", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "105", "23023", "23", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "106", "23024", "1", "Hans", "Hansen");
-            dt.Rows.Add("TESTCharge", "106", "23025", "2", "Peter", "Peterson");
-            dt.Rows.Add("TESTCharge", "106", "23026", "3", "Susi", "Susen");
-            dt.Rows.Add("TESTCharge", "106", "23027", "4", "Maja", "Majar");
-            dt.Rows.Add("TESTCharge", "106", "23028", "5", "Ede", "Edwind");
-            dt.Rows.Add("TESTCharge", "106", "23029", "6", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "106", "23030", "7", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "107", "23031", "8", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "107", "23032", "9", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "107", "23033", "10", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "107", "23034", "11", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "108", "23035", "12", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "108", "23036", "13", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "108", "23037", "14", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "108", "23038", "15", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "108", "23039", "16", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "108", "23040", "17", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "108", "23041", "18", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "109", "23042", "19", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "109", "23043", "20", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "109", "23044", "21", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "109", "23045", "22", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "109", "23046", "23", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "109", "23047", "1", "Hans", "Hansen");
-            dt.Rows.Add("TESTCharge", "109", "23048", "2", "Peter", "Peterson");
-            dt.Rows.Add("TESTCharge", "109", "23049", "3", "Susi", "Susen");
-            dt.Rows.Add("TESTCharge", "109", "23050", "4", "Maja", "Majar");
-            dt.Rows.Add("TESTCharge", "109", "23051", "5", "Ede", "Edwind");
-            dt.Rows.Add("TESTCharge", "109", "23052", "6", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "109", "23053", "7", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "109", "23054", "8", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "109", "23055", "9", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "109", "23056", "10", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "109", "23057", "11", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "109", "23058", "12", "Max", "Maxer");
-            dt.Rows.Add("TESTCharge", "109", "23059", "13", "Max", "Maxer");
-            
-            dt.AcceptChanges();
-
-        }
 
         private Boolean ExportToPDF(DataGridView dataGridView, string _chargenNummer, string pdfFilePath)
         {
@@ -1113,6 +1033,7 @@ namespace KistPack
                 // Refresh the DataGridView
                 dgvAkten.DataSource = null;
                 dgvAkten.DataSource = dt;
+                updateItemCounter();
             }
         }
         #endregion

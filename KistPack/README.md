@@ -4,17 +4,16 @@ Anwendung zur Verwaltung und Dokumentation von Patienten-Chargen (Scannen, Suche
 
 ToDo:
 
-- Kistpack Bug -> wurde bei manchen scanns nicht übernommen? konnte jetzt aber nicht nochmal reproduziert werden.
-- Mehrteilige Akte
-- Neulieferung nochmal prüfen - funktioniert das richtig.
-
-
+- Derzeit keine ToDo's
 
 
 
 ---
 
 ## Versionshistorie
+
+### Version 1.0.7.0
+- Mehrteilige Akte
 
 ### Version 1.0.6.0
 
@@ -170,11 +169,11 @@ GO
 /****** Initiale Konfigurationsdaten in Settings ******/
 -- Werte nur einfuegen wenn der Eintrag noch nicht existiert
 IF NOT EXISTS (SELECT 1 FROM [dbo].[Settings] WHERE [Setting] = 'DBVersion')
-    INSERT INTO [dbo].[Settings] ([Setting], [Value]) VALUES ('DBVersion', '1.0.5.0')
+    INSERT INTO [dbo].[Settings] ([Setting], [Value]) VALUES ('DBVersion', '1.0.7.0')
 
 IF NOT EXISTS (SELECT 1 FROM [dbo].[Settings] WHERE [Setting] = 'Merkmale')
     INSERT INTO [dbo].[Settings] ([Setting], [Value])
-    VALUES ('Merkmale', 'Normal-Akte;Express-Akte;Nachlaufender-Befund;Neulieferung;QS-Akte')
+    VALUES ('Merkmale', 'Normal-Akte;Express-Akte;Nachlaufender-Befund;Neulieferung;QS-Akte;Mehrteilig')
 
 -- Platzhalter: echten Aufruf entsprechend der Archiv-Software eintragen
 -- Beispiel: echo cmd.exe /c ping #FALLNUMMER && pause
