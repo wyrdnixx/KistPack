@@ -7,7 +7,7 @@
     <framework targetVersion="4.7.2" profile="Full" supportedRuntime="4.0.30319" />
   </compatibleFrameworks>
   <dependency>
-    <dependentAssembly dependencyType="install" codebase="KistPack.exe.manifest" size="23457">
+    <dependentAssembly dependencyType="install" codebase="Application Files\KistPack_1_0_7_2\KistPack.exe.manifest" size="23457">
       <assemblyIdentity name="KistPack.exe" version="1.0.7.2" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="msil" type="win32" />
       <hash>
         <dsig:Transforms>
