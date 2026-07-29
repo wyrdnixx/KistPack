@@ -532,6 +532,7 @@ namespace KistPack
 
             btnFinishCharge.Enabled = dt.Rows.Count > 0;
             updateItemCounter();
+            tbFallScann.Focus();
         }
 
 
@@ -568,7 +569,7 @@ namespace KistPack
                 headerPageIndex.AddText(" / ");
                 headerPageIndex.AddNumPagesField();
 
-                headerRow.Cells[1].AddParagraph("MCB-Charge: " + _chargenNummer); // ToDo: use charge from Searchfield
+                headerRow.Cells[1].AddParagraph("MCB-Charge: " + _chargenNummer + " Akten: "+ dataGridView.RowCount); 
                 headerRow.Cells[1].Format.Font.Bold = true;
                 headerRow.Cells[1].Format.Font.Size = 12;
                          
@@ -615,7 +616,7 @@ namespace KistPack
                 {
                     //Kistennummer 
                     section.AddParagraph(); // Leerzeile                    
-                    section.AddParagraph("Kiste: " + kvp.Key.ToString());
+                    section.AddParagraph("Kiste: " + kvp.Key.ToString() + " Akten: " + kvp.Value.Count) ;
                     section.LastParagraph.Format.Font.Bold = true;
                     section.LastParagraph.Format.Font.Size=12;
                     section.AddParagraph(); // Leerzeile
