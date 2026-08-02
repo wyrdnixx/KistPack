@@ -116,8 +116,10 @@ namespace KistPack
 
 
             // activate context menu for datagridview
-            InitializeContextMenu();
+            InitializeContextMenu_dgvAkten();
             externalArchiveCall = kistPackDB.getKistPackDBExternalArchiveCall();
+
+            InitializeContextMenu_dgvSearchResults();
 
         }
 
@@ -177,7 +179,8 @@ namespace KistPack
 
         private void createCharge()
         {
-            tbCharge.Text = cbMandant.Text + DateTime.Now.ToString("yyyyMMddHHmmss");
+            // Format für Charge:  "FN_2026_08_02_2341"
+            tbCharge.Text = cbMandant.Text + DateTime.Now.ToString("_yyyy_MM_dd_HHmm");
             btnNextBox.Enabled = true;
             tbKiste.Enabled = true;
             tbKiste.Focus();
@@ -449,6 +452,10 @@ namespace KistPack
                 dt.Rows.Add(tbCharge.Text, tbKiste.Text, pv.Merkmal, pv.Fallnummer, pv.Person,pv.Gebdat, pv.Vorname, pv.Nachname);
                 dt.AcceptChanges();
                 dgvAkten.Update();
+                if (dgvAkten.Rows.Count > 0)
+                {
+                    dgvAkten.FirstDisplayedScrollingRowIndex = dgvAkten.Rows.Count - 1;
+                }
                 tbStatus.BackColor = System.Drawing.Color.LimeGreen;
                 tbStatus.Text = "Fall " + pv.Fallnummer + " zur Charge hinzugefügt.";
                 playSoundOK();
@@ -667,7 +674,32 @@ namespace KistPack
                 }
 
 
-                
+                // Unterschriftenfelder am Ende des Dokuments
+                section.AddParagraph(); // Abstand nach oben
+                section.AddParagraph();
+                section.AddParagraph();
+
+                Table signatureTable = section.AddTable();
+                signatureTable.Borders.Width = 0; // keine Außenrahmen der Tabelle
+                signatureTable.AddColumn(Unit.FromCentimeter(8));
+                signatureTable.AddColumn(Unit.FromCentimeter(1));  // Abstand zwischen den Feldern
+                signatureTable.AddColumn(Unit.FromCentimeter(8));
+
+                // Zeile mit der Unterschriftslinie (oberer Rand der Zellen als Linie)
+                Row lineRow = signatureTable.AddRow();
+                lineRow.Height = Unit.FromCentimeter(1.5);
+                lineRow.Cells[0].Borders.Top.Width = 0.5;
+                lineRow.Cells[0].Borders.Top.Color = Colors.Black;
+                lineRow.Cells[2].Borders.Top.Width = 0.5;
+                lineRow.Cells[2].Borders.Top.Color = Colors.Black;
+
+                // Zeile mit der Beschriftung unter der Linie
+                Row labelRow = signatureTable.AddRow();
+                labelRow.Cells[0].AddParagraph("Mitarbeiter Archiv");
+                labelRow.Cells[0].Format.Font.Size = 10;
+                labelRow.Cells[2].AddParagraph("Transporteur / Kurier ");
+                labelRow.Cells[2].Format.Font.Size = 10;
+
 
                 // Create a PDF renderer and save the document to a file
                 PdfDocumentRenderer pdfRenderer = new PdfDocumentRenderer();
@@ -896,7 +928,7 @@ namespace KistPack
 
         #region ContextMenu for datagridview
 
-        private void InitializeContextMenu()
+        private void InitializeContextMenu_dgvAkten()
         {
             ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
 
@@ -917,7 +949,7 @@ namespace KistPack
 
             // Create and add menu items
             ToolStripMenuItem OpenInArchiveMenuItem = new ToolStripMenuItem("öffnen im Archiv");
-            OpenInArchiveMenuItem.Click += OpenInArchiveMenuItem_Click;
+            OpenInArchiveMenuItem.Click += OpenInArchiveMenuItem_dgvAkten_Click;
             contextMenuStrip.Items.Add(OpenInArchiveMenuItem);
 
             // Add a separator
@@ -935,8 +967,30 @@ namespace KistPack
             // Subscribe to the MouseDown event of the DataGridView
             dgvAkten.MouseDown += DataGridView1_MouseDown;
 
+            // Subscribe to the MouseDown event of the DataGridView
+            dgvSearchResults.MouseDown += dgvSearchResults_MouseDown;
+
         }
-        
+
+        private void InitializeContextMenu_dgvSearchResults()
+        {
+            ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
+                        
+            // Create and add menu items
+            ToolStripMenuItem OpenInArchiveMenuItem = new ToolStripMenuItem("öffnen im Archiv");
+            OpenInArchiveMenuItem.Click += OpenInArchiveMenuItem_dgvSearchResults_Click;
+            contextMenuStrip.Items.Add(OpenInArchiveMenuItem);
+
+            // Assign the context menu to the DataGridView
+            dgvSearchResults.ContextMenuStrip = contextMenuStrip;
+
+            // Subscribe to the MouseDown event of the DataGridView
+            dgvSearchResults.MouseDown += DataGridView1_MouseDown;
+
+        }
+
+
+
         /// <summary>
         /// select the row if an right click was made
         /// </summary>
@@ -978,8 +1032,28 @@ namespace KistPack
             }
         }
 
-               
-        private void OpenInArchiveMenuItem_Click(object sender, EventArgs e)
+        /// <summary>
+        /// select only the clicked cell if a right click was made
+        /// </summary>
+        private void dgvSearchResults_MouseDown(object sender, MouseEventArgs e)
+        {
+            // Check if the right mouse button was clicked
+            if (e.Button == MouseButtons.Right)
+            {
+                // Get the cell under the mouse cursor
+                DataGridView.HitTestInfo hit = dgvSearchResults.HitTest(e.X, e.Y);
+
+                // If a valid cell was clicked (not header/outside)
+                if (hit.RowIndex >= 0 && hit.ColumnIndex >= 0)
+                {
+                    dgvSearchResults.ClearSelection();
+                    dgvSearchResults.CurrentCell = dgvSearchResults.Rows[hit.RowIndex].Cells[hit.ColumnIndex];
+                    dgvSearchResults.Rows[hit.RowIndex].Cells[hit.ColumnIndex].Selected = true;
+                }
+            }
+        }
+
+        private void OpenInArchiveMenuItem_dgvAkten_Click(object sender, EventArgs e)
         {
 
             string visitNo = dgvAkten.SelectedRows[0].Cells[3].Value.ToString();
@@ -1017,6 +1091,40 @@ namespace KistPack
                 updateItemCounter();
             }
         }
+
+        
+
+
+            private void OpenInArchiveMenuItem_dgvSearchResults_Click(object sender, EventArgs e)
+        {
+
+            //string visitNo = dgvSearchResults.SelectedRows[0].Cells[3].Value.ToString();
+            string visitNo = dgvSearchResults.SelectedCells[0].OwningRow.Cells[3].Value.ToString();
+
+            string ExternalArchiveCall = externalArchiveCall;
+
+            // Create a new process
+            Process process = new Process();
+
+            // Set the process start information - always use cmd to start the programm
+            process.StartInfo.FileName = "cmd.exe";
+            //string parameters = "/c echo  ping #FALLNUMMER && pause ";
+            string parameters = "/c " + ExternalArchiveCall; // use the entry from the database to call the external programm
+
+            parameters = parameters.Replace("#FALLNUMMER", visitNo);  // replace the variable from the settings string
+
+            //process.StartInfo.Arguments = "www.google.com";
+            process.StartInfo.Arguments = parameters;
+
+            // Optionally, you can configure the process to not create a window
+            process.StartInfo.CreateNoWindow = false;
+            process.StartInfo.UseShellExecute = false;
+
+            // Start the process asynchronously
+            process.Start();
+
+        }
+
         #endregion
     }
 

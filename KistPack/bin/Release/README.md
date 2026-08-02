@@ -4,13 +4,26 @@ Anwendung zur Verwaltung und Dokumentation von Patienten-Chargen (Scannen, Suche
 
 ToDo:
 
-- Derzeit keine ToDo's
+Sortierung der Liste umdrehen. letzte gescannte Akte oben
+
+Bei Mehrteiliger Akte die Rückfrage aktivieren ob wirklich Mehrteilig
+
 
 
 
 ---
 
 ## Versionshistorie
+
+## Version 1.0.7.4
+- Rechts Click - Kontext Menü auf der Liste: "In Archiv öffnen" — auch in Suche ermöglicht.
+- Unterschriftenfelder für Abholdatum Fahrer und Archiv MA
+- Format für Charge umgestellt damit Datum besser lesbar ist:  Beispiel: "FN_2026_08_02_2341"
+
+## Version 1.0.7.3
+- wenn löschen geklickt wurde fokus wieder auf Fallnummer stellen.
+- Anzahl Akten pro Kiste im PDF Anzeigen
+
 
 ## Version 1.0.7.2
 refactoring: btnFinishCharge_Click: sauberer ablauf. neue Charge wird nicht automatisch angelegt, sondern erst wenn der Benutzer auf "Neue Charge" klickt damit Mandant gewählt werden kann.
