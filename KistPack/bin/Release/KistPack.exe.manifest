@@ -54,14 +54,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="KistPack.exe" size="873984">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="KistPack.exe" size="873472">
       <assemblyIdentity name="KistPack" version="1.0.8.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>n4AtQbRkpbPSXRAzV0Vtopyb58Jms+5+OLQfChQleJ4=</dsig:DigestValue>
+        <dsig:DigestValue>bMOrxGd/LdMZ1ZsoPE6iYsGVqdUZeyWxmXmyLFALlbA=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

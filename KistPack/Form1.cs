@@ -245,7 +245,12 @@ namespace KistPack
         private void VerarbeiteFallnummer(string fallnummer)
         {
 
-                if (validMandant(cbMandant.Text, tbFallScann.Text))
+            
+            insertNewVisit(tbFallScann.Text);
+
+            // v1.0.8.1 Mandantenprüfung deaktiviert - geht nicht mehr mit Altakten die nicht der Nummerierung entsprechen.
+            /*
+            if (validMandant(cbMandant.Text, tbFallScann.Text))
                 {
                     insertNewVisit(tbFallScann.Text);
                 }
@@ -258,8 +263,8 @@ namespace KistPack
                     tbFallScann.Text = "";
                     playSoundER();
                 }
+            */
 
-            
         }
 
         private void tbFallScann_TextChanged(object sender, EventArgs e)
@@ -273,6 +278,7 @@ namespace KistPack
 
 
         // v.1.0.7.0 - nicht mehr aktiv. jetzt über FallScannTimer_Tick() gesteuert
+        /*
         private void tbFallScann_TextChanged_OLD(object sender, EventArgs e)
         {
 
@@ -295,9 +301,13 @@ namespace KistPack
 
             }
         }
+        */
 
 
-         
+
+        // v1.0.8.1 Mandantenprüfung deaktiviert - geht nicht mehr mit Altakten die nicht der Nummerierung entsprechen.
+        /*
+          
         /// <summary>
         /// Prüfe ob Mandant aus Fallnummer (3te Stelle = index 2) mit Mandant übereinstimmt 
         /// </summary>
@@ -326,7 +336,7 @@ namespace KistPack
             }
             return valid;
         }
-
+        */
 
         private void btnFinishCharge_Click(object sender, EventArgs e)
         {

@@ -15,6 +15,9 @@ Bei Mehrteiliger Akte die Rückfrage aktivieren ob wirklich Mehrteilig
 
 ## Versionshistorie
 
+## Version 1.0.8.1
+- Mandantenprüfung deaktiviert - geht nicht mehr mit Altakten die nicht der Nummerierung entsprechen.
+
 ## Version 1.0.8.0
 -  Fallummern auslöser nicht mehr per Fallnummernlänge sonder über Timer. Damit können auch alte Fallnummern (z.B. 6-stellig) erkannt werden.
 
