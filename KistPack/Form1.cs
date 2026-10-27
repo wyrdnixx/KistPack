@@ -36,9 +36,17 @@ namespace KistPack
         private String[] merkmale;
         private String externalArchiveCall;
 
+        // Timer for scanning fall numbers
+        private readonly System.Windows.Forms.Timer _fallScannTimer =
+            new System.Windows.Forms.Timer { Interval = 1000 };
         public Form1()
         {
             InitializeComponent();
+            
+            // Initialize the timer and attach the Tick event handler
+            _fallScannTimer.Tick += FallScannTimer_Tick;
+
+
 
             // Datenbankverbindung herstellen und testen.
             kistPackDB = new KistPackDB();
@@ -223,8 +231,52 @@ namespace KistPack
 
         }
 
+
+        private void FallScannTimer_Tick(object sender, EventArgs e)
+        {
+            _fallScannTimer.Stop();   // wichtig: nur einmal ausführen
+
+            string fallnummer = tbFallScann.Text.Trim();
+            if (fallnummer.Length == 0)
+                return;
+
+            VerarbeiteFallnummer(fallnummer);
+        }
+        private void VerarbeiteFallnummer(string fallnummer)
+        {
+
+                if (validMandant(cbMandant.Text, tbFallScann.Text))
+                {
+                    insertNewVisit(tbFallScann.Text);
+                }
+                else
+                {
+                    // Fehler: Mandant stimmt nicht mit Fallnummer überein  
+
+                    tbStatus.BackColor = System.Drawing.Color.SeaShell;
+                    tbStatus.Text = tbFallScann.Text.ToString() + " : Fehler ! Mandant stimmt nicht mit Fallnummer überein.";
+                    tbFallScann.Text = "";
+                    playSoundER();
+                }
+
+            
+        }
+
         private void tbFallScann_TextChanged(object sender, EventArgs e)
         {
+            // Bei jedem neuen Zeichen den Timer zurücksetzen
+            _fallScannTimer.Stop();
+
+            if (!string.IsNullOrWhiteSpace(tbFallScann.Text))
+                _fallScannTimer.Start();
+        }
+
+
+        // v.1.0.7.0 - nicht mehr aktiv. jetzt über FallScannTimer_Tick() gesteuert
+        private void tbFallScann_TextChanged_OLD(object sender, EventArgs e)
+        {
+
+
             if (tbFallScann.Text.Length == Properties.Settings.Default.LenghtFallnummer)
             {
                 
@@ -239,12 +291,7 @@ namespace KistPack
                     tbStatus.Text = tbFallScann.Text.ToString() + " : Fehler ! Mandant stimmt nicht mit Fallnummer überein.";
                     tbFallScann.Text = "";
                     playSoundER();
-
-
                 }
-
-
-
 
             }
         }

@@ -166,6 +166,7 @@ namespace KistPack
             this.tbFallScann.Name = "tbFallScann";
             this.tbFallScann.Size = new System.Drawing.Size(428, 37);
             this.tbFallScann.TabIndex = 10;
+            
             this.tbFallScann.TextChanged += new System.EventHandler(this.tbFallScann_TextChanged);
             // 
             // label3
