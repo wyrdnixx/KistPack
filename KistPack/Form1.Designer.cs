@@ -33,6 +33,7 @@ namespace KistPack
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.lblItemCounter = new System.Windows.Forms.Label();
             this.cblMerkmale = new System.Windows.Forms.CheckedListBox();
             this.btnFinishCharge = new System.Windows.Forms.Button();
             this.btnDeleteEntry = new System.Windows.Forms.Button();
@@ -53,10 +54,10 @@ namespace KistPack
             this.label5 = new System.Windows.Forms.Label();
             this.btnRegenCSV = new System.Windows.Forms.Button();
             this.btnRegenPDF = new System.Windows.Forms.Button();
+            this.btnListExport = new System.Windows.Forms.Button();
             this.dgvSearchResults = new System.Windows.Forms.DataGridView();
             this.tbSearchText = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.lblItemCounter = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAkten)).BeginInit();
@@ -102,6 +103,14 @@ namespace KistPack
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Kiste packen";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // lblItemCounter
+            // 
+            this.lblItemCounter.Location = new System.Drawing.Point(8, 755);
+            this.lblItemCounter.Name = "lblItemCounter";
+            this.lblItemCounter.Size = new System.Drawing.Size(1436, 25);
+            this.lblItemCounter.TabIndex = 15;
+            this.lblItemCounter.Text = "Anzahl";
             // 
             // cblMerkmale
             // 
@@ -283,6 +292,7 @@ namespace KistPack
             this.tabPage2.Controls.Add(this.label5);
             this.tabPage2.Controls.Add(this.btnRegenCSV);
             this.tabPage2.Controls.Add(this.btnRegenPDF);
+            this.tabPage2.Controls.Add(this.btnListExport);
             this.tabPage2.Controls.Add(this.dgvSearchResults);
             this.tabPage2.Controls.Add(this.tbSearchText);
             this.tabPage2.Controls.Add(this.label4);
@@ -334,6 +344,16 @@ namespace KistPack
             this.btnRegenPDF.UseVisualStyleBackColor = true;
             this.btnRegenPDF.Click += new System.EventHandler(this.btnRegenPDF_Click);
             // 
+            // btnListExport
+            // 
+            this.btnListExport.Location = new System.Drawing.Point(1322, 6);
+            this.btnListExport.Name = "btnListExport";
+            this.btnListExport.Size = new System.Drawing.Size(124, 78);
+            this.btnListExport.TabIndex = 7;
+            this.btnListExport.Text = "Liste als CSV exportieren";
+            this.btnListExport.UseVisualStyleBackColor = true;
+            this.btnListExport.Click += new System.EventHandler(this.btnListExport_Click);
+            // 
             // dgvSearchResults
             // 
             this.dgvSearchResults.AllowUserToAddRows = false;
@@ -367,14 +387,6 @@ namespace KistPack
             this.label4.Size = new System.Drawing.Size(67, 18);
             this.label4.TabIndex = 0;
             this.label4.Text = "Suche:";
-            // 
-            // lblItemCounter
-            // 
-            this.lblItemCounter.Location = new System.Drawing.Point(8, 755);
-            this.lblItemCounter.Name = "lblItemCounter";
-            this.lblItemCounter.Size = new System.Drawing.Size(1436, 25);
-            this.lblItemCounter.TabIndex = 15;
-            this.lblItemCounter.Text = "Anzahl";
             // 
             // Form1
             // 
@@ -422,6 +434,7 @@ namespace KistPack
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button btnRegenPDF;
         private System.Windows.Forms.Button btnRegenCSV;
+        private System.Windows.Forms.Button btnListExport;
         private System.Windows.Forms.CheckedListBox cblMerkmale;
         private System.Windows.Forms.Label label5;
         private CheckBox cb_SubmitCsv;

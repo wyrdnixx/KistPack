@@ -887,6 +887,26 @@ namespace KistPack
             }
         }
 
+        private void btnListExport_Click(object sender, EventArgs e)
+        {
+            if (dgvSearchResults.Rows.Count == 0)
+                return;
+
+            using (SaveFileDialog sfd = new SaveFileDialog())
+            {
+                sfd.Filter = "CSV-Datei (*.csv)|*.csv";
+                sfd.FileName = "Suchergebnisse.csv";
+                if (sfd.ShowDialog() == DialogResult.OK)
+                {
+                    DataTable dtExport = (DataTable)dgvSearchResults.DataSource;
+                    if (!CSVExport(dtExport, sfd.FileName))
+                    {
+                        MessageBox.Show("Es ist ein Fehler beim Speichern der CSV-Datei aufgetreten. " + sfd.FileName, "Fehler");
+                    }
+                }
+            }
+        }
+
         private void clbMerkmale_SelectedIndexChanged(object sender, EventArgs e)
         {
             // deaktiviere alle items bis auf das im moment gewählte (nur ein Eintrag darf aktiv sein

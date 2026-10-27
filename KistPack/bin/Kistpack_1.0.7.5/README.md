@@ -15,6 +15,9 @@ Bei Mehrteiliger Akte die Rückfrage aktivieren ob wirklich Mehrteilig
 
 ## Versionshistorie
 
+## Version 1.0.7.5
+-  csv export in suche implementiert
+
 ## Version 1.0.7.4
 - Rechts Click - Kontext Menü auf der Liste: "In Archiv öffnen" — auch in Suche ermöglicht.
 - Unterschriftenfelder für Abholdatum Fahrer und Archiv MA

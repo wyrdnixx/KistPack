@@ -3,7 +3,7 @@
   <asmv1:assemblyIdentity name="KistPack.exe" version="1.0.7.3" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="msil" type="win32" />
   <application />
   <entryPoint>
-    <assemblyIdentity name="KistPack" version="1.0.7.4" language="neutral" processorArchitecture="msil" />
+    <assemblyIdentity name="KistPack" version="1.0.7.5" language="neutral" processorArchitecture="msil" />
     <commandLine file="KistPack.exe" parameters="" />
   </entryPoint>
   <trustInfo>
@@ -54,14 +54,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="KistPack.exe" size="872960">
-      <assemblyIdentity name="KistPack" version="1.0.7.4" language="neutral" processorArchitecture="msil" />
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="KistPack.exe" size="873472">
+      <assemblyIdentity name="KistPack" version="1.0.7.5" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>VSrn2UVGu+t3/BCODCNk0ushNhWTSoKGnsq+qfH44gc=</dsig:DigestValue>
+        <dsig:DigestValue>0MjMx0Xh57WmpjeOga3ZlEzlkP7Ec53DXTgmq64D6E8=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
